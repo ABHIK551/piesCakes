@@ -241,7 +241,7 @@ function showToast(message, type = "success") {
       const password = document.querySelector("input[placeholder='Password']").value;
   
       try {
-        const response = await fetch("http://89.116.21.162/api/login/", {
+        const response = await fetch("/api/login/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
