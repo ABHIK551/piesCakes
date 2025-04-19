@@ -166,7 +166,7 @@ button[type="submit"]:hover {
         </div>
 
         <div class="register-link">
-          <span>Register Your account</span>
+          <span><a href="/register" style="text-decoration: none;color: inherit;">Register Your account</a></span>
         </div>
 
         <div class="google-login">
@@ -241,7 +241,7 @@ function showToast(message, type = "success") {
       const password = document.querySelector("input[placeholder='Password']").value;
   
       try {
-        const response = await fetch("/api/login/", {
+        const response = await fetch("http://89.116.21.162/api/login/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
