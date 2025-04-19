@@ -17,10 +17,12 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Your structure matches this
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Where collectstatic will copy all static files for production
+STATIC_ROOT = BASE_DIR / 'static'  # must NOT be same as STATICFILES_DIRS
+
+# Only if you're using additional static files (optional)
+STATICFILES_DIRS = [BASE_DIR / 'static']  # your source folder
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3*rs$xm*_9d^&iz71fu9n*x#0+syt2+w@z&^w=z^)8grdbfae3'
