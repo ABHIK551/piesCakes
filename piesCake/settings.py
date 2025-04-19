@@ -31,10 +31,12 @@ SECRET_KEY = 'django-insecure-3*rs$xm*_9d^&iz71fu9n*x#0+syt2+w@z&^w=z^)8grdbfae3
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '*',
     '127.0.0.1', 
     'localhost',
-    '89.116.21.162',
-    'www.prajnabyparth.com'
+    'prajnabyparth.com', 
+    'www.prajnabyparth.com', 
+    '89.116.21.162'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
