@@ -1,0 +1,253 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+<section class="categories">
+    <div class="filter-sidebar">
+
+        <!-- CATEGORY FILTER -->
+        <div class="filter-section" id="category-filters">
+            <h3>Category</h3>
+            <ul>
+                <li><input type="checkbox" value="Cakes"> Cakes</li>
+                <li><input type="checkbox" value="Cupcakes & Muffins"> Cupcakes & Muffins</li>
+                <li><input type="checkbox" value="Pies & Tarts"> Pies & Tarts</li>
+                <li><input type="checkbox" value="Desserts"> Desserts</li>
+                <li><input type="checkbox" value="Croissants"> Croissants</li>
+                <li><input type="checkbox" value="Snacks"> Snacks</li>
+                <li><input type="checkbox" value="Food Menu"> Food Menu</li>
+                <li><input type="checkbox" value="Beverages"> Beverages</li>
+            </ul>
+        </div>
+
+        <!-- WEIGHT FILTER -->
+        <div class="filter-section" id="weight-filters">
+            <h3>Weight</h3>
+            <ul>
+                <li><input type="checkbox" value="1 Slice"> 1 Slice</li>
+                <li><input type="checkbox" value="2 Slice"> 2 Slice</li>
+                <li><input type="checkbox" value="200g"> 200g</li>
+                <li><input type="checkbox" value="250g"> 250g</li>
+                <li><input type="checkbox" value="500g"> 500g</li>
+                <li><input type="checkbox" value="1000g"> 1000g</li>
+                <li><input type="checkbox" value="Combo"> Combo</li>
+            </ul>
+        </div>
+
+        <!-- PRICE FILTER -->
+        <div class="filter-section">
+            <h3>Price</h3>
+            <input type="range" min="0" max="6000" value="350" id="price-range">
+        </div>
+
+        <!-- TAGS -->
+        <div class="filter-section">
+            <h3>Tags</h3>
+            <div class="tags">
+                <span>Cakes</span>
+                <span>Cookies</span>
+                <span>Pastries</span>
+                <span>Cupcakes</span>
+                <span>Brownies</span>
+                <span>Breads</span>
+                <span>Muffins</span>
+                <span>Desserts</span>
+                <span>Custom Cakes</span>
+                <span>Eggless & Vegan</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="product-section">
+        <div class="product-card">
+            <img src="https://s3-alpha-sig.figma.com/img/862d/44e0/061e29c6e50f12618b0ba34042f3fd79?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=cG-mcU7qlmsC6EH3ElXgE0f-8-RUKi7-HLfx8lxLgViTNAyNU3-0q9cywKfziETo5pwYcuDbxETJQGpeqwTDmqbH003CUDfQhjr7yWnHS-HuHIbxJDWNEW6xPk6ZdWWKQ~CtXFsn4rzhWkvGSifZgMJZ6gLN8S5eL6W28eduUDcPoV1NrQjgFReX9f0Q8TGrtJCzZdhMiKcJ~Zj3mOO7KCJiKGmmzFcUgY~CzLFfrwWgNJpF3cBlt7Od8EVfRB14yPeXMfFQmTXJRF1Oq5pGIXWsDGOShaQQWXrotf8J2Uym0SKXwVRTQmOFQz-yqeuPrtHBRpJ9iSB-mRNa83AttA__" alt="Triple Chocolate Mousse Cake">
+            <div class="product-info">
+                <h4>Cake</h4>
+                <h3>Triple Chocolate Mousse Cake</h3>
+                <p class="price">₹260.00</p>
+                <div class="buttons">
+                    <button class="add-to-cart">ADD TO CART</button>
+                    <button class="buy-now">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const apiUrl = "http://127.0.0.1:8000/api/products-list/?pageSize=10";
+        let allProducts = [];
+    
+        // Elements
+        const productSection = document.querySelector(".product-section");
+        const categoryFilterContainer = document.querySelector("#category-filters ul");
+        const weightInputs = document.querySelectorAll("#weight-filters input[type='checkbox']");
+        const priceRange = document.querySelector("#price-range");
+        const tagSpans = document.querySelectorAll(".tags span");
+    
+        // Fetch products
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    allProducts = data.products.products;
+    
+                    // Step 1: Build unique category filters
+                    const uniqueCategories = new Set();
+                    allProducts.forEach(product => {
+                        if (product.category && product.category.name) {
+                            uniqueCategories.add(product.category.name);
+                        }
+                    });
+    
+                    // Step 2: Render category checkboxes dynamically
+                    categoryFilterContainer.innerHTML = "";
+                    uniqueCategories.forEach(categoryName => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                            <input type="checkbox" value="${categoryName}"> ${categoryName}
+                        `;
+                        categoryFilterContainer.appendChild(li);
+                    });
+    
+                    // Step 3: Add event listeners to new checkboxes
+                    const categoryInputs = categoryFilterContainer.querySelectorAll("input[type='checkbox']");
+                    categoryInputs.forEach(input => {
+                        input.addEventListener("change", applyFilters);
+                    });
+    
+                    renderProducts(allProducts);
+                }
+            });
+    
+        // Render products
+        function renderProducts(products) {
+            productSection.innerHTML = "";
+    
+            if (!products.length) {
+                productSection.innerHTML = "<p>No products match the selected filters.</p>";
+                return;
+            }
+    
+            products.forEach(product => {
+                const imgSrc = product.product_images?.startsWith("/") 
+                    ? `data:image/jpeg;base64,${product.product_images}`
+                    : product.product_images || "default.jpg";
+
+                    let product_ids = [];
+                    product_ids.push(product.id);  // or whatever ID you're pushing
+                    let user_id = sessionStorage.getItem('user_id');
+
+                    sendData = {
+                        "productIds": product_ids,
+                        "userId": user_id
+                    }
+
+                    const json_data = JSON.stringify(sendData);
+                    const encoded_data = btoa(unescape(encodeURIComponent(json_data)));
+    
+                const productHTML = `
+                    <div class="product-card" style="max-height:400px;">
+                        <div class="product-image">
+                            <img src="${imgSrc}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h4 style="color: grey; margin: 0;">${product.category.name}</h4>
+                            <h3 style="margin: 5px 0;">${product.name}</h3>
+                            <p class="price" style="margin: 5px 0;">
+                                <span class="current-price" style="color: orange; font-weight: bold;">
+                                    ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
+                                </span>
+                                ${product.discount_price ? `<span class="old-price" style="text-decoration: line-through; color: grey; margin-left: 8px;">₹${product.price.toFixed(2)}</span>` : ''}
+                            </p>
+                            <div class="rating" style="color: #FFD700; font-size: 1.2em; margin-bottom: 10px;">
+                                ★★★★★
+                            </div>
+                            <div class="buttons" style="display: flex; gap: 10px;">
+                                <button class="add-to-cart" style="background-color: orange; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;" onclick="addToCart('${encoded_data}')">ADD TO CART</button>
+                                <button class="buy-now" style="background-color: #4a3f3f; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;">BUY NOW</button>
+                            </div>
+                        </div>
+                    </div>`;
+    
+                productSection.insertAdjacentHTML("beforeend", productHTML);
+            });
+        }
+    
+        // Filter logic
+        function applyFilters() {
+            const categoryInputs = document.querySelectorAll("#category-filters input[type='checkbox']");
+            console.log("categoryInputs", [...categoryInputs]);
+            const selectedCategories = [...categoryInputs].filter(i => i.checked).map(i => i.value);
+            const selectedWeights = [...weightInputs].filter(i => i.checked).map(i => i.value.toLowerCase());
+            const selectedTags = [...tagSpans].filter(span => span.classList.contains("active")).map(span => span.textContent.trim().toLowerCase());
+            const maxPrice = parseFloat(priceRange.value);
+    
+            const filtered = allProducts.filter(p => {
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(p.category.name);
+                const weightMatch = selectedWeights.length === 0 || selectedWeights.includes(p.cake_size?.toLowerCase());
+                const priceMatch = parseFloat(p.price) <= maxPrice;
+                const tagsMatch = selectedTags.length === 0 || selectedTags.some(tag => p.tags?.toLowerCase().includes(tag));
+
+                return categoryMatch && weightMatch && priceMatch && tagsMatch;
+            });
+    
+            renderProducts(filtered);
+        }
+    
+        priceRange.addEventListener("input", applyFilters);
+    
+        tagSpans.forEach(span => {
+            span.style.cursor = "pointer";
+            span.addEventListener("click", () => {
+                span.classList.toggle("active");
+                applyFilters();
+            });
+        });
+    });
+
+
+function addToCart(encodedData) {
+    // Decode the base64-encoded data
+    const decodedData = JSON.parse(atob(encodedData));
+    // Extract productIds and userId from the decoded data
+    const productIds = decodedData.productIds;
+    const userId = decodedData.userId;
+
+    // Prepare the data to send in the POST request
+    const data = {
+        userId: userId,
+        productIds: productIds
+    };
+
+    // Send a POST request to the API to add products to the cart
+    fetch('http://127.0.0.1:8000/api/add-to-cart/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)  // Send the data as a JSON string
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Products added to cart successfully!");
+        } else {
+            alert("Failed to add products to cart.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while adding to cart.");
+    });
+}
+
+    </script>
+    
+{% include "frontend/bestseller.html" %}
+{% include "frontend/adds.html" %}
+{% include "frontend/new-arrivals.html" %}
+{% include "frontend/baked-delight.html" %}
+{% include "frontend/why-choose-us.html" %}
+{% include "frontend/popular-picke.html" %}
+{% endblock %}

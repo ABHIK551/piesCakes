@@ -1,0 +1,343 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+        
+        <!-- Header Card with Title & Button -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Banner</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBannerModal">
+                Add Banner
+            </button>
+        </div>
+
+        <!-- Card with Table -->
+        <div class="card mt-0">
+            <duv class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Price (rs.)</th>
+                            <th class="d-none d-xl-table-cell">Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </duv>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+<script>
+    const pageSize = 5;
+    let currentPage = 1;
+
+    async function fetchBanners(page = 1) {
+        try {
+            const response = await fetch(`/api/banner-list/?page=${page}&pageSize=${pageSize}`);
+            const result = await response.json();
+
+            if (result.success) {
+                renderBannerTable(result.data);
+                renderPagination(result.totalPages, page);
+            } else {
+                alert("Failed to fetch banners");
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+        }
+    }
+
+    function renderBannerTable(banners) {
+        const tbody = document.getElementById("categoryTableBody");
+        tbody.innerHTML = "";
+
+        banners.forEach(banner => {
+            const row = document.createElement("tr");
+
+            const statusBtnClass = banner.status === 'active' ? 'btn-success' : 'btn-danger';
+            const statusBtnText = banner.status.charAt(0).toUpperCase() + banner.status.slice(1);
+
+            row.innerHTML = `
+                <td>${banner.id}</td>
+                <td>${banner.heading}</td>
+                <td>${banner.price}</td>
+                <td class="d-none d-xl-table-cell">${banner.link}</td>
+                <td><button class="btn btn-sm ${statusBtnClass}">${statusBtnText}</button></td>
+                <td><img src="data:image/png;base64,${banner.image}" alt="banner image" style="height: 50px;"></td>
+                <td class="d-none d-md-table-cell">${banner.created_at}</td>
+                <td class="d-none d-md-table-cell">${banner.updated_at}</td>
+                <td>
+                    <button class="btn btn-sm btn-info" onclick="editBannerById('${banner.id}')">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteBanner('${banner.id}')">Delete</button>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    window.deleteBanner = function (id) {
+		if (confirm("Are you sure you want to delete this banner?")) {
+			fetch(`http://127.0.0.1:8000/api/banner/${id}/delete/`, { method: "POST" })
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`HTTP error! Status: ${response.status}`);
+					}
+					return response.json().catch(() => ({}));
+				})
+				.then(data => {
+					console.log(data)
+					if (data.success) {
+						showToast("Banner deleted successfully!", "success")
+					} else {
+						showToast("Failed to delete banner.", "danger");
+					}
+				})
+		}
+	};
+
+    function renderPagination(totalPages, currentPage) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement("li");
+            li.className = `page-item ${i === currentPage ? "active" : ""}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            li.addEventListener("click", (e) => {
+                e.preventDefault();
+                fetchBanners(i);
+            });
+
+            pagination.appendChild(li);
+        }
+    }
+
+    // Initial call on page load
+    fetchBanners();
+</script>
+
+<!-- Add Banner Modal -->
+<div class="modal fade" id="addBannerModal" tabindex="-1" aria-labelledby="addBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBannerModalLabel">Add New Banner</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="bannerForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Hidden ID field (optional as id is created server-side) -->
+            <input type="hidden" id="bannerId" name="id">
+            
+            <!-- Banner Heading -->
+            <div class="mb-3">
+              <label for="bannerHeading" class="form-label">Heading</label>
+              <input type="text" class="form-control" id="bannerHeading" name="heading" required>
+            </div>
+  
+            <!-- Banner Link -->
+            <div class="mb-3">
+              <label for="bannerLink" class="form-label">Link</label>
+              <input type="url" class="form-control" id="bannerLink" name="link" required placeholder="https://example.com">
+            </div>
+  
+            <!-- Banner Price -->
+            <div class="mb-3">
+              <label for="bannerPrice" class="form-label">Price</label>
+              <input type="number" step="0.01" class="form-control" id="bannerPrice" name="price" required>
+            </div>
+  
+            <!-- Banner Image -->
+            <div class="mb-3">
+              <label for="bannerImage" class="form-label">Image</label>
+              <input type="file" class="form-control" id="bannerImage" name="image" accept="image/*" required>
+            </div>
+            
+            <!-- Banner Status -->
+            <div class="mb-3">
+              <label for="bannerStatus" class="form-label">Status</label>
+              <select class="form-select" id="bannerStatus" name="status" required>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+  
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success" onclick="addBanner(event)">Save Banner</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    async function addBanner(e) {
+      e.preventDefault();
+  
+      // Create a FormData object to handle file uploads
+      const formData = new FormData(document.getElementById("bannerForm"));
+  
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/banners/", {
+          method: "POST",
+          body: formData
+        });
+        const data = await response.json();
+        if (response.ok) {
+            // Hide the modal properly
+            let addBannerModal = document.getElementById("addBannerModal");
+            let modalInstance = bootstrap.Modal.getInstance(addBannerModal);
+            modalInstance.hide();
+
+            // Remove modal backdrop manually (if still present)
+            document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
+
+            showToast("✅ Banner added successfully!","success");
+            // Optionally close the modal and refresh the banner list.
+        } else {
+            showToast("Failed to add banner!","danger");
+        }
+      } catch (error) {
+        console.error("Error adding banner:", error);
+        showToast("Error occured contect your Technical team!","danger");
+      }
+    }
+  </script>
+<script>
+    async function editBannerById(id) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/banner/${id}/`);
+            const result = await response.json();
+  
+            if (result.success && result.data) {
+                const banner = result.data;
+  
+                // Set values in modal form fields
+                document.getElementById("editBannerId").value = banner.id;
+                document.getElementById("editBannerHeading").value = banner.heading || "";
+                document.getElementById("editBannerPrice").value = banner.price || "";
+                document.getElementById("editBannerLink").value = banner.link || "";
+                document.getElementById("editBannerStatus").value = banner.status || "active";
+  
+                // Show image preview if available
+                if (banner.image) {
+                    const img = document.getElementById("editBannerPreviewImage");
+                    img.src = `data:image/png;base64,${banner.image}`;
+                    img.style.display = "block";
+                }
+  
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById("editBannerModal"));
+                modal.show();
+            } else {
+                alert("Banner not found.");
+            }
+        } catch (error) {
+            console.error("Error fetching banner:", error);
+            alert("Failed to load banner.");
+        }
+    }
+  </script>
+
+<script>
+    async function updateBanner() {
+        const form = document.getElementById("editBannerForm");
+        const formData = new FormData(form);
+
+        const bannerId = document.getElementById("editBannerId").value;
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/banner/${bannerId}/update`, {
+                method: "POST",
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showToast("Banner updated successfully!", "success");
+                const modal = bootstrap.Modal.getInstance(document.getElementById("editBannerModal"));
+                modal.hide();
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showToast(result.message || "Failed to update banner", "danger");
+            }
+        } catch (error) {
+            console.error("Error updating banner:", error);
+            showToast("An error occurred while updating.", "danger");
+        }
+    }
+</script>
+
+  
+<!-- Edit Banner Modal -->
+<div class="modal fade" id="editBannerModal" tabindex="-1" aria-labelledby="editBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBannerModalLabel">Edit Banner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBannerForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editBannerId" name="id">
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="editBannerHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="editBannerHeading" name="heading" required>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <label for="editBannerPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="editBannerPrice" name="price" min="0" step="0.01">
+                    </div>
+
+                    <!-- Link -->
+                    <div class="mb-3">
+                        <label for="editBannerLink" class="form-label">Link</label>
+                        <input type="url" class="form-control" id="editBannerLink" name="link" placeholder="https://example.com">
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="editBannerStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editBannerStatus" name="status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Banner Image Upload -->
+                    <div class="mb-3">
+                        <label for="editBannerImage" class="form-label">Banner Image</label>
+                        <input type="file" class="form-control" id="editBannerImage" name="image_base64" accept="image/*">
+                        <img id="editBannerPreviewImage" src="" class="mt-2" style="max-width: 200px; display: none;">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-success" onclick="updateBanner()">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}

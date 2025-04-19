@@ -1,0 +1,36 @@
+<!-- Add Section -->
+<section class="add-section" id="addSection" style="background-size: cover; background-position: center;">
+    <div class="add-content text-white text-center">
+        <h2 id="addHeading">Delicious Cakes & <br>Baked Treats</h2>
+        <p id="addDescription">Indulge in freshly baked delights!</p>
+        <a href="#" id="addLink" class="shop-btn">Shop now</a>
+    </div>
+</section>
+<script>
+    async function loadHomepageAdd() {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/ads-list/?page=1&pageSize=1");
+        const data = await response.json();
+  
+        if (data.success && data.data.length > 0) {
+          const ad = data.data[0]; // get the first (latest) ad
+  
+          // Set Heading & Description (fallback if missing)
+          document.getElementById("addHeading").innerHTML = ad.heading || "Delicious Cakes & <br>Baked Treats";
+          document.getElementById("addDescription").textContent = ad.description || "Indulge in freshly baked delights!";
+          document.getElementById("addLink").href = ad.link || "#";
+  
+          // Set background image
+          if (ad.image) {
+            const imageUrl = `data:image/jpeg;base64,${ad.image}`;
+            document.getElementById("addSection").style.backgroundImage = `url(${imageUrl})`;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load homepage add:", error);
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", loadHomepageAdd);
+  </script>
+  

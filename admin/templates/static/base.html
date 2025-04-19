@@ -1,0 +1,1165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="{% static 'img/icons/icon-48x48.png' %}" />
+
+	<link rel="canonical" href="https://demo-basic.adminkit.io/" />
+
+	<title>AdminKit Demo - Bootstrap 5 Admin Template</title>
+
+	<link href="{% static 'css_admin/app.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Add this in your base.html -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<style>
+/* Table Wrapper to enable scrolling if necessary */
+.table-wrapper {
+    margin-top: 10px;
+    overflow-y: auto;  /* Enables vertical scrolling when content exceeds the wrapper */
+    max-height: 400px; /* Set a max height to trigger scrolling */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Table Styling */
+table {
+    width: 100%; 
+    table-layout: auto; /* Adjust column width based on content */
+    border-collapse: collapse; /* Remove extra spacing between cells */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Table Header */
+th {
+    background-color: #2A376D; /* Your preferred background color */
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Table Data */
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    vertical-align: top;
+}
+
+/* Alternating Row Color */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table {
+        font-size: 12px; /* Smaller font for mobile devices */
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+	/* Full-screen overlay */
+#loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+/* Loader animation */
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #fff;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loader image with jumping animation */
+.loader-image {
+	height: 100px;
+	width: 100px;
+	background-color: white;
+	border-radius: 50%;
+	padding: 10px;
+	object-fit: contain;
+	animation: jump 1s infinite ease-in-out;
+}
+
+/* Keyframes for jumping effect */
+@keyframes jump {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+</style>
+<body>
+
+
+    <div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="index.html">
+          <span class="align-middle">AdminKit</span>
+        </a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="index.html">
+              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/profile">
+              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/login">
+              <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Sign In</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/register">
+              <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="pages-blank.html">
+              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
+            </a>
+					</li>
+
+					<li class="sidebar-header">
+						Components
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/categories">
+              <i class="align-middle" data-feather="square"></i> <span class="align-middle">Categories</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/products">
+              <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Products</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/banner">
+              <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Banner</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/why-choose-us">
+              <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Why Choose US</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/top-picks">
+              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Top Picks IMG</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/adds">
+              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Add section</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/admin/baked-delights">
+              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Baked Delights</span>
+            </a>
+					</li>
+
+					<li class="sidebar-header">
+						Plugins & Addons
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="charts-chartjs.html">
+              <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Charts</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="maps-google.html">
+              <i class="align-middle" data-feather="map"></i> <span class="align-middle">Maps</span>
+            </a>
+					</li>
+				</ul>
+
+				<div class="sidebar-cta">
+					<div class="sidebar-cta-content">
+						<strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+						<div class="mb-3 text-sm">
+							Are you looking for more components? Check out our premium version.
+						</div>
+						<div class="d-grid">
+							<a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg" style="padding-left: 10px;padding-right: 10px;">
+				<a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator">4</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+								<div class="dropdown-menu-header">
+									4 New Notifications
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-danger" data-feather="alert-circle"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Update completed</div>
+												<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+												<div class="text-muted small mt-1">30m ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-warning" data-feather="bell"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Lorem ipsum</div>
+												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-primary" data-feather="home"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Login from 192.186.1.8</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-success" data-feather="user-plus"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">New connection</div>
+												<div class="text-muted small mt-1">Christina accepted your request.</div>
+												<div class="text-muted small mt-1">14h ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all notifications</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="message-square"></i>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+								<div class="dropdown-menu-header">
+									<div class="position-relative">
+										4 New Messages
+									</div>
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="{% static 'img/avatars/avatar-5.jpg' %}" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Vanessa Tucker</div>
+												<div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
+												<div class="text-muted small mt-1">15m ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="{% static 'img/avatars/avatar-2.jpg' %}" class="avatar img-fluid rounded-circle" alt="William Harris">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">William Harris</div>
+												<div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="{% static 'img/avatars/avatar-4.jpg' %}" class="avatar img-fluid rounded-circle" alt="Christina Mason">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Christina Mason</div>
+												<div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
+												<div class="text-muted small mt-1">4h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Sharon Lessman">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Sharon Lessman</div>
+												<div class="text-muted small mt-1">Aenean tellus metus, bibendum sed, posuere ac, mattis non.</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all messages</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                <i class="align-middle" data-feather="settings"></i>
+              </a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                <img src="{% static 'img/avatars/avatar.jpg' %}" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
+              </a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
+								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Log out</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+            <!-- Bootstrap Toast (Hidden by Default) -->
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="toastMessage" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Success Message!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+                {% block content %}
+                <!-- Content of child templates will go here -->
+                {% endblock %}
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+						<div class="col-6 text-start">
+							<p class="mb-0">
+								<a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> - <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Bootstrap Admin Template</strong></a>								&copy;
+							</p>
+						</div>
+						<div class="col-6 text-end">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Support</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Help Center</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Privacy</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Terms</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+			<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+			<div id="loader-container">
+				<img src="https://s3-alpha-sig.figma.com/img/dcd9/118e/ce10851ab2adeac1e26c8d3620d4b47e?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=c~s4X6dwaMpVe1d-hLQ0iKpzzXmxRMj~3SrPrLLNlDnndVsjGtyJ3u8iRYHHkksgoFDBhkpBOinD3L5dVGYwPiftuAfvFt6EEGq0WOUeJWzv8lD3HSdWFeWzOJJgCOGX33IHVCIpQRrTkeBBsbGf9lMMaF~sLBmVpAmYvxGpFiTZ9cJeq8Z56hcKZ3w3zTfNWTRxVxNTdchSHPLyx7E~tqKtLfArRcSPn0vVWJfWmlqIvBYS37XAayQSK4GqPk6~HZrTxcp9kFHnBsII~8fWoWNTbzYfHJA9QeHrzrHSX2II1d6BZHIYhAmu~UGr9kQApO9icJZ9Mj~HDzETAY0GXQ__" alt="Loading..." class="loader-image">
+			</div>
+		</div>
+	</div>
+    <!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap 5 JS (Required for Modal) -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
+			gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
+			gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
+			// Line chart
+			new Chart(document.getElementById("chartjs-dashboard-line"), {
+				type: "line",
+				data: {
+					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					datasets: [{
+						label: "Sales ($)",
+						fill: true,
+						backgroundColor: gradient,
+						borderColor: window.theme.primary,
+						data: [
+							2115,
+							1562,
+							1584,
+							1892,
+							1587,
+							1923,
+							2566,
+							2448,
+							2805,
+							3438,
+							2917,
+							3327
+						]
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						intersect: false
+					},
+					hover: {
+						intersect: true
+					},
+					plugins: {
+						filler: {
+							propagate: false
+						}
+					},
+					scales: {
+						xAxes: [{
+							reverse: true,
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								stepSize: 1000
+							},
+							display: true,
+							borderDash: [3, 3],
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}]
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Pie chart
+			new Chart(document.getElementById("chartjs-dashboard-pie"), {
+				type: "pie",
+				data: {
+					labels: ["Chrome", "Firefox", "IE"],
+					datasets: [{
+						data: [4306, 3801, 1689],
+						backgroundColor: [
+							window.theme.primary,
+							window.theme.warning,
+							window.theme.danger
+						],
+						borderWidth: 5
+					}]
+				},
+				options: {
+					responsive: !window.MSInputMethodContext,
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					cutoutPercentage: 75
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Bar chart
+			new Chart(document.getElementById("chartjs-dashboard-bar"), {
+				type: "bar",
+				data: {
+					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					datasets: [{
+						label: "This year",
+						backgroundColor: window.theme.primary,
+						borderColor: window.theme.primary,
+						hoverBackgroundColor: window.theme.primary,
+						hoverBorderColor: window.theme.primary,
+						data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+						barPercentage: .75,
+						categoryPercentage: .5
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							gridLines: {
+								display: false
+							},
+							stacked: false,
+							ticks: {
+								stepSize: 20
+							}
+						}],
+						xAxes: [{
+							stacked: false,
+							gridLines: {
+								color: "transparent"
+							}
+						}]
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var markers = [{
+					coords: [31.230391, 121.473701],
+					name: "Shanghai"
+				},
+				{
+					coords: [28.704060, 77.102493],
+					name: "Delhi"
+				},
+				{
+					coords: [6.524379, 3.379206],
+					name: "Lagos"
+				},
+				{
+					coords: [35.689487, 139.691711],
+					name: "Tokyo"
+				},
+				{
+					coords: [23.129110, 113.264381],
+					name: "Guangzhou"
+				},
+				{
+					coords: [40.7127837, -74.0059413],
+					name: "New York"
+				},
+				{
+					coords: [34.052235, -118.243683],
+					name: "Los Angeles"
+				},
+				{
+					coords: [41.878113, -87.629799],
+					name: "Chicago"
+				},
+				{
+					coords: [51.507351, -0.127758],
+					name: "London"
+				},
+				{
+					coords: [40.416775, -3.703790],
+					name: "Madrid "
+				}
+			];
+			var map = new jsVectorMap({
+				map: "world",
+				selector: "#world_map",
+				zoomButtons: true,
+				markers: markers,
+				markerStyle: {
+					initial: {
+						r: 9,
+						strokeWidth: 7,
+						stokeOpacity: .4,
+						fill: window.theme.primary
+					},
+					hover: {
+						fill: window.theme.primary,
+						stroke: window.theme.primary
+					}
+				},
+				zoomOnScroll: false
+			});
+			window.addEventListener("resize", () => {
+				map.updateSize();
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var date = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
+			var defaultDate = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
+			document.getElementById("datetimepicker-dashboard").flatpickr({
+				inline: true,
+				prevArrow: "<span title=\"Previous month\">&laquo;</span>",
+				nextArrow: "<span title=\"Next month\">&raquo;</span>",
+				defaultDate: defaultDate
+			});
+		});
+	</script>
+    <script>
+        function toggleParentCategory() {
+			var categoryType = document.getElementById("categoryType").value;
+			var parentCategoryDiv = document.getElementById("parentCategoryDiv");
+
+			if (categoryType === "sub") {
+				parentCategoryDiv.classList.remove("d-none");
+				fetchMainCategories("parentCategory"); // Fetch main categories for Add Category form
+			} else {
+				parentCategoryDiv.classList.add("d-none");
+			}
+		}
+
+		function toggleEditParentCategory() {
+			var categoryType = document.getElementById("editCategoryType").value;
+			var parentCategoryDiv = document.getElementById("editParentCategoryDiv");
+
+			if (categoryType === "sub") {
+				parentCategoryDiv.classList.remove("d-none");
+				fetchMainCategories("editParentCategory"); // Fetch main categories for Edit Category form
+			} else {
+				parentCategoryDiv.classList.add("d-none");
+			}
+		}
+
+		async function fetchMainCategories(selectId) {
+			try {
+				let response = await fetch("http://127.0.0.1:8000/api/categories/main/");
+				let data = await response.json();
+
+				let parentCategorySelect = document.getElementById(selectId);
+				parentCategorySelect.innerHTML = '<option selected disabled>Choose a Parent Category</option>';
+
+				data.forEach(category => {
+					let option = document.createElement("option");
+					option.value = category.id;
+					option.textContent = category.name;
+					parentCategorySelect.appendChild(option);
+				});
+
+				return true; // Return success
+			} catch (error) {
+				console.error("Error fetching main categories:", error);
+				return false; // Return failure
+			}
+		}
+
+		// Attach event listeners to call toggle functions
+		document.getElementById("categoryType").addEventListener("change", toggleParentCategory);
+		document.getElementById("editCategoryType").addEventListener("change", toggleEditParentCategory);
+
+	document.addEventListener("DOMContentLoaded", function () {
+		const categoryModal = document.getElementById('categoryModal');
+		const form = document.getElementById('categoryForm');
+
+		// Function to show toast messages
+		function showToast(message, isSuccess = true) {
+			Toastify({
+				text: message,
+				duration: 3000,
+				close: true,
+				gravity: "top", 
+				position: "right",
+				backgroundColor: isSuccess ? "green" : "red",
+			}).showToast();
+		}
+
+		// Function to show toast notifications
+		function showToast(message, isSuccess = true) {
+			const toastElement = document.getElementById("toastMessage");
+			toastElement.classList.remove("bg-success", "bg-danger"); // Reset classes
+			toastElement.classList.add(isSuccess ? "bg-success" : "bg-danger"); // Apply success/error style
+			toastElement.querySelector(".toast-body").textContent = message; // Set message
+
+			const toast = new bootstrap.Toast(toastElement); // Initialize toast
+			toast.show();
+		}
+	
+		categoryModal.addEventListener('show.bs.modal', function (event) {
+			const button = event.relatedTarget; // Button that triggered the modal
+			const categoryId = button.getAttribute('data-id'); // Get category ID if editing
+	
+			if (categoryId) {
+				// Fetch category data from API (Replace with your API URL)
+				fetch(`/api/categories/${categoryId}/`)
+					.then(response => response.json())
+					.then(data => {
+						document.getElementById('categoryId').value = data.id;
+						document.getElementById('categoryName').value = data.name;
+						document.getElementById('categoryDescription').value = data.description || '';
+						document.getElementById('createdAt').value = data.created_at;
+						document.getElementById('updatedAt').value = data.updated_at;
+						document.getElementById('parentCategory').value = data.parent || '';
+					})
+					.catch(error => console.error('Error fetching category:', error));
+			} else {
+				// Reset form for new category
+				form.reset();
+				document.getElementById('categoryId').value = '';
+				document.getElementById('createdAt').value = new Date().toLocaleString(); // Set current date
+				document.getElementById('updatedAt').value = new Date().toLocaleString();
+			}
+	
+			// Load parent categories dynamically
+			fetch('http://127.0.0.1:8000/api/categories/list/')
+				.then(response => response.json())
+				.then(data => {
+					const parentSelect = document.getElementById('parentCategory');
+					parentSelect.innerHTML = '<option value="">None (Main Category)</option>';
+					data.forEach(category => {
+						parentSelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+					});
+				});
+		});
+
+	});
+
+	const API_URL = "http://127.0.0.1:8000/api/categories-list/";
+	let currentPage = 1;
+	let activeTab = 'categories'; // Default tab
+
+	function fetchCategories(page = 1) {
+		// Show loader before API call
+		document.getElementById("loader-container").style.display = "flex";
+
+		fetch(`${API_URL}?page=${page}`)
+			.then(response => response.json())
+			.then(data => {
+				// Hide loader after receiving response
+				document.getElementById("loader-container").style.display = "none";
+
+				if (data.success) {
+					currentPage = data.page;
+					if (activeTab === 'categories') {
+						populateCategoryTable(data.categories.main_categories);
+					} else {
+						populateSubcategoryTable(data.categories.sub_categories);
+					}
+					updatePagination(data.page, data.totalPages);
+				}
+			})
+			.catch(error => {
+				console.error("Error fetching categories:", error);
+				document.getElementById("loader-container").style.display = "none"; // Hide loader on error
+			});
+	}
+
+	function changePage(page, event) {
+		if (event) event.preventDefault();
+		fetchCategories(page);
+		return false;
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		// Fetch default tab data
+		fetchCategories();
+
+		// Attach event listeners to tab buttons
+		document.getElementById("tab-categories").addEventListener("click", function () {
+			activeTab = 'categories';
+			fetchCategories(1); // Reset to page 1
+		});
+
+		document.getElementById("tab-subcategories").addEventListener("click", function () {
+			activeTab = 'subcategories';
+			fetchCategories(1); // Reset to page 1
+		});
+	});
+	function populateCategoryTable(categories) {
+		let tableBody = document.getElementById("categoryTableBody");
+		tableBody.innerHTML = "";
+
+		categories.forEach(category => {
+			let imageTag = category.image 
+				? `<img src="data:image/png;base64,${category.image}" alt="${category.name}" class="img-thumbnail" width="50" height="50">`
+				: "No Image";
+
+			let statusBadge = category.status === 1 
+				? `<span class="badge bg-success">Active</span>` 
+				: `<span class="badge bg-danger">Inactive</span>`;
+
+			let parentCategory = category.parent ? category.parent.name : "N/A";
+
+			// Convert category object to a JSON string & escape single quotes
+			let categoryData = encodeURIComponent(JSON.stringify(category));
+
+			let row = `<tr>
+				<td>${category.id}</td>
+				<td>${category.name}</td>
+				<td class="d-none d-xl-table-cell">${category.description || "-"}</td>
+				<td>${statusBadge}</td>
+				<td>${imageTag}</td>
+				<td class="d-none d-md-table-cell">${new Date(category.created_at).toLocaleDateString()}</td>
+				<td class="d-none d-md-table-cell">${new Date(category.updated_at).toLocaleDateString()}</td>
+				<td>${parentCategory}</td>
+				<td>
+					<button class="btn btn-sm btn-warning" 
+							onclick="openEditModal('${categoryData}')">
+						Edit
+					</button>
+					
+					<button class="btn btn-sm btn-danger" 
+							onclick="deleteCategory(${category.id})">
+						Delete
+					</button>
+				</td>
+			</tr>`;
+			tableBody.innerHTML += row;
+		});
+	}
+
+	// Open Edit Modal and Set Values
+	async function openEditModal(categoryData) {
+		let category = JSON.parse(decodeURIComponent(categoryData));
+
+		document.getElementById("editCategoryId").value = category.id;
+		document.getElementById("editCategoryName").value = category.name;
+		document.getElementById("editCategoryDescription").value = category.description || "";
+		document.getElementById("editCategoryStatus").value = category.status;
+		document.getElementById("editCategorySlug").value = category.slug || "";
+		document.getElementById("editCategoryOrder").value = category.order || "";
+		document.getElementById("editCategoryType").value = category.parent ? "sub" : "main";
+
+		let parentCategoryDiv = document.getElementById("editParentCategoryDiv");
+		let parentCategorySelect = document.getElementById("editParentCategory");
+
+		if (category.parent) {
+			parentCategoryDiv.classList.remove("d-none");
+			let success = await fetchMainCategories("editParentCategory");
+			if (success) {
+				parentCategorySelect.value = category.parent.id || "none";
+			}
+		} else {
+			parentCategoryDiv.classList.add("d-none");
+			parentCategorySelect.innerHTML = '<option selected disabled>Choose a Parent Category</option>';
+		}
+
+		// Show image preview if available
+		let imagePreview = document.getElementById("editPreviewImage");
+		if (category.image) {
+			imagePreview.src = `data:image/png;base64,${category.image}`;
+			imagePreview.style.display = "block";
+		} else {
+			imagePreview.style.display = "none";
+		}
+
+		let editModal = new bootstrap.Modal(document.getElementById("editCategoryModal"));
+		editModal.show();
+	}
+
+	function populateSubcategoryTable(subcategories) {
+		let tableBody = document.getElementById("subcategoryTableBody");
+		tableBody.innerHTML = "";
+		subcategories.forEach(sub => {
+			let row = `<tr>
+				<td>${sub.name}</td>
+				<td class="d-none d-xl-table-cell">${sub.description || "-"}</td>
+				<td>${sub.parent_category ? sub.parent_category.name : "N/A"}</td>
+				<td class="d-none d-md-table-cell">${new Date(sub.created_at).toLocaleDateString()}</td>
+				<td>
+					<button class="btn btn-sm btn-warning" onclick="editCategory(${sub.id})">Edit</button>
+					<button class="btn btn-sm btn-danger" onclick="deleteCategory(${sub.id})">Delete</button>
+				</td>
+			</tr>`;
+			tableBody.innerHTML += row;
+		});
+	}
+
+	function updatePagination(page, totalPages) {
+		let pagination = document.getElementById("pagination");
+		pagination.innerHTML = "";
+
+		if (page > 1) {
+			pagination.innerHTML += `<li class="page-item">
+				<a class="page-link" href="#" onclick="return changePage(${page - 1}, event)">Previous</a>
+			</li>`;
+		}
+
+		for (let i = 1; i <= totalPages; i++) {
+			pagination.innerHTML += `<li class="page-item ${i === page ? 'active' : ''}">
+				<a class="page-link" href="#" onclick="return changePage(${i}, event)">${i}</a>
+			</li>`;
+		}
+
+		if (page < totalPages) {
+			pagination.innerHTML += `<li class="page-item">
+				<a class="page-link" href="#" onclick="return changePage(${page + 1}, event)">Next</a>
+			</li>`;
+		}
+	}
+
+	window.deleteCategory = function (id) {
+		if (confirm("Are you sure you want to delete this category?")) {
+			fetch(`http://127.0.0.1:8000/api/categories/delete/${id}/`, { method: "DELETE" })
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`HTTP error! Status: ${response.status}`);
+					}
+					return response.json().catch(() => ({})); // Ensure safe JSON parsing
+				})
+				.then(data => {
+					console.log(data)
+					if (data.success) {
+						showToast("Category deleted successfully!", "success")
+						fetchCategories(1);
+						window.location.reload();
+					} else {
+						showToast(data.error || "Failed to delete category.", "danger");
+					}
+				})
+		}
+	};
+
+	async function updateCategory() {
+		let form = document.getElementById("editCategoryForm");
+		let formData = new FormData(form);
+
+		let categoryId = document.getElementById("editCategoryId").value;
+		let imageInput = document.getElementById("editCategoryImage");
+
+		// Append image only if selected
+		if (imageInput.files.length > 0) {
+			formData.append("image", imageInput.files[0]);
+		}
+
+		try {
+			let response = await fetch(`http://127.0.0.1:8000/api/categories/${categoryId}/`, {
+				method: "PUT",
+				body: formData,
+			});
+
+			let result = await response.json();
+
+			if (response.ok) {
+				alert("Category updated successfully!");
+				let editModal = bootstrap.Modal.getInstance(document.getElementById("editCategoryModal"));
+				editModal.hide();
+				fetchCategories(); // Refresh category list
+			} else {
+				alert("Error updating category: " + (result.message || "Unknown error"));
+			}
+		} catch (error) {
+			console.error("Error updating category:", error);
+			alert("Failed to update category. Please try again.");
+		}
+	}
+
+
+</script>
+<!-- <script>
+document.getElementById("categoryForm").addEventListener("submit", async function (event) {
+	event.preventDefault();
+	document.getElementById("loader-container").style.display = "flex";
+
+	const categoryName = document.getElementById("categoryName").value.trim();
+	const categoryDescription = document.getElementById("categoryDescription").value.trim();
+	const categoryStatus = parseInt(document.getElementById("categoryStatus").value, 10) || 0;
+	const parentCategory = document.getElementById("parentCategory").value || null;
+	const imageFile = document.getElementById("categoryImage").files[0];
+	// Get CSRF token from hidden input
+	const csrfToken = document.getElementById("csrfToken").value;
+
+	const formData = new FormData();
+	formData.append("name", categoryName);
+	formData.append("description", categoryDescription);
+	formData.append("status", categoryStatus);
+	if (parentCategory) formData.append("parent", parentCategory);
+	if (imageFile) formData.append("image_file", imageFile);
+
+	try {
+		const response = await fetch("http://127.0.0.1:8000/api/categories/", {
+			method: "POST",
+			body: formData,
+			headers: {
+				"X-CSRFToken": csrfToken,  // Include CSRF token in headers
+				"Accept": "application/json",
+			},
+			credentials: "same-origin",
+		});
+
+		const data = await response.json();
+		document.getElementById("loader-container").style.display = "none";
+
+		if (data.success) {
+			alert("Category saved successfully!");
+		} else {
+			console.error("Error:", data.errors);
+			alert("Error saving category. Check console for details.");
+		}
+	} catch (error) {
+		console.error("Error:", error);
+		alert("An error occurred while saving the category.");
+	}
+});
+
+</script> -->
+<script>
+	document.getElementById("categoryForm").addEventListener("submit", async function (event) {
+	event.preventDefault();
+	document.getElementById("loader-container").style.display = "flex";
+
+	const categoryName = document.getElementById("categoryName").value.trim();
+	const categoryDescription = document.getElementById("categoryDescription").value.trim();
+	const categoryStatus = parseInt(document.getElementById("categoryStatus").value, 10) || 0;
+	const parentCategory = document.getElementById("parentCategory").value || null;
+	const imageFile =  document.getElementById("categoryImage").files[0];
+	const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value; // Fetch CSRF token
+
+	const formData = new FormData();
+	formData.append("name", categoryName);
+	formData.append("description", categoryDescription);
+	formData.append("status", categoryStatus);
+	if (parentCategory) formData.append("parent", parentCategory);
+	if (imageFile) formData.append("image_file", imageFile);
+
+	const response = await fetch("http://127.0.0.1:8000/api/categories/", {
+		method: "POST",
+		body: formData,
+		headers: {
+			"X-CSRFToken": csrfToken,
+		},
+		credentials: "same-origin",
+	});
+
+	const data = await response.json();
+	document.getElementById("loader-container").style.display = "none";
+
+	if (data.success) {
+		// Hide the modal properly
+		let addCategoryModal = document.getElementById("addCategoryModal");
+		let modalInstance = bootstrap.Modal.getInstance(addCategoryModal);
+		modalInstance.hide();
+
+		// Remove modal backdrop manually (if still present)
+		document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
+		// Show success toast message
+		showToast("Category added successfully!", "success");
+
+		document.getElementById("categoryForm").reset();
+	} else {
+		showToast("Failed to add category connect with Super Admin!", "danger");
+	}
+});
+
+// Function to show a toast message
+function showToast(message, type = "success") {
+    const toastContainer = document.getElementById("toast-container");
+    
+    // Create a new toast element
+    const toast = document.createElement("div");
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.setAttribute("role", "alert");
+    toast.setAttribute("aria-live", "assertive");
+    toast.setAttribute("aria-atomic", "true");
+
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Initialize Bootstrap toast with auto-hide enabled (5s)
+    const bsToast = new bootstrap.Toast(toast, { delay: 5000 }); 
+    bsToast.show();
+
+    // ✅ Force page reload after 5 seconds (even if user doesn't close the toast)
+    setTimeout(() => {
+        location.reload();
+    }, 5000);
+
+    // ✅ Also reload when toast is manually closed
+    toast.addEventListener("hidden.bs.toast", () => {
+        location.reload();
+    });
+}
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,370 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+        
+        <!-- Header Card with Title & Button -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Why-Choose-US</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWhyChooseUsModal">
+                Add Why-Choose-US
+            </button>
+        </div>
+
+        <!-- Card with Table -->
+        <div class="card mt-0">
+            <duv class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Heading</th>
+                            <th class="d-none d-xl-table-cell">Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th class="d-none d-md-table-cell">Order</th>
+                            <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="why-choose-usTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </duv>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+
+<!-- Add Why Choose Us Modal -->
+<div class="modal fade" id="addWhyChooseUsModal" tabindex="-1" aria-labelledby="addWhyChooseUsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWhyChooseUsModalLabel">Add "Why Choose Us" Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="whyChooseUsForm" enctype="multipart/form-data">
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="whyImage" class="form-label">Image/Icon</label>
+                        <input type="file" class="form-control" id="whyImage" name="image" accept="image/*" required>
+                    </div>
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="whyHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="whyHeading" name="heading" placeholder="e.g., High-Quality Ingredients" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="whyDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="whyDescription" name="description" rows="3" placeholder="Describe the benefit or reason" required></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="whyStatus" class="form-label">Status</label>
+                        <select class="form-select" id="whyStatus" name="status" required>
+                            <option value="1" selected>Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Display Order -->
+                    <div class="mb-3">
+                        <label for="whyOrder" class="form-label">Display Order</label>
+                        <input type="number" class="form-control" id="whyOrder" name="order" min="1" placeholder="e.g., 1, 2, 3" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary" onclick="addWhyChooseUsItem(event)">Save Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Why Choose Us Modal -->
+<div class="modal fade" id="editWhyChooseUsModal" tabindex="-1" aria-labelledby="editWhyChooseUsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editWhyChooseUsModalLabel">Edit "Why Choose Us" Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editWhyChooseUsForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editWhyId" name="id">
+
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="editWhyImage" class="form-label">Image/Icon</label>
+                        <input type="file" class="form-control" id="editWhyImage" name="image" accept="image/*">
+                        <img id="editWhyPreviewImage" src="" class="mt-2" style="max-width: 100px; display: none;">
+                    </div>
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="editWhyHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="editWhyHeading" name="heading" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="editWhyDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editWhyDescription" name="description" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="editWhyStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editWhyStatus" name="status" required>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Display Order -->
+                    <div class="mb-3">
+                        <label for="editWhyOrder" class="form-label">Display Order</label>
+                        <input type="number" class="form-control" id="editWhyOrder" name="order" min="1" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-success" onclick="updateWhyChooseUsItem(event)">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addWhyChooseUsItem(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("whyChooseUsForm");
+        const formData = new FormData(form);
+
+        fetch('http://127.0.0.1:8000/api/why-choose-us/create/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw data; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalElement = document.getElementById('addWhyChooseUsModal');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Fix leftover backdrop issue
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300); // slight delay to ensure modal hides first
+
+            showToast("Item added successfully!", "success");
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("Failed to add item.", "danger");
+        });
+    }
+
+</script>
+<script>
+    // Function to fetch and render data into the table
+function fetchData(page = 1, pageSize = 5) {
+    const tableBody = document.getElementById('why-choose-usTableBody');
+    const pagination = document.getElementById('pagination');
+
+    // Clear the table body and pagination
+    tableBody.innerHTML = '';
+    pagination.innerHTML = '';
+
+    // Fetch data from the API with pagination
+    fetch(`http://127.0.0.1:8000/api/why-choose-us/?page=${page}&pageSize=${pageSize}`)
+        .then(response => response.json())
+        .then(data => {
+            // Render the table data
+            data.data.forEach(item => {
+                const row = document.createElement('tr');
+                id = item.id
+                const encodedId = btoa(id.toString());  // This is fine since it's just a number
+
+                // Safely encode full item with Unicode-safe base64 encoding
+                const encodedItem = btoa(unescape(encodeURIComponent(JSON.stringify({
+                    id: item.id,
+                    heading: item.heading,
+                    description: item.description,
+                    status: item.status,
+                    order: item.order,
+                    image: item.image
+                }))));
+                
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.heading}</td>
+                    <td class="d-none d-xl-table-cell">${item.description}</td>
+                    <td>
+                        <span class="badge ${item.status ? 'bg-success' : 'bg-danger'}">
+                            ${item.status ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td>
+                        <img src="${item.image}" alt="Image" width="60" height="60">
+                    </td>
+                    <td class="d-none d-md-table-cell">${item.order}</td>
+                    <td class="d-none d-md-table-cell">${item.created_at}</td>
+                    <td class="d-none d-md-table-cell">${item.updated_at}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="decodeAndOpenEditModal('${encodedItem}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteWhyChooseUsItem('${encodedId}')">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Render pagination
+            const totalPages = data.totalPages;
+            const currentPage = data.page;
+
+            // Previous Page Button
+            if (currentPage > 1) {
+                const prevButton = document.createElement('li');
+                prevButton.classList.add('page-item');
+                prevButton.innerHTML = `<a class="page-link" href="#" onclick="fetchData(${currentPage - 1}, ${pageSize})">Previous</a>`;
+                pagination.appendChild(prevButton);
+            }
+
+            // Page Number Buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('li');
+                pageButton.classList.add('page-item');
+                pageButton.innerHTML = `
+                    <a class="page-link" href="#" onclick="fetchData(${i}, ${pageSize})">${i}</a>
+                `;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pagination.appendChild(pageButton);
+            }
+
+            // Next Page Button
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('li');
+                nextButton.classList.add('page-item');
+                nextButton.innerHTML = `<a class="page-link" href="#" onclick="fetchData(${currentPage + 1}, ${pageSize})">Next</a>`;
+                pagination.appendChild(nextButton);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+fetchData(1, 5);
+
+</script>
+<script>
+
+function deleteWhyChooseUsItem(encodedId) {
+    fetch(`http://127.0.0.1:8000/api/why-choose-us/delete/${encodedId}/`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Failed to delete item');
+    })
+    .then(data => {
+        console.log('Item deleted successfully:', data);
+        showToast('Item deleted successfully', 'success');
+    })
+    .catch(error => {
+        console.error('Error deleting item:', error);
+        showToast('Error deleting item', 'danger');
+    });
+}
+
+</script>
+<script>
+    function decodeAndOpenEditModal(encodedData) {
+    const item = JSON.parse(atob(encodedData));
+
+    // Populate the edit modal fields
+    document.getElementById('editWhyId').value = item.id;
+    document.getElementById('editWhyHeading').value = item.heading;
+    document.getElementById('editWhyDescription').value = item.description;
+    document.getElementById('editWhyStatus').value = item.status ? '1' : '0';
+    document.getElementById('editWhyOrder').value = item.order;
+
+    // Set preview image
+    const previewImage = document.getElementById('editWhyPreviewImage');
+    previewImage.src = item.image;
+    previewImage.style.display = 'block';
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('editWhyChooseUsModal'));
+    modal.show();
+}
+
+</script>
+<script>
+    function updateWhyChooseUsItem(event){
+        event.preventDefault();
+        const form = document.getElementById("editWhyChooseUsForm");
+        const formData = new FormData(form);
+        
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+
+        fetch('http://127.0.0.1:8000/api/why-choose-us/update/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw data; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalElement = document.getElementById('editWhyChooseUsModal'); // ✅ Modal, not the form
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Fix leftover backdrop issue
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300); // slight delay to ensure modal hides first
+
+            showToast("Item Update successfully!", "success");
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("Failed to Update item.", "danger");
+        });
+    }
+</script>
+
+{%endblock%}

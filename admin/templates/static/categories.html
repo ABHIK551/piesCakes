@@ -1,0 +1,198 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+        
+        <!-- Header Card with Title & Button -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Categories</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                Add Category
+            </button>
+        </div>
+
+        <!-- Card with Table -->
+        <div class="card mt-0">
+            <duv class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th class="d-none d-xl-table-cell">Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Updated At</th>
+                            <th>Parent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </duv>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm" enctype="multipart/form-data">
+                    <!-- Category Type: Main or Subcategory -->
+                    {% csrf_token %}
+                    <input type="hidden" id="csrfToken" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label">Category Type</label>
+                        <select class="form-select" id="categoryType" name="category_type" onchange="toggleParentCategory()">
+                            <option value="main">Main Category</option>
+                            <option value="sub">Subcategory</option>
+                        </select>
+                    </div>
+                
+                    <!-- Parent Category (Only for Subcategories) -->
+                    <div class="mb-3 d-none" id="parentCategoryDiv">
+                        <label for="parentCategory" class="form-label">Parent Category</label>
+                        <select class="form-select" id="parentCategory" name="parent">
+                            <option selected disabled>Choose a Parent Category</option>
+                        </select>
+                    </div>
+                
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" name="name" required>
+                    </div>
+                
+                    <!-- Slug (SEO Friendly URL) -->
+                    <div class="mb-3">
+                        <label for="categorySlug" class="form-label">Slug (SEO URL)</label>
+                        <input type="text" class="form-control" id="categorySlug" name="slug" placeholder="example-category">
+                    </div>
+                
+                    <!-- Status (Active / Inactive) -->
+                    <div class="mb-3">
+                        <label for="categoryStatus" class="form-label">Status</label>
+                        <select class="form-select" id="categoryStatus" name="status">
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+                
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="categoryImage" class="form-label">Category Image</label>
+                        <input type="file" class="form-control" id="categoryImage" name="image_file" accept="image/*">
+                    </div>
+                
+                    <!-- Ordering (Display Order) -->
+                    <div class="mb-3">
+                        <label for="categoryOrder" class="form-label">Display Order</label>
+                        <input type="number" class="form-control" id="categoryOrder" name="order" min="1">
+                    </div>
+                
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" name="description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+                
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success" onclick="addCategory()">Save Category</button>
+                </form>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editCategoryId" name="category_id">
+                    
+                    <!-- Category Type -->
+                    <div class="mb-3">
+                        <label for="editCategoryType" class="form-label">Category Type</label>
+                        <select class="form-select" id="editCategoryType" name="category_type" onchange="toggleEditParentCategory()">
+                            <option value="main">Main Category</option>
+                            <option value="sub">Subcategory</option>
+                        </select>
+                    </div>
+
+                    <!-- Parent Category (Only for Subcategories) -->
+                    <div class="mb-3 d-none" id="editParentCategoryDiv">
+                        <label for="editParentCategory" class="form-label">Parent Category</label>
+                        <select class="form-select" id="editParentCategory" name="parent">
+                            <option selected disabled>Choose a Parent Category</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                    </div>
+
+                    <!-- Slug (SEO URL) -->
+                    <div class="mb-3">
+                        <label for="editCategorySlug" class="form-label">Slug (SEO URL)</label>
+                        <input type="text" class="form-control" id="editCategorySlug" name="slug" placeholder="example-category">
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="editCategoryStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editCategoryStatus" name="status">
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="editCategoryImage" class="form-label">Category Image</label>
+                        <input type="file" class="form-control" id="editCategoryImage" name="image_base64" accept="image/*">
+                        <img id="editPreviewImage" src="" class="mt-2" style="max-width: 100px; display: none;">
+                    </div>
+
+                    <!-- Ordering -->
+                    <div class="mb-3">
+                        <label for="editCategoryOrder" class="form-label">Display Order</label>
+                        <input type="number" class="form-control" id="editCategoryOrder" name="order" min="1">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="editCategoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editCategoryDescription" name="description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-success" onclick="updateCategory()">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}

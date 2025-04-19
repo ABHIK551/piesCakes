@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fdf7f2;
+  color: #333;
+}
+
+.login-section {
+  background: url('https://i.imgur.com/x5C9bIX.png') no-repeat center center;
+  background-color: #3c2b20;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-container {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 1.2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #6d4c41;
+  margin-bottom: 0.5rem;
+}
+
+.login-container p {
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  display: block;
+  font-size: 0.95rem;
+}
+
+.form-group i {
+  margin-right: 0.5rem;
+  color: #6d4c41;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.05rem;
+  border: none;
+  background: #6d4c41;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background: #5a3d32;
+}
+
+.register-link {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.google-login button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.google-login button:hover {
+  background: #f1f1f1;
+}
+
+.google-login img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input, button {
+    font-size: 0.95rem;
+  }
+}
+
+</style>
+<body>
+  <div class="login-section">
+    <div class="login-container">
+      <h2>Login</h2>
+      <p>Access your account and enjoy our treats!</p>
+      
+      <form>
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Username</label>
+          <input type="text" placeholder="Username" required />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <input type="password" placeholder="Password" required />
+        </div>
+
+        <div class="form-group">
+          <button type="submit">Login Now</button>
+        </div>
+
+        <div class="register-link">
+          <span>Register Your account</span>
+        </div>
+
+        <div class="google-login">
+          <button type="button">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" />
+            Login with Google
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+  <!-- Toast Container (place this in your HTML, like inside <body>) -->
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<script>
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+
+    // Optional fade-out effect
+    toast.style.cssText = `
+        margin-top: 10px;
+        padding: 10px 15px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        min-width: 200px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+
+    // Background color based on type
+    if (type === "success") {
+        toast.style.backgroundColor = "#28a745";
+    } else if (type === "danger") {
+        toast.style.backgroundColor = "#dc3545";
+    } else {
+        toast.style.backgroundColor = "#6c757d"; // default
+    }
+
+    const container = document.getElementById("toast-container");
+    container.appendChild(toast);
+
+    // Fade in
+    requestAnimationFrame(() => {
+        toast.style.opacity = 1;
+    });
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => toast.remove(), 300);
+    }, 6000);
+}
+</script>
+
+  <script>
+    // Check if the user is already logged in
+  if (sessionStorage.getItem("auth_token")) {
+    // If token is found, redirect to home page
+    window.location.href = "/";
+  }
+
+    document.querySelector("form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+  
+      const email = document.querySelector("input[placeholder='Username']").value;
+      const password = document.querySelector("input[placeholder='Password']").value;
+  
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/login/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+  
+        const data = await response.json();
+        console.log(data)
+        if (data.success) {
+          // Store details in sessionStorage
+          sessionStorage.setItem("auth_token", data.token);
+          sessionStorage.setItem("user_id", data.user.id);
+          sessionStorage.setItem("user_email", data.user.email);
+          sessionStorage.setItem("user_name", data.user.name);
+  
+          showToast("Login Successful! Redirecting", "success");
+  
+          // Redirect after login
+          window.location.href = "/";
+        } else {
+          showToast(data.message || "Login failed!", "danger");
+        }
+  
+      } catch (error) {
+        console.error("Login error:", error);
+        showToast("Something went wrong!" + error, "danger");
+      }
+    });
+  </script>
+  
+</body>
+</html>

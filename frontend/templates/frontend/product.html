@@ -1,0 +1,84 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+
+<section class="product-section">
+    <div class="product-container">
+        <div class="product-image">
+            {% if product.product_images_base64 %}
+                <img src="data:image/png;base64,{{ product.product_images_base64 }}" alt="{{ product.name }}">
+            {% endif %}
+        </div>
+
+        <div class="product-details">
+            <h1>{{ product.name }}</h1>
+            <div class="rating">⭐ ⭐ ⭐ ⭐ ☆</div>
+            <p class="price">₹{{ product.price }}</p>
+            <p>{{ product.description }}</p>
+
+            <!-- Optional: You can loop weights if they are stored separately -->
+            <div class="weight-selection">
+                <h3>WEIGHT</h3>
+                <button class="weight active">{{ product.weight }}</button>
+                <!-- <button class="weight">500g</button>
+                <button class="weight">1000g</button> -->
+            </div>
+
+            <div class="quantity" style="max-width: 100px;">
+                <button class="minus">-</button>
+                <input type="text" value="1">
+                <button class="plus">+</button>
+            </div>
+
+            <button class="add-to-cart">ADD TO CART</button>
+        </div>
+    </div>
+</section>
+
+<section class="recommendation-section">
+    <div class="heading">
+        <h2>You May <span>Also Like</span></h2>
+        <p>Looking for more indulgence? Try these delicious treats handpicked for you!</p>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="https://s3-alpha-sig.figma.com/img/ef04/3dbb/2b7cccec16c019ce86a585e7241463b7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DJ562FCnN-yWQ64l24lNAcj8fPbUAgUwgLdMgaFLaMfEyqrtCy7O-q8iGr9Y6Z~bP4egQDJA8EhUEaf2T1OOabx4hEpS2JpK72jkmysv0eYVWoSa0ENnorj~ouV10TkhwCaJ8Kgxs2PV9bgppmVKdezl3sOMtVLlrDKUBQWumUF55COYTbkwvLgm9Pl9xUTQXwUH~my1zs4L937crgOQKxhvikYoLKxYnziBPPQodTyvA9RZaBNNok~GgOU1ZDSTIsLiVOZ7dUuKuJZmoHs4ZH4Vb70cZLs4UILpnKgrsEKxlx-loulQo-X0ZjFoZjG2TXvF24al5cOl5d6kPHV3IQ__" alt="French Vanilla Bomboloni">
+            <div class="product-info">
+                <h3>FRENCH VANILLA BOMBOLONI</h3>
+                <p class="category">Desserts</p>
+                <p class="price">₹200.00</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://s3-alpha-sig.figma.com/img/45a5/b7c7/495c436c36424bfee5a0384fa68331fa?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qdDBiU8FClumOXSW7aRdSkE3vMcXBwknkRAm5AF0kF9SbtyxoVI5fVW01A03M7mBBPYeXYSAeRGgA5GGl69YGqX14DgA0LjYU-uJ790XtPrjX6ljncUltu6oPys4xjk0O8CVXXYcLbvR0NqElMDuNH4lhS85jYXjsCwLfPC5G5DQWkw8Wqvz5kN2MtWcXQwmiiwqYfnZ3eXGEOxF5BLsfo6g5lU2PLItEF7g-0pdq9yImEnR2MMZY4ZDRPrPpVg6Pc0Tubx53tcY9P3RjU2gJVV6vvC6eLBJ18eA1IMyArozke9BqTBhXJ31yH0dbptwLTUfcrfVuiKcXouVz-IIzA__" alt="Blueberry Cheese Cake">
+            <div class="product-info">
+                <h3>BLUEBERRY CHEESE CAKE</h3>
+                <p class="category">Cakes</p>
+                <p class="price">₹200.00</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://s3-alpha-sig.figma.com/img/8a20/53cf/69326bca05412c52363c504c81ab5637?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WgWf-H23qT3XJUGV2z3hJ3A4mDyPveHoaCBMgL6-hQiRmWj4ni2VR4kR2BwirySZpNofDjfMGEOxMz5AzoeHWFwVexqhE1GYybgzF19JWyw4BFoJ4ZzmjKK9G0xy~kxd7cYyMgtju2eX5IQ2pHBektzEu0FDb9z5s7~fTNQvI5OE1rr-FC8ibgUTgZzIFww06uSr1-3pZBkASO~UlfYnI~DEpEfNB-fuA9fwQm-vN8noaSLOI9eKw~3eVgUWWp5zE74qp1zziW452XWp6KzhLu-9gXrdbxxVHhwoXJqee7~2PW010f3JBjpNi5jhsmvIYDfMN6GYwEgFQgsKS7GrcQ__" alt="Classic Hot Chocolate">
+            <div class="product-info">
+                <h3>CLASSIC HOT CHOCOLATE</h3>
+                <p class="category">Beverages</p>
+                <p class="price">₹180.00</p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://s3-alpha-sig.figma.com/img/f9b3/0e57/78ef8132c44847533f3a6134ad7b20cb?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=TzGfKdCvQDg4Pn4EC8Of6UsyoJcssjiN~sqpnBYb17pu0-xCwLeXRvxKfuOE09kSiAry1ooSjJk4DgJFLRze27b1L5PFFU0lc56rz91iTcGuc31JUA~fqip54chuktybe8nQhEyoy0EjtAsC7TblatHMxSWKIK0mhuesc95BcOq2huwRXlKkG4R4IOwtX39B4hgW~m1z9jwbbObtT6UpP7Ls-w5TqRcOzsISrHbCj7vrIJXBviuwLT3P5jjeno-dSz8angXYyXfntn~Ys8eFIZ6kIHx6~CZG4cLtllEEL-NXAIDSwjqcMMQ~NJto7~6y6yfQP9Ty6PurGgDocEgL6A__" alt="Biscoff Brownies">
+            <div class="product-info">
+                <h3>BISCOFF BROWNIES</h3>
+                <p class="category">Desserts</p>
+                <p class="price">₹150.00</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include "frontend/why-choose-us.html" %}
+{% endblock %}

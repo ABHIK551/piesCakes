@@ -1,0 +1,34 @@
+<section class="baked-delights" id="bakedDelightsContainer">
+    <!-- Baked items will be injected here -->
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchBakedDelights();
+    });
+
+    function fetchBakedDelights() {
+        fetch(`http://127.0.0.1:8000/api/baked-delights/list/?page=1&pageSize=10`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('bakedDelightsContainer');
+                container.innerHTML = ''; // Clear existing content
+
+                data.data.forEach(item => {
+                    const bakedItem = `
+                        <div class="baked-item">
+                            <img src="${item.image}" alt="${item.heading}">
+                            <div class="content">
+                                <h2>${item.heading}</h2>
+                                <p>${item.description}</p>
+                                <a href="${item.link}" class="shop-btn" style="background-color:#D17829">Shop Now</a>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', bakedItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching baked delights:", error);
+            });
+    }
+</script>

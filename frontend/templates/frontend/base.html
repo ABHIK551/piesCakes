@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pies & Thighs</title>
+    <link rel="icon" sizes="32x32" type="image/png" href="{% static 'img/photos/logo1.png' %}"_">
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
+    h1,h2 {
+        font-family: 'Mochiy Pop One', sans-serif !important;
+        font-weight: 400 !important;
+    }
+    body, h3, h4, h5, h6, p, span, strike{
+        font-family: 'Avenir LT Std', sans-serif !important;
+        font-weight: 400 !important;
+    }
+    .tags span.active {
+    background-color: #f58220;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 2px;
+    }
+    .tags span {
+    cursor: pointer;
+    }
+</style>
+<body>
+    <main>
+        {% block content %}
+        <!-- Content of child templates will go here -->
+        {% endblock %}
+    </main>
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="{% static 'img/photos/e3ede258318de5bb324a6fc3f47bfbb4.png' %}" alt="Pies & Thighs Logo">
+                <img src="{% static 'img/photos/logo1.png' %}" alt="Pies & Thighs Logo" style="max-height: 100px;">
+                <p>
+                    Pies & Thighs is a warm and inviting bakery that fills every bite with the comfort of home-baked goodness.
+                </p>
+            </div>
+    
+            <div class="footer-section">
+                <h4>Category</h4>
+                <ul>
+                    <li><a href="#">Cakes & Pies</a></li>
+                    <li><a href="#">Tarts & Desserts</a></li>
+                    <li><a href="#">Snacks</a></li>
+                    <li><a href="#">Brownies</a></li>
+                    <li><a href="#">Croissants & Donuts</a></li>
+                    <li><a href="#">Beverages</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">Sign In</a></li>
+                    <li><a href="#">View Cart</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Order</a></li>
+                    <li><a href="#">Payments</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📍 Shop 60C, Lower Ground Floor, Ranchi</p>
+                <p>📞 +91 9304766907</p>
+                <p>✉ info@prajna.com</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom" style="padding-left: 20px;padding-right: 20px;">
+            <p style="float: left;">Copyright © <span>Pies & Thighs</span>. All rights reserved.</p>
+            <div class="payment-icons" style="float: right;">
+                <img src="{% static 'img/photos/payment.png' %}" alt="payment option">
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper(".bestsellers-slider", {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 3000, // 3 seconds per slide
+            disableOnInteraction: false, // Keeps autoplay after user interaction
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            1200: { slidesPerView: 4 }, // Large Screens
+            1000: { slidesPerView: 3 }, // Medium Screens
+            768: { slidesPerView: 2 },  // Tablets
+            480: { slidesPerView: 1 },  // Mobile
+            200: { slidesPerView: 1 },  // Mobile
+        }
+    });
+});
+
+</script>
+<script>
+function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+    if (sidebar) { // Ensure sidebar exists before accessing classList
+        if (sidebar.classList.contains("open")) {
+            sidebar.classList.remove("open");
+        } else {
+            sidebar.classList.add("open");
+        }
+    }
+}
+</script>
+<script>
+    document.getElementById("scrollLink").addEventListener("click", function(e){
+      e.preventDefault();  // Prevent URL update
+      document.getElementById("categories").scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/banner-list/");
+        const data = await response.json();
+
+        console.log("Banner API Response:", data); // 👉 This will show the structure in the console
+
+
+        if (activeBanner) {
+            // Set banner content
+            document.getElementById("bannerPrice").textContent = activeBanner.price_text || "Starting at ₹149";
+            document.getElementById("bannerTitle").textContent = activeBanner.title || "Freshly Baked Goodness";
+            document.getElementById("bannerSubtitle").textContent = activeBanner.subtitle || "Just For You";
+
+            const bannerBtn = document.getElementById("bannerBtn");
+            bannerBtn.textContent = activeBanner.button_text || "Shop Now";
+            if (activeBanner.button_link) {
+                bannerBtn.setAttribute("href", activeBanner.button_link);
+            }
+
+            // Set background image from base64
+            const bannerSection = document.getElementById("bannerSection");
+            if (activeBanner.image_base64) {
+                bannerSection.style.backgroundImage = `url(data:image/png;base64,${activeBanner.image_base64})`;
+                bannerSection.style.backgroundSize = "cover";
+                bannerSection.style.backgroundPosition = "center";
+            }
+        }
+    } catch (err) {
+        console.error("Error fetching banner:", err);
+    }
+});
+
+</script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/banner-list/");
+    const data = await response.json();
+
+    if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+      const banner = data.data[0]; // select first banner
+
+      const priceElem = document.getElementById("bannerPrice");
+      const titleElem = document.getElementById("bannerTitle");
+      const subtitleElem = document.getElementById("bannerSubtitle");
+      const btnElem = document.getElementById("bannerBtn");
+      const bannerSection = document.getElementById("bannerSection");
+
+      if (priceElem) priceElem.textContent = `Starting at ₹${parseFloat(banner.price).toFixed(0)}`;
+      if (titleElem) titleElem.textContent = banner.heading || "Freshly Baked Goodness";
+      if (subtitleElem) subtitleElem.textContent = banner.subheading || "Just For You";
+      if (btnElem) {
+        btnElem.textContent = banner.button_text || "Shop Now";
+        btnElem.setAttribute("href", banner.link || "#");
+      }
+      if (banner.image && bannerSection) {
+        bannerSection.style.backgroundImage = `url('data:image/png;base64,${banner.image}')`;
+        bannerSection.style.backgroundSize = "cover";
+        bannerSection.style.backgroundPosition = "center";
+      }
+    } else {
+      console.warn("No active banner found.");
+    }
+  } catch (err) {
+    console.error("Error fetching banner:", err);
+  }
+});
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const authToken = sessionStorage.getItem("auth_token");
+      if (!authToken) return;               // nothing to do if not logged in
+    
+      // (Optional) get a dynamic cart count (replace with your real logic)
+      const cartCount = sessionStorage.getItem("cart_count") || 0;
+    
+      // build the span > a
+      const span = document.createElement("span");
+      const a    = document.createElement("a");
+      a.href               = "/cart";
+      a.style.color        = "inherit";
+      a.style.textDecoration = "none";
+      a.textContent        = `🛒 Cart (${cartCount})`;
+    
+      span.appendChild(a);
+    
+      // inject into .user-actions
+      const container = document.querySelector(".user-actions");
+      if (container) container.appendChild(span);
+    });
+    </script>
+    <!-- Toast Container (place this in your HTML, like inside <body>) -->
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<script>
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+
+    // Optional fade-out effect
+    toast.style.cssText = `
+        margin-top: 10px;
+        padding: 10px 15px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        min-width: 200px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+
+    // Background color based on type
+    if (type === "success") {
+        toast.style.backgroundColor = "#28a745";
+    } else if (type === "danger") {
+        toast.style.backgroundColor = "#dc3545";
+    } else {
+        toast.style.backgroundColor = "#6c757d"; // default
+    }
+
+    const container = document.getElementById("toast-container");
+    container.appendChild(toast);
+
+    // Fade in
+    requestAnimationFrame(() => {
+        toast.style.opacity = 1;
+    });
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+    
+
+</body>
+</html>

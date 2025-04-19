@@ -1,0 +1,405 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+        
+        <!-- Header Card with Title & Button -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Baked Delight</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBakedDelightsModal">
+                Add Baked Delight
+            </button>
+        </div>
+
+        <!-- Card with Table -->
+        <div class="card mt-0">
+            <duv class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Heading</th>
+                            <th class="d-none d-xl-table-cell">Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Link</th>
+                            <th class="d-none d-md-table-cell">Order</th>
+                            <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bakedDelightsTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </duv>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+
+<!-- Add Baked Delights Modal -->
+<div class="modal fade" id="addBakedDelightsModal" tabindex="-1" aria-labelledby="addBakedDelightsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBakedDelightsModalLabel">Add New Baked Delight</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addBakedDelightsForm" enctype="multipart/form-data">
+                    
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="bakedDelightHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="bakedDelightHeading" name="heading" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="bakedDelightDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="bakedDelightDescription" name="description" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Link -->
+                    <div class="mb-3">
+                        <label for="bakedDelightLink" class="form-label">Link</label>
+                        <input type="url" class="form-control" id="bakedDelightLink" name="link" placeholder="https://example.com" required>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="bakedDelightImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="bakedDelightImage" name="image" accept="image/*" required>
+                    </div>
+
+                    <!-- Order -->
+                    <div class="mb-3">
+                        <label for="bakedDelightOrder" class="form-label">Order</label>
+                        <input type="number" class="form-control" id="bakedDelightOrder" name="order" min="1" required>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="bakedDelightStatus" class="form-label">Status</label>
+                        <select class="form-select" id="bakedDelightStatus" name="status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success" onclick="addBakedDelight(event)">Save Baked Delight</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Why Choose Us Modal -->
+<div class="modal fade" id="editBLChooseUsModal" tabindex="-1" aria-labelledby="editBLChooseUsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBLChooseUsModalLabel">Edit "Why Choose Us" Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBakedDelightForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editBLId" name="id">
+
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="editWhyImage" class="form-label">Image/Icon</label>
+                        <input type="file" class="form-control" id="editBLImage" name="image" accept="image/*">
+                        <img id="editBLPreviewImage" src="" class="mt-2" style="max-width: 100px; display: none;">
+                    </div>
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="editWhyHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="editBLHeading" name="heading" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="editWhyDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editBLDescription" name="description" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="editWhyStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editBLStatus" name="status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Display Order -->
+                    <div class="mb-3">
+                        <label for="editWhylink" class="form-label">Link</label>
+                        <input type="text" class="form-control" id="editBLlink" name="link" min="1" required>
+                    </div>
+
+                    <!-- Display Order -->
+                    <div class="mb-3">
+                        <label for="editWhyOrder" class="form-label">Display Order</label>
+                        <input type="number" class="form-control" id="editBLOrder" name="order" min="1" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-success" onclick="updateBakedDelightItem(event)">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addBakedDelight(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("addBakedDelightsForm");
+        const formData = new FormData(form);
+
+        const imageFile = form.querySelector('input[type="file"]').files[0];
+
+        // Check if image is present and exceeds 2MB (2 * 1024 * 1024 bytes)
+        if (imageFile && imageFile.size > 2 * 1024 * 1024) {
+            const modalElement = document.getElementById('addBakedDelightsModal');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Remove modal backdrop if present
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300);
+
+            showToast("Image size exceeded 2 MB", "danger");
+            return;
+        }
+
+        fetch('http://127.0.0.1:8000/api/baked-delights/create/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw data; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalElement = document.getElementById('addBakedDelightsModal');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300);
+
+            showToast("Item added successfully!", "success");
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("Failed to add item.", "danger");
+        });
+    }
+</script>
+
+<script>
+// Function to fetch and render data into the table
+function fetchData(page = 1, pageSize = 5) {
+    const tableBody = document.getElementById('bakedDelightsTableBody');
+    const pagination = document.getElementById('pagination');
+
+    // Clear the table body and pagination
+    tableBody.innerHTML = '';
+    pagination.innerHTML = '';
+
+    // Fetch data from the API with pagination
+    fetch(`http://127.0.0.1:8000/api/baked-delights/list/?page=${page}&pageSize=${pageSize}`)
+        .then(response => response.json())
+        .then(data => {
+            // Render the table data
+            data.data.forEach(item => {
+                const row = document.createElement('tr');
+                id = item.id
+                const encodedId = btoa(id.toString());  // This is fine since it's just a number
+
+                // Safely encode full item with Unicode-safe base64 encoding
+                const encodedItem = btoa(unescape(encodeURIComponent(JSON.stringify({
+                    id: item.id,
+                    heading: item.heading,
+                    description: item.description,
+                    status: item.status,
+                    order: item.order,
+                    link:item.link,
+                    image: item.image
+                }))));
+                
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.heading}</td>
+                    <td class="d-none d-xl-table-cell">${item.description}</td>
+                    <td>
+                        <span class="badge ${item.status == 'active' ? 'bg-success' : 'bg-danger'}">
+                            ${item.status ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td>
+                        <img src="${item.image}" alt="Image" width="60" height="60">
+                    </td>
+                    <td class="d-none d-md-table-cell"><a href="${item.link}">Link</a></td>
+                    <td class="d-none d-md-table-cell">${item.order}</td>
+                    <td class="d-none d-md-table-cell">${item.created_at}</td>
+                    <td class="d-none d-md-table-cell">${item.updated_at}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="decodeAndOpenEditModal('${encodedItem}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteBakedDelight('${encodedId}')">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Render pagination
+            const totalPages = data.totalPages;
+            const currentPage = data.page;
+
+            // Previous Page Button
+            if (currentPage > 1) {
+                const prevButton = document.createElement('li');
+                prevButton.classList.add('page-item');
+                prevButton.innerHTML = `<a class="page-link" href="#" onclick="fetchData(${currentPage - 1}, ${pageSize})">Previous</a>`;
+                pagination.appendChild(prevButton);
+            }
+
+            // Page Number Buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('li');
+                pageButton.classList.add('page-item');
+                pageButton.innerHTML = `
+                    <a class="page-link" href="#" onclick="fetchData(${i}, ${pageSize})">${i}</a>
+                `;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pagination.appendChild(pageButton);
+            }
+
+            // Next Page Button
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('li');
+                nextButton.classList.add('page-item');
+                nextButton.innerHTML = `<a class="page-link" href="#" onclick="fetchData(${currentPage + 1}, ${pageSize})">Next</a>`;
+                pagination.appendChild(nextButton);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+fetchData(1, 5);
+
+</script>
+<script>
+
+function deleteBakedDelight(encodedId) {
+    fetch(`http://127.0.0.1:8000/api/baked-delight/delete/${encodedId}/`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Failed to delete item');
+    })
+    .then(data => {
+        console.log('Item deleted successfully:', data);
+        showToast('Item deleted successfully', 'success');
+    })
+    .catch(error => {
+        console.error('Error deleting item:', error);
+        showToast('Error deleting item', 'danger');
+    });
+}
+
+</script>
+<script>
+    function decodeAndOpenEditModal(encodedData) {
+    const item = JSON.parse(atob(encodedData));
+
+    // Populate the edit modal fields
+    document.getElementById('editBLId').value = item.id;
+    document.getElementById('editBLHeading').value = item.heading;
+    document.getElementById('editBLDescription').value = item.description;
+    document.getElementById('editBLStatus').value = item.status ? 'active' : 'inactive';
+    document.getElementById('editBLOrder').value = item.order;
+    document.getElementById('editBLlink').value = item.link;
+
+    // Set preview image
+    const previewImage = document.getElementById('editBLPreviewImage');
+    previewImage.src = item.image;
+    previewImage.style.display = 'block';
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('editBLChooseUsModal'));
+    modal.show();
+}
+
+</script>
+<script>
+    function updateBakedDelightItem(event){
+        event.preventDefault();
+        const form = document.getElementById("editBakedDelightForm");
+        const formData = new FormData(form);
+        
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+
+        fetch('http://127.0.0.1:8000/api/baked-delight/update/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw data; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalElement = document.getElementById('editBLChooseUsModal'); // ✅ Modal, not the form
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Fix leftover backdrop issue
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300); // slight delay to ensure modal hides first
+
+            showToast("Item Update successfully!", "success");
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("Failed to Update item.", "danger");
+        });
+    }
+</script>
+
+{%endblock%}

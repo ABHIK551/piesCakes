@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fdf7f2;
+  color: #333;
+}
+
+.register-section {
+  background: url('https://i.imgur.com/x5C9bIX.png') no-repeat center center;
+  background-color: #3c2b20;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.form-container {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 1.2rem;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #6d4c41;
+}
+
+.form-container p {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.input-half {
+  flex: 1 1 45%;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.05rem;
+  border: none;
+  background: #6d4c41;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #5a3d32;
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .input-half {
+    flex: 1 1 100%;
+  }
+
+  .form-container {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 1.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input, button {
+    font-size: 0.95rem;
+  }
+}
+
+</style>
+<!-- <body>
+  <div class="register-section">
+    <div class="form-container">
+      <h2>Register</h2>
+      <p>Sign up to begin your journey with us!</p>
+      <form>
+        <div class="form-group row">
+          <div class="input-half">
+            <label>Name *</label>
+            <input type="text" placeholder="Last Name" required />
+          </div>
+          <div class="input-half">
+            <label>&nbsp;</label>
+            <input type="text" placeholder="First Name" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="text" placeholder="Phone Number" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" placeholder="Email ID" required />
+        </div>
+
+        <div class="form-group row">
+          <div class="input-half">
+            <label>Password *</label>
+            <input type="password" placeholder="Password" required />
+          </div>
+          <div class="input-half">
+            <label>&nbsp;</label>
+            <input type="password" placeholder="Confirm your Password" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit">Register Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body> -->
+
+<body>
+  <div class="register-section">
+    <div class="form-container">
+      <h2>Register</h2>
+      <p>Sign up to begin your journey with us!</p>
+      <form id="registerForm">
+        <div class="form-group row">
+          <div class="input-half">
+            <label>First Name *</label>
+            <input type="text" name="first_name" placeholder="First Name" required />
+          </div>
+          <div class="input-half">
+            <label>Last Name *</label>
+            <input type="text" name="last_name" placeholder="Last Name" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="text" name="phone" placeholder="Phone Number" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="Email ID" required />
+        </div>
+
+        <div class="form-group row">
+          <div class="input-half">
+            <label>Password *</label>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+          <div class="input-half">
+            <label>Confirm Password *</label>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit">Register Now</button>
+        </div>
+      </form>
+      <p id="responseMessage" style="text-align:center; margin-top:1rem; color:green;"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const responseMsg = document.getElementById("responseMessage");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const password = formData.get("password");
+      const confirmPassword = formData.get("confirm_password");
+
+      if (password !== confirmPassword) {
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "Passwords do not match!";
+        return;
+      }
+
+      const data = {
+        first_name: formData.get("first_name"),
+        last_name: formData.get("last_name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        password: password,
+        confirm_password : confirmPassword
+      };
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          responseMsg.style.color = "green";
+          responseMsg.textContent = "Registered successfully!";
+          form.reset();
+        } else {
+          responseMsg.style.color = "red";
+          responseMsg.textContent = result.detail || "Registration failed.";
+        }
+      } catch (err) {
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "Something went wrong.";
+      }
+    });
+  </script>
+</body>
+
+</html>

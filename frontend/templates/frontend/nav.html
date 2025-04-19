@@ -1,0 +1,99 @@
+{% load static %}
+<nav class="navbar">
+    <!-- Top Header (Contact & Help Links) -->
+    <div class="top-header">
+        <div class="top-bar">
+            <div class="contact-info">
+                <span>📞 +91 9304766907</span>
+                <span>📞 +91 9304766907</span>
+                <span>Jharkhand’s Favorite Online Bakery – Freshly Baked, Delivered to You!</span>
+            </div>
+            <div class="help-links">
+                <span>Help?</span>
+                <span>Track Order?</span>
+                <span>English ⬇</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" onclick="toggleSidebar()"></button>
+    <!-- Main Header (Logo, Search Bar, User Actions) -->
+    <div class="main-header">
+        <div class="logo" style="background-color: white; border-radius: 50%; padding: 10px; width: 50px; justify-content: center; text-align: center;">
+            <img src="{% static 'img/photos/logo1.png' %}" alt="Pies & Thighs">
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Products...">
+            <button>🔍</button>
+        </div>
+        <div class="user-actions">
+            <a href="/login"
+                style="
+                text-decoration: none !important;
+                margin: 0 10px;
+                font-size: 14px;
+                cursor: pointer;
+                color: white;
+                "
+            ><span>👤 Login</span></a>
+            <span>❤️ Wishlist (3)</span>
+        </div>
+    </div>
+
+    <!-- Navigation Bar (Categories & Links) -->
+    <div class="nav-bar">
+        <button class="category-btn">
+            <a id="scrollLink">
+                📂 All Categories ⬇
+            </a>
+        </button>
+        <ul>
+            <li>
+                <a href="/"
+                    style = "
+                    color: inherit !important;
+                    text-decoration: none !important;
+                    "
+                >Home ⬇</a></li>
+            <li>About Us ⬇</li>
+            <li>Menu ⬇</li>
+            <li>Gallery</li>
+            <li>Contact Us</li>
+            <li>⚡ Offers</li>
+        </ul>
+        <button class="location-btn"><i class="bi bi-geo-alt"></i> Ranchi ⬇</button>
+    </div>
+</nav>
+
+<!-- Sidebar for Mobile & Tablet -->
+<div class="sidebar" id="sidebar">
+    <button class="close-btn" onclick="toggleSidebar()">✖</button>
+
+    <div class="sidebar-content">
+        <div class="logo">
+            <img src="https://s3-alpha-sig.figma.com/img/dcd9/118e/ce10851ab2adeac1e26c8d3620d4b47e?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=c~s4X6dwaMpVe1d-hLQ0iKpzzXmxRMj~3SrPrLLNlDnndVsjGtyJ3u8iRYHHkksgoFDBhkpBOinD3L5dVGYwPiftuAfvFt6EEGq0WOUeJWzv8lD3HSdWFeWzOJJgCOGX33IHVCIpQRrTkeBBsbGf9lMMaF~sLBmVpAmYvxGpFiTZ9cJeq8Z56hcKZ3w3zTfNWTRxVxNTdchSHPLyx7E~tqKtLfArRcSPn0vVWJfWmlqIvBYS37XAayQSK4GqPk6~HZrTxcp9kFHnBsII~8fWoWNTbzYfHJA9QeHrzrHSX2II1d6BZHIYhAmu~UGr9kQApO9icJZ9Mj~HDzETAY0GXQ__" alt="Pies & Thighs">
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search Products...">
+            <button>🔍</button>
+        </div>
+
+        <div class="user-actions">
+            <span>👤 Login</span>
+            <span>❤️ Wishlist (3)</span>
+            <span>🛒 Cart (3)</span>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>Home ⬇</li>
+            <li>About Us ⬇</li>
+            <li>Menu ⬇</li>
+            <li>Gallery</li>
+            <li>Contact Us</li>
+            <li>⚡ Offers</li>
+        </ul>
+
+        <button class="location-btn"><i class="bi bi-geo-alt"></i> Ranchi ⬇</button>
+    </div>
+</div>

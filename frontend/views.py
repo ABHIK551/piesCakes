@@ -1,0 +1,44 @@
+import base64
+from django.shortcuts import render, get_object_or_404
+from apis.models import Product
+
+def home(request):
+    return render(request, 'frontend/index.html')
+
+def product(request, product_id):
+    print("product_id" + product_id)
+    try:
+        # Decode base64 to get original product id (e.g., "1-piescakes")
+        decoded_bytes = base64.b64decode(product_id)
+        decoded_str = decoded_bytes.decode('utf-8')
+        decoded_str_filtered = decoded_str.split("-")[0]
+        print("decoded_str_filtered = " + decoded_str_filtered)
+        # Assuming your `Product` model uses UUID or string-based IDs
+        product = get_object_or_404(Product, id=decoded_str_filtered)
+
+        
+        context = {
+            'product': product
+        }
+
+    except Exception as e:
+        context = {
+            'error': 'Invalid or missing product ID.',
+        }
+
+    return render(request, 'frontend/product.html', context)
+
+def category(request):
+    return render(request, 'frontend/categories.html')
+
+def cart(request):
+    return render(request, 'frontend/cart.html')
+
+def orders(request):
+    return render(request, 'frontend/orders.html')
+
+def login(request):
+    return render(request, 'frontend/login.html')
+
+def register(request):
+    return render(request, 'frontend/register.html')

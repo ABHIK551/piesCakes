@@ -1,0 +1,55 @@
+<section class="why-choose-us" id="whyChooseUsDataSection">
+    <!-- <div class="feature-card">
+        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSafq-tXDUGH3XsqyMgcBSRhDhqyIxv8oQ8sq6Hb7mT6fXjg708" alt="Free Shipping">
+        <h3>Free Shipping</h3>
+        <p>Enjoy free shipping on all U.S. orders or orders above ₹200.</p>
+    </div> -->
+</section>  
+<script>
+    async function loadWhyChooseUs() {
+        try {
+            const token = sessionStorage.getItem("auth_token"); // Or use localStorage
+
+            if (!token) {
+                redirectToLogin();  // Token is missing, redirect to login
+                return;
+            }
+
+            const response = await fetch('http://localhost:8000/api/why-choose-us/', {
+                method: 'GET',
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            const data = await response.json();
+
+            // Now, data.data contains the actual list of items
+            const section = document.getElementById("whyChooseUsDataSection");
+            section.innerHTML = ''; // Clear existing content
+
+            data.data.forEach(item => { // Loop over the items inside data.data
+                if (item.status === true) { // Check if status is true
+                    const card = document.createElement('div');
+                    card.classList.add('feature-card');
+
+                    card.innerHTML = `
+                        <img src="${item.image}" alt="${item.heading}">
+                        <h3>${item.heading}</h3>
+                        <p>${item.description}</p>
+                    `;
+
+                    section.appendChild(card);
+                }
+            });
+
+        } catch (error) {
+            console.error('Error loading Why Choose Us section:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadWhyChooseUs);
+</script>
+
+
+

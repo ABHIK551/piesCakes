@@ -1,0 +1,398 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+        
+        <!-- Header Card with Title & Button -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Top Pick Back Image</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTopPickBackImg">
+                Add Image and URL
+            </button>
+        </div>
+
+        <!-- Card with Table -->
+        <div class="card mt-0">
+            <duv class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th class="d-none d-xl-table-cell">Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Link</th>
+                            <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topPickTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </duv>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+
+<!-- Add Top Pick Background Modal -->
+<div class="modal fade" id="addTopPickBackImg" tabindex="-1" aria-labelledby="addTopPickBackImgLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTopPickBackImgLabel">Add Top Pick Background</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="topPickForm" enctype="multipart/form-data">
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="topPickImage" class="form-label">Background Image</label>
+                        <input type="file" class="form-control" id="topPickImage" name="image" accept="image/*" required>
+                    </div>
+
+                    <!-- Link -->
+                    <div class="mb-3">
+                        <label for="topPickLink" class="form-label">Link (URL)</label>
+                        <input type="url" class="form-control" id="topPickLink" name="link" placeholder="https://example.com" required>
+                    </div>
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="topPickHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="topPickHeading" name="heading" placeholder="Top Pick Heading" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="topPickDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="topPickDescription" name="description" rows="3" placeholder="Enter description" required></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="topPickStatus" class="form-label">Status</label>
+                        <select class="form-select" id="topPickStatus" name="status" required>
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success" onclick="addTopPick(event)">Save Top Pick</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Top Pick Modal -->
+<div class="modal fade" id="editTopPickBackImg" tabindex="-1" aria-labelledby="editTopPickBackImgLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTopPickBackImgLabel">Edit Top Pick</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editTopPickForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editTopPickId" name="top_pick_id">
+
+                    <!-- Heading -->
+                    <div class="mb-3">
+                        <label for="editTopPickHeading" class="form-label">Heading</label>
+                        <input type="text" class="form-control" id="editTopPickHeading" name="heading" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="editTopPickDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editTopPickDescription" name="description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="editTopPickStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editTopPickStatus" name="status">
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                        <label for="editTopPickImage" class="form-label">Top Pick Image</label>
+                        <input type="file" class="form-control" id="editTopPickImage" name="image_base64" accept="image/*">
+                        <img id="editTopPickPreviewImage" src="" class="mt-2" style="max-width: 100px; display: block;">
+                    </div>
+
+                    <!-- Link -->
+                    <div class="mb-3">
+                        <label for="editTopPickLink" class="form-label">Link</label>
+                        <input type="url" class="form-control" id="editTopPickLink" name="link" placeholder="http://example.com">
+                    </div>
+
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-success" onclick="updateTopPick()">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchTopPickData(1); // initial page
+    });
+    
+    function fetchTopPickData(page) {
+        fetch(`http://127.0.0.1:8000/api/top-pick-background/list/?page=${page}&pageSize=5`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderTopPickTable(data.data);
+                    renderPagination(data.totalPages, page);
+                } else {
+                    alert("Failed to fetch data");
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+    
+    function renderTopPickTable(items) {
+        const tbody = document.getElementById("topPickTableBody");
+        tbody.innerHTML = ""; // clear previous
+        
+    
+        items.forEach(item => {
+            const row = document.createElement("tr");
+            const encodedItem = encodeURIComponent(JSON.stringify(item));
+            row.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.heading}</td>
+                <td class="d-none d-xl-table-cell">${item.description || ""}</td>
+                <td>
+                    <span class="btn btn-sm ${item.status === 1 ? 'btn-success' : 'btn-danger'}">
+                        ${item.status === 1 ? 'Active' : 'Inactive'}
+                    </span>
+                </td>
+                <td><img src="${item.image}" alt="img" style="height: 50px; width: 50px;" /></td>
+                <td><a href="${item.link}" target="_blank">${item.link}</a></td>
+                <td class="d-none d-md-table-cell">${item.created_at || ""}</td>
+                <td class="d-none d-md-table-cell">${item.updated_at || ""}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="editTopPick('${encodedItem}')">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteTopPick(${item.id})">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+    
+    function renderPagination(totalPages, currentPage) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+    
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement("li");
+            li.className = `page-item ${i === currentPage ? "active" : ""}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            li.addEventListener("click", function (e) {
+                e.preventDefault();
+                fetchTopPickData(i);
+            });
+            pagination.appendChild(li);
+        }
+    }
+    </script>
+<script>
+    function base64Encode(str) {
+        return btoa(str); // encode to base64
+    }
+
+    function deleteTopPick(id) {
+        const encodedId = base64Encode(id.toString());
+
+        fetch(`http://127.0.0.1:8000/api/top-pick-background/delete/${encodedId}/`, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast("Deleted successfully!", "success");
+            } else {
+                showToast("Failed to delete.", "danger");
+            }
+        })
+        .catch(err => console.error("Delete Error:", err));
+    }
+</script>
+<script>
+    function addTopPick(event) {
+        event.preventDefault();
+    
+        const form = document.getElementById('topPickForm');
+        if (!form) {
+            console.error("Form with ID 'topPickForm' not found.");
+            return;
+        }
+    
+        const imageInput = form.querySelector('input[type="file"][name="image"]'); // Adjust "name" to match your input name
+        const file = imageInput?.files?.[0];
+    
+        if (file && file.size > 1.2 * 1024 * 1024) { // 1.2MB = 1.2 * 1024 * 1024 bytes
+            const modalElement = document.getElementById('addTopPickBackImg');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+    
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300);
+    
+            showToast("Image size must not exceed 1.2 MB.", "danger");
+            return;
+        }
+    
+        const formData = new FormData(form);
+    
+        fetch('http://127.0.0.1:8000/api/top-pick-background/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.id) {
+                const modalElement = document.getElementById('addTopPickBackImg');
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modalInstance.hide();
+    
+                setTimeout(() => {
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    document.body.classList.remove('modal-open');
+                    document.body.style = '';
+                }, 300);
+    
+                showToast("Top pick added successfully!", "success");
+                form.reset();
+                fetchTopPickData(1);
+            } else {
+                showToast("Failed to add top pick.", "danger");
+                console.warn("Unexpected response data:", data);
+            }
+        })
+        .catch(error => {
+            console.error("Error while adding top pick:", error);
+            showToast("An error occurred. Please try again.", "danger");
+        });
+    }
+</script>
+<script>
+function editTopPick(encodedItem) {
+    // Step 1: Decode the item using decodeURIComponent
+    const item = JSON.parse(decodeURIComponent(encodedItem));
+
+    console.log(item)
+
+    // Step 2: Open the Edit Top Pick Modal (Assuming you are using Bootstrap modal)
+    const modalElement = document.getElementById('editTopPickBackImg');
+    const modalInstance = new bootstrap.Modal(modalElement);
+    modalInstance.show();
+
+    // Step 3: Populate the modal form with the item data
+    document.getElementById('editTopPickId').value = item.id; // Set ID
+    document.getElementById('editTopPickHeading').value = item.heading || ''; // Populate heading
+    document.getElementById('editTopPickDescription').value = item.description || ''; // Populate description
+    document.getElementById('editTopPickStatus').value = item.status || ''; // Populate status
+    document.getElementById('editTopPickLink').value = item.link || ''; // Populate link
+    document.getElementById('editTopPickPreviewImage').src = item.image || ''; // Populate image preview
+     // Step 4: Set the image preview if image exists (base64 encoded image)
+     const imageElement = document.getElementById('editTopPickPreviewImage');
+    if (item.image) {
+        imageElement.src = item.image; // Base64 image is directly set as the source
+        imageElement.style.display = 'block'; // Ensure image preview is visible
+    } else {
+        imageElement.style.display = 'none'; // Hide the preview if no image
+    }
+
+    // Step 5: Optionally, show the image preview when selecting a new image
+    document.getElementById('editTopPickImage').addEventListener('change', function() {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('editTopPickPreviewImage').src = e.target.result;
+            document.getElementById('editTopPickPreviewImage').style.display = 'block';
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+}
+
+</script>
+<script>
+function updateTopPick() {
+    const form = document.getElementById('editTopPickForm');
+    const formData = new FormData(form);
+
+    const imageFile = document.getElementById('editTopPickImage').files[0];  // Get the image file if any
+    const imageBase64 = formData.get('image_base64'); // Get base64 from form data if present
+    document.getElementById("loader-container").style.display = "flex";
+
+    // If an image file is selected, convert it to base64 and append to the formData
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            const base64Image = reader.result.split(',')[1];  // Get the base64 part
+            formData.append('image_base64', base64Image); // Append the base64 image to the formData
+        };
+        reader.readAsDataURL(imageFile);
+    }
+
+    fetch('http://127.0.0.1:8000/api/top-pick-background/update/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("loader-container").style.display = "none";
+
+        if (data.status === 'success') {
+            const modalElement = document.getElementById('editTopPickBackImg');
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modalInstance.hide();
+    
+                setTimeout(() => {
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    document.body.classList.remove('modal-open');
+                    document.body.style = '';
+                }, 300);
+    
+            showToast("Top pick updated successfully!", "success");
+            fetchTopPickData(1);  // Refetch data if needed
+        } else {
+            showToast("Failed to update top pick.", "danger");
+        }
+    })
+    .catch(error => {
+        showToast("An error occurred. Please try again.", "danger");
+        console.error("Error:", error);
+    });
+}
+
+</script>
+
+
+{%endblock%}

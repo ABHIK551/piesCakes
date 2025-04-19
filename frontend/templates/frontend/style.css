@@ -1,0 +1,125 @@
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap');
+
+body {
+    font-family: 'Avenir', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+/* Navbar Wrapper */
+.navbar {
+    width: 100%;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Header */
+.top-header {
+    background-color: white;
+    padding: 5px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid #ccc;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    flex-wrap: wrap;
+}
+
+.top-bar .contact-info span,
+.top-bar .help-links span {
+    margin-right: 15px;
+}
+
+/* Main Header */
+.main-header {
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 500px;
+    margin: 0 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: -30px;
+    color: #ccc;
+}
+
+/* Align User Actions in a Row */
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+.user-actions span {
+    margin: 0 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.category-btn, .location-btn {
+    background-color: #a56632;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Center Navbar Items */
+.nav-bar ul {
+    list-style: none;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-bar ul li {
+    margin: 0 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.nav-bar ul li:hover {
+    color: #a56632;
+}
