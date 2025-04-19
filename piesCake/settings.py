@@ -22,7 +22,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'  # must NOT be same as STATICFILES_DIRS
 
 # Only if you're using additional static files (optional)
-STATICFILES_DIRS = [BASE_DIR / 'static']  # your source folder
+STATICFILES_DIRS = [BASE_DIR / 'staticfiles']  # your source folder
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3*rs$xm*_9d^&iz71fu9n*x#0+syt2+w@z&^w=z^)8grdbfae3'
