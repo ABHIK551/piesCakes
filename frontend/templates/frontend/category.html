@@ -45,11 +45,6 @@
 function fetchCategories() {
     const token = sessionStorage.getItem("auth_token"); // Or use localStorage
 
-    if (!token) {
-        redirectToLogin();  // Token is missing, redirect to login
-        return;
-    }
-
     fetch("/api/categories-list/", {
         method: "GET",
         headers: {
@@ -119,11 +114,6 @@ function renderCategories(categories) {
 
             container.appendChild(categoryDiv);
         });
-}
-
-
-function redirectToLogin() {
-    window.location.href = "/login";
 }
 </script>
 
