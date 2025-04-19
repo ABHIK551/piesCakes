@@ -192,7 +192,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const token = sessionStorage.getItem("auth_token");
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/products-list/?page=1&pageSize=1000", {
+        const response = await fetch("/api/products-list/?page=1&pageSize=1000", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

@@ -104,7 +104,7 @@
 <script>
     async function fetchAndRenderProducts() {
     try {
-        const res = await fetch('http://127.0.0.1:8000/api/products-list/?page=1&pageSize=100');
+        const res = await fetch('/api/products-list/?page=1&pageSize=100');
         const data = await res.json();
 
         // Access the products array from the nested structure
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
             return;
         }
 
-        fetch('http://127.0.0.1:8000/api/top-pick-background/list/?page=1&pageSize=5', {
+        fetch('/api/top-pick-background/list/?page=1&pageSize=5', {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`,

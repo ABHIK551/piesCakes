@@ -257,12 +257,13 @@ button:hover {
 
         if (res.ok) {
           responseMsg.style.color = "green";
-          responseMsg.textContent = "Registered successfully!";
+          responseMsg.textContent = result.message || "Registered successfully!";
           form.reset();
         } else {
           responseMsg.style.color = "red";
-          responseMsg.textContent = result.detail || "Registration failed.";
+          responseMsg.textContent = result.message || "Registration failed.";
         }
+
       } catch (err) {
         responseMsg.style.color = "red";
         responseMsg.textContent = "Something went wrong.";

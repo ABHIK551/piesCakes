@@ -127,7 +127,7 @@
         const userId = sessionStorage.getItem("user_id");
         const cartTableBody = document.querySelector(".cart-table tbody");
     
-        fetch(`http://127.0.0.1:8000/api/view-cart/${userId}/`, {
+        fetch(`/api/view-cart/${userId}/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

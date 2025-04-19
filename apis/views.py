@@ -363,9 +363,11 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Registration successful."}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+            return Response({"message": "Registration successful.", "status": "success"}, status=status.HTTP_201_CREATED)
+        
+        # Flatten errors
+        error = serializer.errors.get("message") or next(iter(serializer.errors.values()))[0]
+        return Response({"message": error, "status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 
 import jwt
 from django.conf import settings

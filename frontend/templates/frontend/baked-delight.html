@@ -7,7 +7,7 @@
     });
 
     function fetchBakedDelights() {
-        fetch(`http://127.0.0.1:8000/api/baked-delights/list/?page=1&pageSize=10`)
+        fetch(`/api/baked-delights/list/?page=1&pageSize=10`)
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('bakedDelightsContainer');

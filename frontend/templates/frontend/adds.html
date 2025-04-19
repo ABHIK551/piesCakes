@@ -9,7 +9,7 @@
 <script>
     async function loadHomepageAdd() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/ads-list/?page=1&pageSize=1");
+        const response = await fetch("/api/ads-list/?page=1&pageSize=1");
         const data = await response.json();
   
         if (data.success && data.data.length > 0) {

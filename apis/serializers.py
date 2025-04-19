@@ -112,14 +112,24 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
+        # Check if passwords match
+        if attrs.get('password') != attrs.get('confirm_password'):
+            raise serializers.ValidationError({"message": "Passwords do not match."})
+        
+        # Check if email already exists
+        if CustomUser.objects.filter(email=attrs.get('email')).exists():
+            raise serializers.ValidationError({"message": "Email already registered."})
+        
+        # Check if phone already exists
+        if CustomUser.objects.filter(phone=attrs.get('phone')).exists():
+            raise serializers.ValidationError({"message": "Phone number already registered."})
+        
         return attrs
 
     def create(self, validated_data):
         validated_data.pop('confirm_password')
         user = CustomUser.objects.create_user(**validated_data)
-        user.start_session()  # Log session on first register
+        user.start_session()  # Optional: auto-login logic
         return user
 
 from rest_framework import serializers
