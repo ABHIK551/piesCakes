@@ -198,7 +198,7 @@ function toggleSidebar() {
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/banner-list/");
+    const response = await fetch("/api/banner-list/");
     const data = await response.json();
 
     if (data.success && Array.isArray(data.data) && data.data.length > 0) {

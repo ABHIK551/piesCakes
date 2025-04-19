@@ -36,7 +36,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1', 
-    'localhost'
+    'localhost',
+    '89.116.21.162',
+    'www.prajnabyparth.com'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
