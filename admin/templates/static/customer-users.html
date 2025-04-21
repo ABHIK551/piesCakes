@@ -1,0 +1,82 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+
+        <!-- Header Card -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Customer Users List</h3>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card mt-0">
+            <div class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>First Login</th>
+                            <th>Session Start</th>
+                            <th>Session End</th>
+                            <th>User Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <!-- Data will be inserted here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = sessionStorage.getItem("admin_access_token");
+        document.getElementById("loader-container").style.display = "flex";
+    
+        fetch("http://127.0.0.1:8000/api/admin/customers/", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("loader-container").style.display = "none";
+            const tbody = document.getElementById("customerTableBody");
+            tbody.innerHTML = "";
+    
+            data.forEach((user, index) => {
+                const isActiveBtn = user.is_active === true || user.is_active === "true"
+                    ? `<button style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Active</button>`
+                    : `<button style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Inactive</button>`;
+
+                const row = `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.first_name} ${user.last_name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.first_login || "-"}</td>
+                        <td>${user.session_started_at || "-"}</td>
+                        <td>${user.session_ended_at || "-"}</td>
+                        <td>${isActiveBtn}</td>
+                    </tr>`;
+                tbody.insertAdjacentHTML("beforeend", row);
+            });
+        })
+        .catch(err => {
+            console.error("Failed to fetch customer data:", err);
+            alert("Failed to load customer list.");
+            document.getElementById("loader-container").style.display = "none";
+        });
+    });
+    </script>
+    
+{% endblock %}

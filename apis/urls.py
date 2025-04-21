@@ -39,4 +39,6 @@ urlpatterns = [
     path('view-cart/<int:user_id>/', view_cart, name='view-cart'),
     path('admin/signup/', AdminUserSignupView.as_view(), name='admin-signup'),
     path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
+    path('admin/customers/', CustomerListView.as_view(), name='customer-list'),
+    path('admin/logout/', AdminLogoutView.as_view(), name='admin-logout'),
 ]

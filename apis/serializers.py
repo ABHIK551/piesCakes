@@ -281,3 +281,13 @@ class AdminLoginSerializer(serializers.Serializer):
             'name': admin.name,
             'email': admin.email,
         }
+
+
+class CustomUserFetchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 'first_name', 'last_name', 'email', 'phone',
+            'first_login', 'session_started_at', 'session_ended_at',
+            'created_at', 'updated_at', 'is_active'
+        ]
