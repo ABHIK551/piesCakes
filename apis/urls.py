@@ -37,4 +37,6 @@ urlpatterns = [
     path('baked-delight/update/', update_baked_delights, name='update_baked_delights'),
     path('add-to-cart/', add_to_cart, name='add_to_cart'),
     path('view-cart/<int:user_id>/', view_cart, name='view-cart'),
+    path('admin/signup/', AdminUserSignupView.as_view(), name='admin-signup'),
+    path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
 ]

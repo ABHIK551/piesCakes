@@ -238,3 +238,46 @@ class CartSerializer(serializers.ModelSerializer):
         instance.products.set([product['id'] for product in validated_data.get('products', [])])  # Update products
         instance.save()
         return instance
+    
+from .models import AdminUser
+
+class AdminUserSignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = AdminUser
+        fields = ['name', 'email', 'password']
+
+    def create(self, validated_data):
+        return AdminUser.objects.create_user(**validated_data)
+    
+
+from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
+from .models import AdminUser
+
+class AdminLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+
+        try:
+            admin = AdminUser.objects.get(email=email)
+        except AdminUser.DoesNotExist:
+            raise serializers.ValidationError("Invalid credentials or not an admin.")
+
+        if not check_password(password, admin.password):
+            raise serializers.ValidationError("Invalid credentials or not an admin.")
+
+        refresh = RefreshToken.for_user(admin)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'admin_id': admin.id,
+            'name': admin.name,
+            'email': admin.email,
+        }

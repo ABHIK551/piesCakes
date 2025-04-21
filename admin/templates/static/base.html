@@ -147,22 +147,22 @@ tr:nth-child(even) {
 					</li>
 
 					<li class="sidebar-item active">
-						<a class="sidebar-link" href="index.html">
+						<a class="sidebar-link" href="/admin">
               <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
             </a>
 					</li>
 
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/admin/profile">
               <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
             </a>
-					</li>
+					</li> -->
 
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/admin/login">
               <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Sign In</span>
             </a>
-					</li>
+					</li> -->
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/admin/register">
@@ -399,7 +399,7 @@ tr:nth-child(even) {
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                <img src="{% static 'img/avatars/avatar.jpg' %}" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
+                <img src="{% static 'img/avatars/avatar.jpg' %}" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark" id="adminName">Charles Hall</span>
               </a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -408,7 +408,7 @@ tr:nth-child(even) {
 								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
 								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
+								<a class="dropdown-item" href="#" id="logoutBtn">Log out</a>
 							</div>
 						</li>
 					</ul>
@@ -1173,6 +1173,44 @@ function showToast(message, type = "success") {
 }
 
 </script>
+<script>
+	window.onload = function() {
+		// Get the admin details from sessionStorage
+		const admin = sessionStorage.getItem("admin_user");
+	
+		if (admin) {
+			// Parse the admin details if they exist in sessionStorage
+			const adminData = JSON.parse(admin);
+	
+			if (adminData && adminData.name) {
+				// Set the admin name inside the span with id "adminName"
+				document.getElementById("adminName").textContent = adminData.name;
+			} else {
+				// Redirect to login if no name is found
+				window.location.href = "/admin/login";
+			}
+		} else {
+			// Redirect to login if no admin data is found
+			window.location.href = "/admin/login";
+		}
+	};
+	</script>
+	
+	<script>
+		document.getElementById("logoutBtn").addEventListener("click", function(e) {
+			e.preventDefault();
+		
+			// Clear the sessionStorage
+			sessionStorage.removeItem("admin_access_token");
+			sessionStorage.removeItem("admin_refresh_token");
+			sessionStorage.removeItem("admin_user");
+		
+			// Redirect to login page
+			window.location.href = "/admin/login"; // Change this URL if needed
+		});
+		</script>
+		
+	
 </body>
 
 </html>
