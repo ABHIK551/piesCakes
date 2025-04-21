@@ -161,25 +161,11 @@ document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
 </script>
 <script>
     function loadPopularItem() {
-        const token = sessionStorage.getItem("auth_token");
-
-        if (!token) {
-            redirectToLogin();
-            return;
-        }
 
         fetch('/api/top-pick-background/list/?page=1&pageSize=5', {
             method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
         })
         .then(response => {
-            if (response.status === 401) {
-                redirectToLogin();
-                return;
-            }
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }

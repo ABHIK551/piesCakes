@@ -284,6 +284,12 @@ class AdminLoginSerializer(serializers.Serializer):
 
 
 class CustomUserFetchSerializer(serializers.ModelSerializer):
+    first_login = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
+    session_started_at = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
+    session_ended_at = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
+    created_at = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
+    updated_at = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
+
     class Meta:
         model = CustomUser
         fields = [

@@ -1001,9 +1001,11 @@ class CustomerListView(APIView):
     # permission_classes = [IsAdminUser]
 
     def get(self, request):
-        users = CustomUser.objects.filter(is_staff=False)
-        serializer = CustomUserFetchSerializer(users, many=True)
-        return Response(serializer.data)
+        users = CustomUser.objects.filter(is_staff=False).order_by("id")
+        paginator = CustomPaginationMain()
+        paginated_users = paginator.paginate_queryset(users, request, view=self)
+        serializer = CustomUserFetchSerializer(paginated_users, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
 class AdminLogoutView(APIView):
     def post(self, request):

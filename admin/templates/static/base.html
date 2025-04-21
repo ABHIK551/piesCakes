@@ -140,6 +140,7 @@ tr:nth-child(even) {
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.html">
           <span class="align-middle">AdminKit</span>
+		  <span id="LogoutBTN" style="float:right;">Logout</span>
         </a>
 
 				<ul class="sidebar-nav">
@@ -1177,8 +1178,11 @@ function showToast(message, type = "success") {
 	</script>
 	
 	<script>
-		document.getElementById("logoutBtn").addEventListener("click", async function(e) {
-			e.preventDefault();
+		["logoutBtnNav", "LogoutBTN"].forEach(id => {
+		const btn = document.getElementById(id);
+		if (btn) {
+			btn.addEventListener("click", async function(e) {
+				e.preventDefault();
 	
 			const refreshToken = sessionStorage.getItem("admin_refresh_token");
 	
@@ -1204,6 +1208,8 @@ function showToast(message, type = "success") {
 			// Redirect to login page
 			window.location.href = "/admin/login";
 		});
+	}
+});
 	</script>
 	
 	
