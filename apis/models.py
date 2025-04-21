@@ -230,3 +230,54 @@ class Cart(models.Model):
         for product in self.products.all():
             total += product.discount_price if product.discount_price else product.price
         return total
+    
+
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group, Permission
+from django.db import models
+
+class AdminUserManager(BaseUserManager):
+    def create_user(self, email, name, password=None):
+        if not email:
+            raise ValueError("Admins must have an email address")
+        email = self.normalize_email(email)
+        admin = self.model(email=email, name=name)
+        admin.set_password(password)
+        admin.save(using=self._db)
+        return admin
+
+    def create_superuser(self, email, name, password=None):
+        admin = self.create_user(email, name, password)
+        admin.is_superuser = True
+        admin.is_staff = True
+        admin.save(using=self._db)
+        return admin
+
+class AdminUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name='adminuser_set',  # 👈 Fix for groups
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups'
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='adminuser_set',  # 👈 Fix for permissions
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    objects = AdminUserManager()
+
+    def __str__(self):
+        return self.emails

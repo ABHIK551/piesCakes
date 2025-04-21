@@ -18,6 +18,10 @@
 	<title>Sign In | AdminKit Demo</title>
 
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- Toastr CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <style>
 	/*!
@@ -45,7 +49,7 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="m-sm-3">
-									<form>
+									<form id="adminLoginForm">
 										<div class="mb-3">
 											<label class="form-label">Email</label>
 											<input class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" />
@@ -61,7 +65,7 @@
 											</div>
 										</div>
 										<div class="d-grid gap-2 mt-3">
-											<a href="/admin/" class="btn btn-lg btn-primary">Sign in</a>
+											<button type="submit" class="btn btn-lg btn-primary">Login</button>
 										</div>
 									</form>
 								</div>
@@ -75,8 +79,69 @@
 			</div>
 		</div>
 	</main>
-
-	<script src="{% static 'js/app.js'%}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script>
+		function showToast(message, type = "info") {
+			toastr.options = {
+				"closeButton": true,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"timeOut": "4000"
+			};
+		
+			if (type === "success") {
+				toastr.success(message);
+			} else if (type === "error") {
+				toastr.error(message);
+			} else if (type === "warning") {
+				toastr.warning(message);
+			} else {
+				toastr.info(message);
+			}
+		}
+		</script>
+		
+	<script>
+		document.getElementById("adminLoginForm").addEventListener("submit", async function (e) {
+			e.preventDefault();
+		
+			const email = document.querySelector('input[name="email"]').value;
+			const password = document.querySelector('input[name="password"]').value;
+		
+			try {
+				const response = await fetch("/api/admin/login/", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ email, password })
+				});
+		
+				const data = await response.json();
+		
+				if (response.ok) {
+					// Store tokens and user info
+					showToast("Login successful! Redirecting", "success");
+					sessionStorage.setItem("admin_access_token", data.access);
+					sessionStorage.setItem("admin_refresh_token", data.refresh);
+					sessionStorage.setItem("admin_user", JSON.stringify({
+						id: data.admin_id,
+						name: data.name,
+						email: data.email
+					}));
+		
+					// Redirect to admin dashboard
+					window.location.href = "/admin/";
+				} else {
+					showToast(data.non_field_errors ? data.non_field_errors[0] : "Login failed", "danger");
+				}
+			} catch (err) {
+				console.error("Login error:", err);
+				showToast("An error occurred while logging in.", "danger");
+			}
+		});
+		</script>
+		
 
 </body>
 

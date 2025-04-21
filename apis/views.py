@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 from .models import Category,  Product
 from .serializers import CategorySerializer, ProductSerializer
 from rest_framework import generics, filters, status
@@ -975,3 +976,21 @@ def view_cart(request, user_id):
 
     except CustomUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+class AdminUserSignupView(APIView):
+    def post(self, request):
+        serializer = AdminUserSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Admin user created successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            # Add this for debugging
+            print("Serializer Errors:", serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminLoginView(APIView):
+    def post(self, request):
+        serializer = AdminLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
