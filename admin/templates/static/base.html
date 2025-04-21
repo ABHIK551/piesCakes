@@ -720,7 +720,7 @@ tr:nth-child(even) {
 
 		async function fetchMainCategories(selectId) {
 			try {
-				let response = await fetch("http://127.0.0.1:8000/api/categories/main/");
+				let response = await fetch("/api/categories/main/");
 				let data = await response.json();
 
 				let parentCategorySelect = document.getElementById(selectId);
@@ -797,7 +797,7 @@ tr:nth-child(even) {
 			}
 	
 			// Load parent categories dynamically
-			fetch('http://127.0.0.1:8000/api/categories/list/')
+			fetch('/api/categories/list/')
 				.then(response => response.json())
 				.then(data => {
 					const parentSelect = document.getElementById('parentCategory');
@@ -810,7 +810,7 @@ tr:nth-child(even) {
 
 	});
 
-	const API_URL = "http://127.0.0.1:8000/api/categories-list/";
+	const API_URL = "/api/categories-list/";
 	let currentPage = 1;
 	let activeTab = 'categories'; // Default tab
 
@@ -986,7 +986,7 @@ tr:nth-child(even) {
 
 	window.deleteCategory = function (id) {
 		if (confirm("Are you sure you want to delete this category?")) {
-			fetch(`http://127.0.0.1:8000/api/categories/delete/${id}/`, { method: "DELETE" })
+			fetch(`/api/categories/delete/${id}/`, { method: "DELETE" })
 				.then(response => {
 					if (!response.ok) {
 						throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1019,7 +1019,7 @@ tr:nth-child(even) {
 		}
 
 		try {
-			let response = await fetch(`http://127.0.0.1:8000/api/categories/${categoryId}/`, {
+			let response = await fetch(`/api/categories/${categoryId}/`, {
 				method: "PUT",
 				body: formData,
 			});
@@ -1108,7 +1108,7 @@ document.getElementById("categoryForm").addEventListener("submit", async functio
 	if (parentCategory) formData.append("parent", parentCategory);
 	if (imageFile) formData.append("image_file", imageFile);
 
-	const response = await fetch("http://127.0.0.1:8000/api/categories/", {
+	const response = await fetch("/api/categories/", {
 		method: "POST",
 		body: formData,
 		headers: {
