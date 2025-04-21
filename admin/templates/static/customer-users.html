@@ -41,7 +41,7 @@
         const token = sessionStorage.getItem("admin_access_token");
         document.getElementById("loader-container").style.display = "flex";
     
-        fetch("http://127.0.0.1:8000/api/admin/customers/", {
+        fetch("/api/admin/customers/", {
             headers: {
                 Authorization: `Bearer ${token}`
             }

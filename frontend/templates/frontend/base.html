@@ -2554,7 +2554,7 @@ function toggleSidebar() {
             loginBtn.textContent = "🚪 Logout";
             loginBtn.style.cursor = "pointer";
             loginBtn.onclick = () => {
-                fetch("http://127.0.0.1:8000/api/admin/logout/", {
+                fetch("/api/admin/logout/", {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${authToken}`,

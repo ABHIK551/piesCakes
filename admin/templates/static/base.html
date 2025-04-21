@@ -1184,7 +1184,7 @@ function showToast(message, type = "success") {
 	
 			try {
 				// Optional: Call logout API (if using JWT blacklist or just for logging purposes)
-				await fetch("http://127.0.0.1:8000/api/admin/logout/", {
+				await fetch("/api/admin/logout/", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
