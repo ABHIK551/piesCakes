@@ -1,7 +1,7 @@
 {% extends "static/base.html" %}
 {% load static %}
 {% block content %}
-<main class="content">
+<!-- <main class="content"> -->
 <div class="container d-flex flex-column">
     <div class="row vh-100">
         
@@ -39,14 +39,14 @@
         <ul id="pagination" class="pagination"></ul>
     </div>
 </div>
-</main>
+<!-- </main> -->
 <script>
     const pageSize = 5;
     let currentPage = 1;
 
     async function fetchBanners(page = 1) {
-        document.getElementById("loader-container").style.display = "flex";
         try {
+            document.getElementById("loader-container").style.display = "flex";
             const response = await fetch(`/api/banner-list/?page=${page}&pageSize=${pageSize}`);
             const result = await response.json();
 
