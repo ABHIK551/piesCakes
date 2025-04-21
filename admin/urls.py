@@ -13,5 +13,5 @@ urlpatterns = [
     path('top-picks', top_picks, name='top-picks'),
     path('adds', adds, name='adds'),
     path('baked-delights', baked_delights, name='baked-delights'),
-    path('customer/users', customer_user, name='customer_user'),
+    path('customers', customer_user, name='customer_user'),
 ]
