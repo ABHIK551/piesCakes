@@ -155,7 +155,7 @@
     });
     
     function fetchTopPickData(page) {
-        fetch(`http://127.0.0.1:8000/api/top-pick-background/list/?page=${page}&pageSize=5`)
+        fetch(`/api/top-pick-background/list/?page=${page}&pageSize=5`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -222,7 +222,7 @@
     function deleteTopPick(id) {
         const encodedId = base64Encode(id.toString());
 
-        fetch(`http://127.0.0.1:8000/api/top-pick-background/delete/${encodedId}/`, {
+        fetch(`/api/top-pick-background/delete/${encodedId}/`, {
             method: 'POST'
         })
         .then(res => res.json())
@@ -266,7 +266,7 @@
     
         const formData = new FormData(form);
     
-        fetch('http://127.0.0.1:8000/api/top-pick-background/', {
+        fetch('/api/top-pick-background/', {
             method: 'POST',
             body: formData
         })
@@ -361,7 +361,7 @@ function updateTopPick() {
         reader.readAsDataURL(imageFile);
     }
 
-    fetch('http://127.0.0.1:8000/api/top-pick-background/update/', {
+    fetch('/api/top-pick-background/update/', {
         method: 'POST',
         body: formData
     })

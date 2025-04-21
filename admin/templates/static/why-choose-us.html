@@ -154,7 +154,7 @@
         const form = document.getElementById("whyChooseUsForm");
         const formData = new FormData(form);
 
-        fetch('http://127.0.0.1:8000/api/why-choose-us/create/', {
+        fetch('/api/why-choose-us/create/', {
             method: 'POST',
             body: formData
         })
@@ -197,7 +197,7 @@ function fetchData(page = 1, pageSize = 5) {
     pagination.innerHTML = '';
 
     // Fetch data from the API with pagination
-    fetch(`http://127.0.0.1:8000/api/why-choose-us/?page=${page}&pageSize=${pageSize}`)
+    fetch(`/api/why-choose-us/?page=${page}&pageSize=${pageSize}`)
         .then(response => response.json())
         .then(data => {
             // Render the table data
@@ -282,7 +282,7 @@ fetchData(1, 5);
 <script>
 
 function deleteWhyChooseUsItem(encodedId) {
-    fetch(`http://127.0.0.1:8000/api/why-choose-us/delete/${encodedId}/`, {
+    fetch(`/api/why-choose-us/delete/${encodedId}/`, {
         method: 'DELETE',
     })
     .then(response => {
@@ -335,7 +335,7 @@ function deleteWhyChooseUsItem(encodedId) {
         }
 
 
-        fetch('http://127.0.0.1:8000/api/why-choose-us/update/', {
+        fetch('/api/why-choose-us/update/', {
             method: 'POST',
             body: formData
         })

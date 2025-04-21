@@ -187,7 +187,7 @@
             return;
         }
 
-        fetch('http://127.0.0.1:8000/api/baked-delights/create/', {
+        fetch('/api/baked-delights/create/', {
             method: 'POST',
             body: formData
         })
@@ -229,7 +229,7 @@ function fetchData(page = 1, pageSize = 5) {
     pagination.innerHTML = '';
 
     // Fetch data from the API with pagination
-    fetch(`http://127.0.0.1:8000/api/baked-delights/list/?page=${page}&pageSize=${pageSize}`)
+    fetch(`/api/baked-delights/list/?page=${page}&pageSize=${pageSize}`)
         .then(response => response.json())
         .then(data => {
             // Render the table data
@@ -316,7 +316,7 @@ fetchData(1, 5);
 <script>
 
 function deleteBakedDelight(encodedId) {
-    fetch(`http://127.0.0.1:8000/api/baked-delight/delete/${encodedId}/`, {
+    fetch(`/api/baked-delight/delete/${encodedId}/`, {
         method: 'DELETE',
     })
     .then(response => {
@@ -370,7 +370,7 @@ function deleteBakedDelight(encodedId) {
         }
 
 
-        fetch('http://127.0.0.1:8000/api/baked-delight/update/', {
+        fetch('/api/baked-delight/update/', {
             method: 'POST',
             body: formData
         })
