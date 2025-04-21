@@ -230,15 +230,15 @@ function addToCart(encodedData) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            alert("Products added to cart successfully!");
+        if (data.ok) {
+            showToast("Products added to cart successfully!", "success");
         } else {
-            alert("Failed to add products to cart.");
+            showToast("Failed to add products to cart.", "danger");
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("An error occurred while adding to cart.");
+        showToast("An error occurred while adding to cart.", "danger");
     });
 }
 

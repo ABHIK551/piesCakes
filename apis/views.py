@@ -963,7 +963,7 @@ def add_to_cart(request):
         # Serialize the cart and return the response
         from .serializers import CartSerializer
         serializer = CartSerializer(cart)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
 def view_cart(request, user_id):

@@ -26,14 +26,67 @@
 
             <div class="quantity" style="max-width: 100px;">
                 <button class="minus">-</button>
-                <input type="text" value="1">
+                <input type="text" value="1" class="quantity-input">
                 <button class="plus">+</button>
             </div>
 
-            <button class="add-to-cart">ADD TO CART</button>
+            <button class="add-to-cart" data-encoded="{{ product.id }}">ADD TO CART</button>
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Quantity Button Logic
+        const quantityInput = document.querySelector('.quantity-input');
+        const minusBtn = document.querySelector('.minus');
+        const plusBtn = document.querySelector('.plus');
+    
+        minusBtn.addEventListener('click', () => {
+            let currentQty = parseInt(quantityInput.value);
+            if (currentQty > 1) quantityInput.value = currentQty - 1;
+        });
+    
+        plusBtn.addEventListener('click', () => {
+            let currentQty = parseInt(quantityInput.value);
+            quantityInput.value = currentQty + 1;
+        });
+    
+        // Add to Cart Logic
+        document.querySelector('.add-to-cart').addEventListener('click', function () {
+            const productId = this.getAttribute('data-encoded');
+            user_id = sessionStorage.getItem('user_id')
+            const productIds = productId;
+            const userId = user_id;
+            const quantity = parseInt(quantityInput.value);
+    
+            // Adjust product ID list based on quantity
+            const productsToAdd = [];
+            for (let i = 0; i < quantity; i++) {
+                productsToAdd.push(...productIds);
+            }
+    
+            fetch('/api/add-to-cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    productIds: productsToAdd
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    showToast("Products added to cart successfully!", "success");
+                } else {
+                    showToast("Failed to add products to cart.", "danger");
+                }
+            });
+        });
+    });
+    </script>
+    
 
 <section class="recommendation-section">
     <div class="heading">
