@@ -164,15 +164,15 @@ tr:nth-child(even) {
             </a>
 					</li> -->
 
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/admin/register">
               <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
-            </a>
+            </a> -->
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="pages-blank.html">
-              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
+						<a class="sidebar-link" href="customer/users">
+              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Customer users</span>
             </a>
 					</li>
 
@@ -399,7 +399,7 @@ tr:nth-child(even) {
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                <img src="{% static 'img/avatars/avatar.jpg' %}" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark" id="adminName">Charles Hall</span>
+                <span class="text-dark" id="adminName">Charles Hall</span>
               </a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -430,29 +430,6 @@ tr:nth-child(even) {
                 {% endblock %}
 			<footer class="footer">
 				<div class="container-fluid">
-					<div class="row text-muted">
-						<div class="col-6 text-start">
-							<p class="mb-0">
-								<a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> - <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Bootstrap Admin Template</strong></a>								&copy;
-							</p>
-						</div>
-						<div class="col-6 text-end">
-							<ul class="list-inline">
-								<li class="list-inline-item">
-									<a class="text-muted" href="https://adminkit.io/" target="_blank">Support</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="https://adminkit.io/" target="_blank">Help Center</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="https://adminkit.io/" target="_blank">Privacy</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="https://adminkit.io/" target="_blank">Terms</a>
-								</li>
-							</ul>
-						</div>
-					</div>
 				</div>
 			</footer>
 			<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
@@ -1197,19 +1174,35 @@ function showToast(message, type = "success") {
 	</script>
 	
 	<script>
-		document.getElementById("logoutBtn").addEventListener("click", function(e) {
+		document.getElementById("logoutBtn").addEventListener("click", async function(e) {
 			e.preventDefault();
-		
-			// Clear the sessionStorage
+	
+			const refreshToken = sessionStorage.getItem("admin_refresh_token");
+	
+			try {
+				// Optional: Call logout API (if using JWT blacklist or just for logging purposes)
+				await fetch("http://127.0.0.1:8000/api/admin/logout/", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ refresh: refreshToken })  // Only if required by your backend
+				});
+			} catch (error) {
+				console.error("Logout API error:", error);
+				// Even if API fails, proceed to log out client-side
+			}
+	
+			// Clear sessionStorage
 			sessionStorage.removeItem("admin_access_token");
 			sessionStorage.removeItem("admin_refresh_token");
 			sessionStorage.removeItem("admin_user");
-		
+	
 			// Redirect to login page
-			window.location.href = "/admin/login"; // Change this URL if needed
+			window.location.href = "/admin/login";
 		});
-		</script>
-		
+	</script>
+	
 	
 </body>
 

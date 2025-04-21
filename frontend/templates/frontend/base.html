@@ -2534,27 +2534,51 @@ function toggleSidebar() {
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const authToken = sessionStorage.getItem("auth_token");
-      if (!authToken) return;               // nothing to do if not logged in
+        const authToken = sessionStorage.getItem("auth_token");
     
-      // (Optional) get a dynamic cart count (replace with your real logic)
-      const cartCount = sessionStorage.getItem("cart_count") || 0;
+        // Handle Cart Display (same as your logic)
+        const cartCount = sessionStorage.getItem("cart_count") || 0;
+        const cartSpan = document.createElement("span");
+        const cartLink = document.createElement("a");
+        cartLink.href = "/cart";
+        cartLink.style.color = "inherit";
+        cartLink.style.textDecoration = "none";
+        cartLink.textContent = `🛒 Cart (${cartCount})`;
+        cartSpan.appendChild(cartLink);
+        const userActions = document.querySelector(".user-actions");
+        if (userActions) userActions.appendChild(cartSpan);
     
-      // build the span > a
-      const span = document.createElement("span");
-      const a    = document.createElement("a");
-      a.href               = "/cart";
-      a.style.color        = "inherit";
-      a.style.textDecoration = "none";
-      a.textContent        = `🛒 Cart (${cartCount})`;
-    
-      span.appendChild(a);
-    
-      // inject into .user-actions
-      const container = document.querySelector(".user-actions");
-      if (container) container.appendChild(span);
+        // Replace Login with Logout if logged in
+        const loginBtn = document.getElementById("LoginBtnPublic");
+        if (authToken && loginBtn) {
+            loginBtn.textContent = "🚪 Logout";
+            loginBtn.style.cursor = "pointer";
+            loginBtn.onclick = () => {
+                fetch("http://127.0.0.1:8000/api/admin/logout/", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => {
+                    if (res.ok) {
+                        sessionStorage.clear();
+                        showToast("Logged out successfully.", "success");
+                        window.location.href = "/"; 
+                    } else {
+                        showToast("Failed to logout.", "danger");
+                    }
+                })
+                .catch(err => {
+                    console.error("Logout error:", err);
+                    showToast("Something wrong connect you support team", "danger");
+                });
+            };
+        }
     });
     </script>
+    
     <!-- Toast Container (place this in your HTML, like inside <body>) -->
 <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 

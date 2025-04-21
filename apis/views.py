@@ -994,3 +994,18 @@ class AdminLoginView(APIView):
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.permissions import IsAdminUser 
+
+class CustomerListView(APIView):
+    # permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        users = CustomUser.objects.filter(is_staff=False)
+        serializer = CustomUserFetchSerializer(users, many=True)
+        return Response(serializer.data)
+    
+class AdminLogoutView(APIView):
+    def post(self, request):
+        request.session.flush()  # Clears the session
+        return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)

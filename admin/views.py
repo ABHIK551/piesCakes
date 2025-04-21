@@ -34,3 +34,7 @@ def adds(request):
 
 def baked_delights(request):
     return render(request,'static/baked-delight.html')
+
+
+def customer_user(request):
+    return render(request,'static/customer-users.html')
