@@ -45,11 +45,13 @@
     let currentPage = 1;
 
     async function fetchBanners(page = 1) {
+        document.getElementById("loader-container").style.display = "flex";
         try {
             const response = await fetch(`/api/banner-list/?page=${page}&pageSize=${pageSize}`);
             const result = await response.json();
 
             if (result.success) {
+                document.getElementById("loader-container").style.display = "none";
                 renderBannerTable(result.data);
                 renderPagination(result.totalPages, page);
             } else {
