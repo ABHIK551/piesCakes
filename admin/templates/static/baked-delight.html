@@ -223,6 +223,8 @@
 function fetchData(page = 1, pageSize = 5) {
     const tableBody = document.getElementById('bakedDelightsTableBody');
     const pagination = document.getElementById('pagination');
+    document.getElementById("loader-container").style.display = "flex";
+
 
     // Clear the table body and pagination
     tableBody.innerHTML = '';
@@ -232,6 +234,7 @@ function fetchData(page = 1, pageSize = 5) {
     fetch(`/api/baked-delights/list/?page=${page}&pageSize=${pageSize}`)
         .then(response => response.json())
         .then(data => {
+            document.getElementById("loader-container").style.display = "none";
             // Render the table data
             data.data.forEach(item => {
                 const row = document.createElement('tr');

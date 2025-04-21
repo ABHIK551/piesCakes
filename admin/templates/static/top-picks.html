@@ -155,10 +155,12 @@
     });
     
     function fetchTopPickData(page) {
+        document.getElementById("loader-container").style.display = "flex";
         fetch(`/api/top-pick-background/list/?page=${page}&pageSize=5`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    document.getElementById("loader-container").style.display = "none";
                     renderTopPickTable(data.data);
                     renderPagination(data.totalPages, page);
                 } else {

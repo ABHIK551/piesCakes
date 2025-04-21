@@ -152,6 +152,8 @@
         event.preventDefault();
 
         const form = document.getElementById("whyChooseUsForm");
+        document.getElementById("loader-container").style.display = "flex";
+
         const formData = new FormData(form);
 
         fetch('/api/why-choose-us/create/', {
@@ -160,6 +162,7 @@
         })
         .then(response => {
             if (!response.ok) {
+                document.getElementById("loader-container").style.display = "none";
                 return response.json().then(data => { throw data; });
             }
             return response.json();
@@ -191,6 +194,7 @@
 function fetchData(page = 1, pageSize = 5) {
     const tableBody = document.getElementById('why-choose-usTableBody');
     const pagination = document.getElementById('pagination');
+    document.getElementById("loader-container").style.display = "flex";
 
     // Clear the table body and pagination
     tableBody.innerHTML = '';
@@ -200,6 +204,7 @@ function fetchData(page = 1, pageSize = 5) {
     fetch(`/api/why-choose-us/?page=${page}&pageSize=${pageSize}`)
         .then(response => response.json())
         .then(data => {
+            document.getElementById("loader-container").style.display = "none";
             // Render the table data
             data.data.forEach(item => {
                 const row = document.createElement('tr');
@@ -328,6 +333,8 @@ function deleteWhyChooseUsItem(encodedId) {
     function updateWhyChooseUsItem(event){
         event.preventDefault();
         const form = document.getElementById("editWhyChooseUsForm");
+        document.getElementById("loader-container").style.display = "flex";
+
         const formData = new FormData(form);
         
         for (let pair of formData.entries()) {
@@ -346,6 +353,7 @@ function deleteWhyChooseUsItem(encodedId) {
             return response.json();
         })
         .then(data => {
+            document.getElementById("loader-container").style.display = "none";
             const modalElement = document.getElementById('editWhyChooseUsModal'); // ✅ Modal, not the form
             const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
             modalInstance.hide();

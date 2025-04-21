@@ -44,6 +44,8 @@
     });
     
     function fetchAdsList(page = 1) {
+        document.getElementById("loader-container").style.display = "flex";
+
         fetch(`/api/ads-list/?page=${page}&pageSize=5`)
             .then(response => {
                 if (!response.ok) {
@@ -52,6 +54,7 @@
                 return response.json();
             })
             .then(data => {
+                document.getElementById("loader-container").style.display = "none";
                 const adsBody = document.getElementById("adsTableBody");
                 const pagination = document.getElementById("pagination");
     
