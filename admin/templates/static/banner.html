@@ -91,7 +91,7 @@
 
     window.deleteBanner = function (id) {
 		if (confirm("Are you sure you want to delete this banner?")) {
-			fetch(`http://127.0.0.1:8000/api/banner/${id}/delete/`, { method: "POST" })
+			fetch(`/api/banner/${id}/delete/`, { method: "POST" })
 				.then(response => {
 					if (!response.ok) {
 						throw new Error(`HTTP error! Status: ${response.status}`);
@@ -193,7 +193,7 @@
       const formData = new FormData(document.getElementById("bannerForm"));
   
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/banners/", {
+        const response = await fetch("/api/banners/", {
           method: "POST",
           body: formData
         });
@@ -221,7 +221,7 @@
 <script>
     async function editBannerById(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/banner/${id}/`);
+            const response = await fetch(`/api/banner/${id}/`);
             const result = await response.json();
   
             if (result.success && result.data) {
@@ -262,7 +262,7 @@
         const bannerId = document.getElementById("editBannerId").value;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/banner/${bannerId}/update`, {
+            const response = await fetch(`/api/banner/${bannerId}/update`, {
                 method: "POST",
                 body: formData,
             });
