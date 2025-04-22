@@ -1835,99 +1835,145 @@ main {
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .heading h2 {
-        font-size: 24px;
-    }
-    .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .heading h2 {
-        font-size: 22px;
-    }
-    .product-grid {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    .product-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .product-card img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .heading {
-        text-align: center;
-    }
-    .heading h2 {
-        font-size: 20px;
-    }
-    .product-card {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-}
-
-/* Responsive Design */
 @media (max-width: 1024px) {
     .product-container {
         flex-direction: column;
+        gap: 20px;
         text-align: center;
+        align-items: center;
     }
 
-    .related-items {
-        flex-wrap: wrap;
-        justify-content: center;
+    .product-image img {
+        height: 450px;
+    }
+
+    .product-details h1 {
+        font-size: 24px;
+    }
+
+    .product-details .price {
+        font-size: 20px;
+    }
+
+    .product-details .description {
+        font-size: 14px;
     }
 }
 
 @media (max-width: 768px) {
-    .product-image {
+    .product-container {
+        flex-direction: row;
+        gap: 20px;
         text-align: center;
-    }
-
-    .related-items {
-        flex-direction: column;
         align-items: center;
     }
 
-    .item {
-        width: 90%;
+    .product-image img {
+        height:350px;
+    }
+
+    .product-details h1 {
+        text-align: left;
+        font-size: 18px;
+    }
+    .product-details {
+        text-align: left;
+        align-items: flex-start; /* If using Flexbox */
+        justify-content: flex-start; /* Optional */
+    }
+    .product-details .price {
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .product-details .description {
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .product-details .rating, .product-details p{
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .product-details .weight-selection h3{
+        text-align: left;
+    }
+
+    .product-details .weight-selection .weight{
+        align-items: left !important;
+        display: none;
+    }
+
+    .product-details .weight-selection .weight,
+    .quantity button,
+    .quantity input,
+    .add-to-cart {
+        align-items: start !important;
+        font-size: 12px;
+        padding: 5px 8px;
     }
 }
 
 @media (max-width: 480px) {
+    .product-section{
+        margin: 0px;
+        padding: 0px;
+    }
+    .product-container {
+        flex-direction: row;
+        gap: 8px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .product-image img {
+        height:175px;
+    }
+
     .product-details h1 {
-        font-size: 22px;
-    }
-
-    .price {
-        font-size: 20px;
-    }
-
-    .description {
+        text-align: left;
         font-size: 14px;
     }
-
-    .weight, .quantity button {
-        padding: 5px 10px;
+    .product-details {
+        padding: 20px;
+        text-align: left;
+        align-items: flex-start; /* If using Flexbox */
+        justify-content: flex-start; /* Optional */
+    }
+    .product-details .price {
+        text-align: left;
+        font-size: 10px;
     }
 
+    .product-details .description {
+        text-align: left;
+        font-size: 8px;
+    }
+
+    .product-details .rating, .product-details p{
+        font-size: 10px;
+        text-align: left;
+    }
+
+    .product-details .weight-selection h3{
+        text-align: left;
+    }
+
+    .product-details .weight-selection .weight{
+        align-items: left !important;
+        display: none;
+    }
+
+    .product-details .weight-selection .weight,
+    .quantity button,
+    .quantity input,
     .add-to-cart {
-        width: 100%;
-        padding: 12px;
+        align-items: start !important;
+        font-size: 8px;
+        padding: 5px 8px;
     }
 }
-
 
 
 .filter-sidebar {
@@ -2433,6 +2479,57 @@ th, td {
         font-size: 20px;
     }
 }
+.ad-section.loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #f3f3f3 url('spinner.gif') center center no-repeat;
+  z-index: 2;
+}
+.ad-section.loading .overlay {
+  opacity: 0.5;
+}
+.ad-section.loaded::before {
+  display: none;
+}
+.ad-section.loaded .overlay {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.banner-section.loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #e0e0e0 url('spinner.gif') center center no-repeat;
+  z-index: 1;
+}
+.banner-section.loaded::before {
+  display: none;
+}
+
+.category.loading {
+  background-color: #f3f3f3;
+}
+.category.loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(240,240,240,1) 25%,
+    rgba(220,220,220,1) 50%,
+    rgba(240,240,240,1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 2;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
 </style>
 <body>
     <main>
@@ -2618,10 +2715,36 @@ function toggleSidebar() {
         btnElem.setAttribute("href", banner.link || "#");
       }
       if (banner.image && bannerSection) {
-        bannerSection.style.backgroundImage = `url('data:image/png;base64,${banner.image}')`;
-        bannerSection.style.backgroundSize = "cover";
-        bannerSection.style.backgroundPosition = "center";
-      }
+        const imageUrl = `data:image/png;base64,${banner.image}`;
+        const img = new Image();
+
+        // Add loading class to show spinner or placeholder
+        bannerSection.classList.add("loading");
+
+
+        img.onload = () => {
+            bannerSection.style.backgroundImage = `url('${imageUrl}')`;
+            bannerSection.style.backgroundSize = "cover";
+            bannerSection.style.backgroundPosition = "center";
+
+            // Optional: Remove loading class or spinner here
+            bannerSection.classList.remove("loading");
+            bannerSection.classList.add("loaded");
+        };
+
+        img.onerror = () => {
+            console.warn("Failed to load banner image.");
+            // You can show a fallback background color or image here
+            bannerSection.style.backgroundColor = "#f2f2f2";
+            bannerSection.classList.remove("loading");
+        };
+
+        // Start loading the image
+        img.src = imageUrl;
+
+        // Optional: Add a loading class initially
+        bannerSection.classList.add("loading");
+        }
     } else {
       console.warn("No active banner found.");
     }
