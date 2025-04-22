@@ -1,12 +1,12 @@
 import base64
 from django.shortcuts import render, get_object_or_404
 from apis.models import Product
+import os
 
 def home(request):
     return render(request, 'frontend/index.html')
 
 def product(request, product_id):
-    print("product_id" + product_id)
     try:
         # Decode base64 to get original product id (e.g., "1-piescakes")
         decoded_bytes = base64.b64decode(product_id)
