@@ -19,13 +19,13 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <style>
-    section:not(#bannerSection) {
+    /* section:not(#bannerSection) {
         width: 100%;
         margin: 40px auto;
         padding: 20px;
         background-color: #fff;
         border-radius: 8px;
-    }
+    } */
     h1,h2 {
         font-family: 'Mochiy Pop One', sans-serif !important;
         font-weight: 400 !important;
@@ -428,10 +428,11 @@ main {
     }
 }
 
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
     .banner {
-        height: 60vh;
-        padding: 15px;
+        height: 50vh;
+        min-width: 100%;
+        padding-right: 0px;
     }
     .banner-content h1 {
         font-size: 1.8rem;
@@ -443,7 +444,25 @@ main {
         padding: 10px 15px;
         font-size: 0.9rem;
     }
+} */
+
+@media (max-width: 480px) {
+    html, body, main {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    #bannerSection.banner {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+    }
 }
+
 /* Features Section */
 .features {
     display: flex;
