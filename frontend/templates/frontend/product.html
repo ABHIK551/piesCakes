@@ -94,7 +94,7 @@
         <p>Looking for more indulgence? Try these delicious treats handpicked for you!</p>
     </div>
 
-    <div class="product-grid">
+    <div class="product-grid" id="recommendationGrid">
         <div class="product-card">
             <img src="https://s3-alpha-sig.figma.com/img/ef04/3dbb/2b7cccec16c019ce86a585e7241463b7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DJ562FCnN-yWQ64l24lNAcj8fPbUAgUwgLdMgaFLaMfEyqrtCy7O-q8iGr9Y6Z~bP4egQDJA8EhUEaf2T1OOabx4hEpS2JpK72jkmysv0eYVWoSa0ENnorj~ouV10TkhwCaJ8Kgxs2PV9bgppmVKdezl3sOMtVLlrDKUBQWumUF55COYTbkwvLgm9Pl9xUTQXwUH~my1zs4L937crgOQKxhvikYoLKxYnziBPPQodTyvA9RZaBNNok~GgOU1ZDSTIsLiVOZ7dUuKuJZmoHs4ZH4Vb70cZLs4UILpnKgrsEKxlx-loulQo-X0ZjFoZjG2TXvF24al5cOl5d6kPHV3IQ__" alt="French Vanilla Bomboloni">
             <div class="product-info">
@@ -132,6 +132,76 @@
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadRecommendations();
+    });
+    
+    async function loadRecommendations() {
+      try {
+        const res = await fetch("/api/products-list/?page=1&pageSize=1000");
+        if (!res.ok) throw new Error("Network response was not ok");
+        const data = await res.json();
+    
+        // All products array
+        const all = data.products.products;
+    
+        // Take the last 4 entries
+        const lastFour = all.slice(-4);
+    
+        // Find the grid and clear it
+        const grid = document.getElementById("recommendationGrid");
+        grid.innerHTML = "";
+    
+        lastFour.forEach(prod => {
+          // Build your card
+          const card = document.createElement("div");
+          card.className = "product-card";
+          const encodedId = btoa(`${prod.id}-piescakes`); // Encode ID same way as in your app
 
+            const imgSrc = prod.product_images
+            ? `data:image/png;base64,${prod.product_images}`
+            : "placeholder.jpg"; // fallback if no image
+
+            card.innerHTML = `
+            <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
+                <a href="/product/${encodedId}">
+                <img src="${imgSrc}" alt="${prod.name}" loading="lazy" />
+                </a>
+                <div class="product-info">
+                <span class="category mb-1" style="text-align: left !important;">${prod.category?.name || "Uncategorized"}</span>
+
+                <h4 class="mb-1 product-heading">
+                    <a href="product/${encodedId}" style="
+                    text-decoration: none;
+                    font-size: 14px !important;
+                    font-weight: bold;
+                    text-align: left !important;
+                    color: #5A3E36;
+                    margin: 0;
+                    ">
+                    ${prod.name}
+                    </a>
+                </h4>
+
+                <div class="rating mb-1">⭐⭐⭐⭐⭐</div>
+
+                <p class="price mb-1">
+                    ₹${prod.discount_price ? (prod.price - prod.discount_price).toFixed(2) : prod.price.toFixed(2)}
+                    ${prod.discount_price ? `<strike>₹${prod.price.toFixed(2)}</strike>` : ""}
+                </p>
+                </div>
+            </div>
+            `;
+
+    
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load recommendations:", err);
+      }
+    }
+    </script>
+    
 {% include "frontend/why-choose-us.html" %}
 {% endblock %}

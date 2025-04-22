@@ -661,163 +661,170 @@ main {
         grid-template-columns: repeat(1, 1fr); /* 1 per row */
     }
 }
+
 /* Section Styling */
-.bestsellers {
-    background-color: #ffff;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-}
-
-/* Wrapper */
+/* Container */
 .bestsellers-wrapper {
-    max-width: 1200px;
-    width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
 }
 
+/* Product Card */
+.bestseller-product {
+  background: #fff;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  color: #333;             /* reset default text color */
+}
+.bestseller-product:hover {
+  transform: scale(1.05);
+}
+
+/* Image */
+.bestseller-product .product-image {
+  position: relative;
+}
+.bestseller-product .product-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
 /* Heading */
 .bestsellers h2 {
-    font-size: 32px;
-    color: black;
-    font-weight: bold;
-    text-align: left;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+  font-weight: bold;
 }
-
 .bestsellers h2 span {
-    color: #ff8800;
+  color: #ff8800;
 }
 
-.bestsellers p {
-    color: #ffff;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* Swiper Container */
-.bestsellers-slider {
-    overflow: hidden;
-    position: relative;
-}
-
-/* Product Box */
-.bestseller-product {
-    background: #ffff;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    overflow: hidden;
-    /* box-shadow: 0 4px 8px rgba(255, 136, 0, 0.3); */
-    transition: transform 0.3s ease-in-out;
-}
-
-.bestseller-product:hover {
-    transform: scale(1.05);
-}
-
-/* Product Image */
-.bestseller-product .product-image {
-    position: relative;
-}
-
-.bestsellers-wrapper .product img {
-    width: 100%;
-    height: 200px;
-    min-height: 200px;
-    max-width: 300px;
-    object-fit: cover;
-}
-
-/* Sale & New Badges */
+/* Badges */
 .bestseller-product .badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: black;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  background: #ff4d4d;     /* SALE badge color */
+  border-radius: 3px;
+}
+.bestseller-product.new .badge {
+  background: #ff8800;     /* NEW badge color */
 }
 
-.bestseller-product.sale {
-    background: red;
-}
-
-.bestseller-product .new {
-    background: orange;
-}
-
-/* Product Info */
+/* Info */
 .bestseller-product .product-info {
-    padding: 10px;
-    margin: 2px;
-    text-align: left;
-    color: white;
+  padding: 10px;
+  text-align: left;
 }
-
 .bestseller-product .product-info .category {
-    font-size: 12px;
-    color: black;
+  font-size: 12px;
+  color: #888;
 }
-
 .bestseller-product .product-info h3 {
-    font-size: 10px !important;
-    font-weight: bold;
-    color: black;
-    color: black;
+  font-size: 16px;
+  margin: 5px 0;
 }
-
-/* Rating */
 .bestseller-product .product-info .rating {
-    font-size: 14px;
-    margin: 5px 0;
+  font-size: 14px;
+  margin: 5px 0;
 }
-
-/* Price */
 .bestseller-product .product-info .price {
-    font-size: 14px;
-    font-weight: bold;
-    color: black;
+  font-size: 14px;
+  font-weight: bold;
 }
-
 .bestseller-product .product-info .price del {
-    color: black;
-    font-size: 12px;
+  font-size: 12px;
+  color: #aaa;
 }
 
-.bestseller-product .weight {
-    font-size: 12px;
-    color: #bbb;
+/* Swiper Controls */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ff8800 !important;
 }
-
-/* Swiper Navigation */
-.swiper-button-next, .swiper-button-prev {
-    color: #ff8800 !important;
-}
-
-/* Swiper Pagination */
 .swiper-pagination-bullet {
-    background: black;
+  background: #333 !important;
 }
 
-
-/* 📌 Responsive Styles */
+/* Responsive Grid Fallback (if you ever use a grid) */
+.bestseller-container {
+  display: grid;
+  gap: 20px;
+}
+@media (min-width: 1001px) {
+  .bestseller-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 @media (max-width: 1000px) {
-    .bestseller-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 per row */
-    }
+  .bestseller-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
-
 @media (max-width: 768px) {
-    .bestseller-container {
-        grid-template-columns: repeat(2, 1fr); /* 2 per row */
-    }
+  .bestseller-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .bestseller-container {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (max-width: 480px) {
-    .bestseller-container {
-        grid-template-columns: repeat(1, 1fr); /* 1 per row */
-    }
+/* Shimmer Keyframes (if using skeleton loaders elsewhere) */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
+
+
+.loading {
+  position: relative;
+  overflow: hidden;
+  background-color: #f3f3f3;
+}
+
+.loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #eee 25%,
+    #ddd 50%,
+    #eee 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.skeleton-card {
+  width: 180px;
+  height: 260px;
+  border-radius: 8px;
+}
+.skeleton-card .skeleton-image {
+  width: 100%;
+  height: 140px;
+  background: #ddd;
+}
+.skeleton-card .skeleton-text {
+  height: 16px;
+  margin: 10px 8px;
+  background: #ddd;
+}
+
+
 .add-section {
     position: relative;
     width: 100%;
@@ -1032,6 +1039,20 @@ main {
     .section-title {
         font-size: 1.8em;
     }
+    #products-container {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 16px;               /* adjust spacing between cards */
+    padding: 0 10px;         /* optional side padding */
+  }
+
+  /* shrink/widen the card and auto‑margin */
+  .product-card {
+    width: 100% !important;      /* full width of that 1fr column */
+    max-width: 360px;            /* or whatever your desired max */
+    margin: 0 auto !important;
+  }
 
     .section-subtitle {
         font-size: 1em;
@@ -1483,7 +1504,7 @@ main {
     }
 }
 
-/* Mobile */
+/* Tablets */
 @media (max-width: 768px) {
     .popular-left {
         width: 100%;
@@ -1501,6 +1522,44 @@ main {
     .popular-category .items .item {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+
+/* Tablets */
+@media (max-width: 468px) {
+    .popular-left {
+        width: 100%;
+        text-align: center;
+    }
+    .popular-text {
+        position: static;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .popular-right {
+        flex-direction: column;
+        align-items: center;
+    }
+    .popular-category h2{
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 11px !important;
+        text-align: none;
+    }
+    .popular-category h2 b{
+        font-weight: 300 !important;
+        font-size: 15px !important;
+    }
+    .popular-category .items .item {
+        width: 200px;
+        max-width: 250px;
+        flex-direction: column;
+        text-align: center;
+    }
+    .popular-category .items .item  img{
+        width: 80%;
+        object-fit: cover;
     }
 }
 
@@ -1972,6 +2031,32 @@ main {
         align-items: start !important;
         font-size: 8px;
         padding: 5px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px 5%;
+    }
+
+    .heading h2 {
+        font-size: 20px;
+    }
+
+    .heading p {
+        font-size: 12px;
+    }
+
+    .product-grid .product-card img {
+        height: 150px;
+    }
+
+    .product-grid .product-card .product-info h4,
+    .product-grid .product-card .product-info .price,
+    .product-grid .product-card .product-info .category {
+        font-size: 12px !important;
     }
 }
 
@@ -2609,7 +2694,7 @@ th, td {
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+<!-- 3. Your initialization script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     var swiper = new Swiper(".bestsellers-slider", {

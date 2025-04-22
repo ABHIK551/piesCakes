@@ -1,86 +1,164 @@
 <section class="bestsellers">
     <div class="bestsellers-wrapper">
-        <h2><span>Our</span> Bestsellers</h2>
-        <p>Don't wait. The time will never be just right.</p>
-
-        <!-- Swiper Slider -->
-        <div class="swiper bestsellers-slider">
-            <div class="swiper-wrapper">
-                <!-- Product 1 -->
-                <div class="swiper-slide product bestseller-product">
-                    <div class="product-image">
-                        <img src="https://s3-alpha-sig.figma.com/img/862d/44e0/061e29c6e50f12618b0ba34042f3fd79?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=cG-mcU7qlmsC6EH3ElXgE0f-8-RUKi7-HLfx8lxLgViTNAyNU3-0q9cywKfziETo5pwYcuDbxETJQGpeqwTDmqbH003CUDfQhjr7yWnHS-HuHIbxJDWNEW6xPk6ZdWWKQ~CtXFsn4rzhWkvGSifZgMJZ6gLN8S5eL6W28eduUDcPoV1NrQjgFReX9f0Q8TGrtJCzZdhMiKcJ~Zj3mOO7KCJiKGmmzFcUgY~CzLFfrwWgNJpF3cBlt7Od8EVfRB14yPeXMfFQmTXJRF1Oq5pGIXWsDGOShaQQWXrotf8J2Uym0SKXwVRTQmOFQz-yqeuPrtHBRpJ9iSB-mRNa83AttA__" alt="Triple Chocolate Mousse Cake">
-                        <span class="badge sale">SALE</span>
-                    </div>
-                    <div class="product-info">
-                        <p class="category">Cakes</p>
-                        <h3>TRIPLE CHOCOLATE MOUSSE CAKE</h3>
-                        <div class="rating">⭐⭐⭐⭐☆</div>
-                        <p class="price">₹260.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-
-            <!-- Pagination Dots -->
-            <div class="swiper-pagination"></div>
+      <h2><span>Our</span> Bestsellers</h2>
+      <div class="swiper bestsellers-slider">
+        <div class="swiper-wrapper" id="bestsellerWrapper">
+          <!-- JS will inject skeleton cards here -->
         </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
     </div>
-</section>
-
+  </section>
+  
 <script>
-    function loadBestsellers() {
-        fetch(`/api/products-list/?page=1&pageSize=100`)
-            .then(response => response.json())
-            .then(data => {
-                const allProducts = data.products.products;
+    // function loadBestsellers() {
+    //     fetch(`/api/products-list/?page=1&pageSize=100`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             const allProducts = data.products.products;
     
-                // Normalize reviews and sort by number of reviews (assume it's an array or number)
-                const sorted = allProducts
-                    .map(p => {
-                        const reviewCount = Array.isArray(p.reviews) ? p.reviews.length : (parseInt(p.reviews) || 0);
-                        return { ...p, reviewCount };
-                    })
-                    .sort((a, b) => b.reviewCount - a.reviewCount)
-                    .slice(0, 10); // Top 10 only
+    //             // Normalize reviews and sort by number of reviews (assume it's an array or number)
+    //             const sorted = allProducts
+    //                 .map(p => {
+    //                     const reviewCount = Array.isArray(p.reviews) ? p.reviews.length : (parseInt(p.reviews) || 0);
+    //                     return { ...p, reviewCount };
+    //                 })
+    //                 .sort((a, b) => b.reviewCount - a.reviewCount)
+    //                 .slice(0, 10); // Top 10 only
     
-                const wrapper = document.querySelector('.bestsellers-slider .swiper-wrapper');
-                wrapper.innerHTML = ''; // Clear current slides
+    //             const wrapper = document.querySelector('.bestsellers-slider .swiper-wrapper');
+    //             wrapper.innerHTML = ''; // Clear current slides
     
-                sorted.forEach(product => {
-                    const badgeLabel = product.reviewCount > 50 ? 'HOT' : (product.reviewCount > 20 ? 'TRENDING' : '');
-                    const badgeHTML = badgeLabel ? `<span class="badge sale">${badgeLabel}</span>` : '';
-                    const category = product.category ? product.category.name : 'Unknown';
-                    const rating = '⭐'.repeat(Math.min(5, Math.floor(product.reviewCount / 10))) + '☆'.repeat(5 - Math.min(5, Math.floor(product.reviewCount / 10)));
+    //             sorted.forEach(product => {
+    //                 const badgeLabel = product.reviewCount > 50 ? 'HOT' : (product.reviewCount > 20 ? 'TRENDING' : '');
+    //                 const badgeHTML = badgeLabel ? `<span class="badge sale">${badgeLabel}</span>` : '';
+    //                 const category = product.category ? product.category.name : 'Unknown';
+    //                 const rating = '⭐'.repeat(Math.min(5, Math.floor(product.reviewCount / 10))) + '☆'.repeat(5 - Math.min(5, Math.floor(product.reviewCount / 10)));
                         
-                    const slide = `
-                        <div class="swiper-slide product bestseller-product">
-                            <div class="product-image">
-                                <img src="data:image/png;base64,${product.product_images}" alt="${product.name}">
-                                ${badgeHTML}
-                            </div>
-                            <div class="product-info">
-                                <p class="category">${category}</p>
-                                <h3>${product.name}</h3>
-                                <div class="rating">${rating}</div>
-                                <p class="price">
-                                    ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
-                                    ${product.discount_price ? `<strike>₹${product.price.toFixed(2)}</strike>` : ''}
-                                </p>                           
-                            </div>
-                        </div>
-                    `;
-                    wrapper.innerHTML += slide;
-                });
-            })
-            .catch(error => {
-                console.error('Error loading bestsellers:', error);
-            });
-    }
+    //                 const slide = `
+    //                     <div class="swiper-slide product bestseller-product">
+    //                         <div class="product-image">
+    //                             <img src="data:image/png;base64,${product.product_images}" alt="${product.name}" loading="lazy">
+    //                             ${badgeHTML}
+    //                         </div>
+    //                         <div class="product-info">
+    //                             <p class="category">${category}</p>
+    //                             <h3>${product.name}</h3>
+    //                             <div class="rating">${rating}</div>
+    //                             <p class="price">
+    //                                 ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
+    //                                 ${product.discount_price ? `<strike>₹${product.price.toFixed(2)}</strike>` : ''}
+    //                             </p>                           
+    //                         </div>
+    //                     </div>
+    //                 `;
+    //                 wrapper.innerHTML += slide;
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading bestsellers:', error);
+    //         });
+    // }
     
-    document.addEventListener('DOMContentLoaded', loadBestsellers);
+    // document.addEventListener('DOMContentLoaded', loadBestsellers);
+    
+document.addEventListener("DOMContentLoaded", loadBestsellers);
+
+function loadBestsellers() {
+  const wrapper = document.getElementById("bestsellerWrapper");
+  wrapper.innerHTML = ""; 
+
+  // 1. Insert 5 skeleton cards
+  for (let i = 0; i < 5; i++) {
+    const skel = document.createElement("div");
+    skel.className = "swiper-slide skeleton-card loading";
+    skel.innerHTML = `
+      <div class="skeleton-image"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text" style="width:60%;"></div>
+    `;
+    wrapper.appendChild(skel);
+  }
+
+  // 2. Fetch real products
+  fetch(`/api/products-list/?page=1&pageSize=10`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.products) throw new Error("No products");
+      wrapper.innerHTML = ""; // clear skeletons
+
+      data.products.products.forEach(product => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide bestseller-product";
+
+        // Preload image
+        const img = new Image();
+        img.onload = () => {
+          slide.querySelector("img").src = img.src;
+        };
+        img.onerror = () => {
+          slide.querySelector("img").src = "default.jpg";
+        };
+        img.src = `data:image/png;base64,${product.product_images}`;
+
+        slide.innerHTML = `
+          <div class="product-image">
+            <img src="" alt="${product.name}">
+            <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
+          </div>
+          <div class="product-info">
+            <p class="category">${product.category.name}</p>
+            <h3>${product.name}</h3>
+            <div class="rating">
+              ${"⭐".repeat(Math.min(5, Math.floor(product.reviews.length/10)))}
+            </div>
+            <p class="price">₹${product.price.toFixed(2)}</p>
+          </div>
+        `;
+        wrapper.appendChild(slide);
+      });
+    })
+    .catch(err => {
+      console.error("Error loading bestsellers:", err);
+    });
+}
     </script>
+    <script>
+        // Import or include Swiper JS and CSS in your page first
+const swiper = new Swiper('.bestsellers-slider', {
+  // Default for very small screens
+  slidesPerView: 1,
+  spaceBetween: 20,
+  centeredSlides: true,        // Center that single slide on mobile :contentReference[oaicite:3]{index=3}
+  watchOverflow: true,         // Disable navigation if not enough slides :contentReference[oaicite:4]{index=4}
+
+  // Responsive breakpoints
+  breakpoints: {
+    // ≥768px – show 3 slides
+    768: {
+      slidesPerView: 3,
+      spaceBetween: 24,
+      centeredSlides: false
+    },
+    // ≥1200px – show 4 slides
+    1200: {
+      slidesPerView: 4,
+      spaceBetween: 32
+    }
+  },
+
+  // Navigation arrows and pagination
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev'
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true
+  }
+});
+
+</script>
     

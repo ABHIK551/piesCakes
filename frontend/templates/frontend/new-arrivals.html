@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const encodedId = encodeProductId(product.id); // 🔐 encoded ID
 
                 productElement.classList.add("product-card");
-                productElement.innerHTML = `<div style="border-radius:0px;text-align: left !important;">
+                productElement.innerHTML = `<div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
                         <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loadin="lazy"/></a>
                         <div class="product-info">
                             <span class="category mb-1" style="text-align: left !important;">${product.category.name}</span>
