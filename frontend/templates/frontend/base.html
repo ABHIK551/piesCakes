@@ -445,23 +445,70 @@ main {
         font-size: 0.9rem;
     }
 } */
-
 @media (max-width: 480px) {
     html, body, main {
         margin: 0 !important;
         padding: 0 !important;
         width: 100% !important;
         overflow-x: hidden !important;
+        font-size: 14px !important; /* base font size */
+    }
+
+    h1 {
+        font-size: 1.4rem !important;
+    }
+
+    h2 {
+        font-size: 1.2rem !important;
+    }
+
+    h3 {
+        font-size: 1.2rem !important;
+    }
+
+    h4 {
+        font-size: 1rem !important;
+    }
+
+    h5 {
+        font-size: 0.8rem !important;
+    }
+
+    h6 {
+        font-size: 0.6rem !important;
+    }
+
+    p, span, a, li, td, th, div {
+        font-size: 0.95rem !important;
+        line-height: 1 !important;
+    }
+
+    .shop-btn {
+        font-size: 0.9rem !important;
+        padding: 10px 20px !important;
     }
 
     #bannerSection.banner {
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 10px !important;
         width: 100% !important;
+        height: auto !important;
         box-sizing: border-box !important;
         display: block !important;
+        background-size: cover !important;
+        background-position: center !important;
+        text-align: center !important;
+    }
+    .banner-content{
+        margin: auto;
+    }
+
+    .banner-content {
+        padding: 0 15px !important;
+        width: 100% !important;
     }
 }
+
 
 /* Features Section */
 .features {
@@ -1141,6 +1188,7 @@ main {
     object-fit: cover;
 }
 
+/* ✅ Keep content absolutely positioned on all screen sizes */
 .baked-item .content {
     position: absolute;
     top: 50%;
@@ -1149,12 +1197,14 @@ main {
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     max-width: 60%;
+    z-index: 2;
 }
 
 .baked-item h2 {
     font-size: 2rem;
     font-weight: bold;
     color: white;
+    margin: 0;
 }
 
 .baked-item p {
@@ -1188,24 +1238,14 @@ main {
 }
 
 @media (max-width: 992px) {
-    .baked-delights {
-        flex-direction: column;
-        gap: 30px;
-    }
     .baked-item {
-        width: 100%;
-        text-align: center;
+        width: 100%; /* Stack full-width on tablets and phones */
     }
     .baked-item .content {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        max-width: 100%;
-        padding: 20px;
-    }
-    .baked-item h2 {
-        font-size: 1.6rem;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        max-width: 90%;
     }
 }
 
@@ -1222,17 +1262,39 @@ main {
 }
 
 @media (max-width: 480px) {
+    .baked-item {
+        width: 100%;
+    }
+
+    .baked-item img {
+        height: 220px !important;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .baked-item .content {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        max-width: 90%;
+        padding: 10px;
+    }
+
     .baked-item h2 {
-        font-size: 1.2rem;
+        font-size: 1rem !important;
     }
+
     .baked-item p {
-        font-size: 0.8rem;
+        font-size: 0.7rem !important;
     }
+
     .shop-btn {
-        padding: 6px 12px;
-        font-size: 0.9rem;
+        padding: 6px 14px !important;
+        font-size: 0.65rem !important;
     }
 }
+
+
 
 .why-choose-us {
     display: flex;
@@ -1443,6 +1505,7 @@ main {
 }
 
 
+
 .footer {
     background: #ffff;
     color: black;
@@ -1565,6 +1628,11 @@ main {
 
     .footer-bottom p {
         font-size: 12px;
+    }
+    .footer-logo{
+        justify-content: center;
+        text-align: center;
+        align-items: center;
     }
 
     .payment-icons img {
