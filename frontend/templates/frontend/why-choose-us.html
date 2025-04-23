@@ -10,7 +10,7 @@
         try {
             const token = sessionStorage.getItem("auth_token"); // Or use localStorage
 
-            const response = await fetch('http://localhost:8000/api/why-choose-us/', {
+            const response = await fetch('/api/why-choose-us/', {
                 method: 'GET',
             });
             const data = await response.json();
