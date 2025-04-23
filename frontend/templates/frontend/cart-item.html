@@ -87,17 +87,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const token = sessionStorage.getItem("auth_token");
-    
         const userId = sessionStorage.getItem("user_id");
         const cartTableBody = document.querySelector("#cart-table-body");
+    
+        if (!userId) {
+            cartTableBody.innerHTML = `<tr><td colspan="6">Please login to view your cart.</td></tr>`;
+            return;
+        }
     
         fetch(`/api/view-cart/${userId}/`, {
             method: "GET",
         })
         .then(response => response.json())
         .then(data => {
-            
-            if (!data || !data.products || data.products.length === 0) {
+            const cartItems = data.cart_items || [];
+    
+            if (!cartItems.length) {
                 cartTableBody.innerHTML = `<tr><td colspan="6">Your cart is empty.</td></tr>`;
                 sessionStorage.setItem("cart_count", "0");
                 return;
@@ -106,11 +111,13 @@
             let totalAmount = 0;
             cartTableBody.innerHTML = "";
     
-            data.products.forEach(product => {
-                const price = parseFloat(product.price);
-                const discount_price = parseFloat(product.discount_price);
-                const quantity = 1;
-                const total = price * quantity;
+            cartItems.forEach(item => {
+                const product = item.product;
+                const price = parseFloat(product.price || 0);
+                const discount = parseFloat(product.discount_price || 0);  // assuming it's a percentage
+                const effectivePrice = price - discount;  // apply discount
+                const quantity = item.quantity || 1;
+                const total = effectivePrice * quantity;
                 totalAmount += total;
     
                 const imageSrc = product.product_images_base64_output
@@ -124,7 +131,7 @@
                             <span>${product.name}</span>
                         </td>
                         <td>₹${price.toFixed(2)}</td>
-                        <td>₹${discount_price.toFixed(2)}</td>
+                        <td>₹${discount.toFixed(2)}</td>
                         <td class="quantity">
                             <button class="qty-btn minusQtyBTN">-</button>
                             <span class="quantityControl">${quantity}</span>
@@ -142,7 +149,7 @@
                 scrollWrapper.style.display = '';
             });
     
-            sessionStorage.setItem("cart_count", data.products.length.toString());
+            sessionStorage.setItem("cart_count", cartItems.length.toString());
     
             document.querySelector(".cost span").textContent = `₹${totalAmount.toFixed(2)}`;
             document.querySelector("h3").textContent = `Total Amount: ₹${totalAmount.toFixed(2)}`;

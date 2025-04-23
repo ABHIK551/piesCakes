@@ -160,6 +160,7 @@
                             <div class="product-image">
                             <img src="${imgSrcFinal}" alt="${product.name}" loading="lazy">
                             </div>
+                        </a>
                             <div class="product-info">
                                 <h4 style="color: grey; margin: 0;">${product.category.name}</h4>
                                 <h3 style="margin: 5px 0;">${product.name}</h3>
@@ -177,7 +178,6 @@
                                     <button class="buy-now" style="background-color: #4a3f3f; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;">BUY NOW</button>
                                 </div>
                             </div>
-                        </a>
                     </div>`;
     
                 productSection.insertAdjacentHTML("beforeend", productHTML);
@@ -216,41 +216,50 @@
         });
     });
 
+    function addToCart(encodedData) {
+        // Decode the base64-encoded data
+        const decodedData = JSON.parse(atob(encodedData));
+        const productIds = decodedData.productIds;
+        const userId = decodedData.userId;
 
-function addToCart(encodedData) {
-    // Decode the base64-encoded data
-    const decodedData = JSON.parse(atob(encodedData));
-    // Extract productIds and userId from the decoded data
-    const productIds = decodedData.productIds;
-    const userId = decodedData.userId;
-
-    // Prepare the data to send in the POST request
-    const data = {
-        userId: userId,
-        productIds: productIds
-    };
-
-    // Send a POST request to the API to add products to the cart
-    fetch('/api/add-to-cart/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)  // Send the data as a JSON string
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.ok) {
-            showToast("Products added to cart successfully!", "success");
-        } else {
-            showToast("Failed to add products to cart.", "danger");
+        // Check if user is logged in
+        if (!userId) {
+            showToast("Please login to add items to the cart", "danger");
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        showToast("An error occurred while adding to cart.", "danger");
-    });
-}
+
+        // Build cart items with default quantity = 1
+        const cartItems = productIds.map(productId => ({
+            product: productId,
+            quantity: 1
+        }));
+
+        const data = {
+            userId: userId,
+            cartItems: cartItems
+        };
+
+        // Send a POST request to the API to add products to the cart
+        fetch('/api/add-to-cart/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data && !data.error) {
+                showToast("Products added to cart successfully!", "success");
+            } else {
+                showToast("Failed to add products to cart.", "danger");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("An error occurred while adding to cart.", "danger");
+        });
+    }
 
     </script>
     <script>

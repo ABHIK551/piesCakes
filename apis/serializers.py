@@ -218,28 +218,41 @@ class BakedDelightsSerializer(serializers.ModelSerializer):
     def get_updated_at(self, obj):
         return localtime(obj.updated_at).strftime('%B %d, %Y, %I:%M %p')
     
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()  # <-- This returns full product details
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity']
+    
 class CartSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True)
+    cart_items = CartItemSerializer(many=True)
 
     class Meta:
         model = Cart
-        fields = ['id', 'user', 'products', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'cart_items', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         user = validated_data.get('user')
-        products_data = validated_data.get('products', [])
-        
+        cart_items_data = validated_data.pop('cart_items', [])
+
         cart = Cart.objects.create(user=user)
-        cart.products.set([product['id'] for product in products_data])  # Associate products with the cart
+        for item in cart_items_data:
+            CartItem.objects.create(cart=cart, **item)
         return cart
 
     def update(self, instance, validated_data):
-        instance.products.clear()  # Clear current products
-        instance.products.set([product['id'] for product in validated_data.get('products', [])])  # Update products
+        instance.cart_items.all().delete()  # Clear old items
+        cart_items_data = validated_data.pop('cart_items', [])
+
+        for item in cart_items_data:
+            CartItem.objects.create(cart=instance, **item)
         instance.save()
         return instance
-    
+
+
 from .models import AdminUser
+
 
 class AdminUserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

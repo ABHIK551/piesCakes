@@ -924,47 +924,83 @@ def update_baked_delights(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+# @api_view(['POST'])
+# def add_to_cart(request):
+#     if request.method == 'POST':
+#         # Extract userId and productIds from the request data
+#         user_id = request.data.get('userId')
+#         product_ids = request.data.get('productIds')
+
+#         # If productIds is not a list, convert it into one
+#         if isinstance(product_ids, int):  # If it's a single integer
+#             product_ids = [product_ids]
+#         elif not isinstance(product_ids, list):  # If it's neither a list nor a single integer
+#             return Response({'error': 'productIds should be a list or a single integer.'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         if not user_id or not product_ids:
+#             return Response({'error': 'userId and productIds are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # Get the user object
+#         try:
+#             user = CustomUser.objects.get(id=user_id)
+#         except CustomUser.DoesNotExist:
+#             return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+#         # Get the products
+#         products = Product.objects.filter(id__in=product_ids)
+
+#         # If no products were found with the given IDs
+#         if not products.exists():
+#             return Response({'error': 'Some products not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+#         # Get or create the user's cart
+#         cart, created = Cart.objects.get_or_create(user=user)
+
+#         # Add products to the cart
+#         cart.products.add(*products)
+#         cart.save()
+
+#         # Serialize the cart and return the response
+#         from .serializers import CartSerializer
+#         serializer = CartSerializer(cart)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 def add_to_cart(request):
     if request.method == 'POST':
-        # Extract userId and productIds from the request data
         user_id = request.data.get('userId')
-        product_ids = request.data.get('productIds')
+        cart_items_data = request.data.get('cartItems', [])
 
-        # If productIds is not a list, convert it into one
-        if isinstance(product_ids, int):  # If it's a single integer
-            product_ids = [product_ids]
-        elif not isinstance(product_ids, list):  # If it's neither a list nor a single integer
-            return Response({'error': 'productIds should be a list or a single integer.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not user_id or not cart_items_data:
+            return Response({'error': 'userId and cartItems are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not user_id or not product_ids:
-            return Response({'error': 'userId and productIds are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Get the user object
         try:
             user = CustomUser.objects.get(id=user_id)
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Get the products
-        products = Product.objects.filter(id__in=product_ids)
-
-        # If no products were found with the given IDs
-        if not products.exists():
-            return Response({'error': 'Some products not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Get or create the user's cart
+        # Get or create cart
         cart, created = Cart.objects.get_or_create(user=user)
 
-        # Add products to the cart
-        cart.products.add(*products)
-        cart.save()
+        # Optionally clear existing items (depends on whether you're replacing or appending)
+        cart.cart_items.all().delete()
 
-        # Serialize the cart and return the response
-        from .serializers import CartSerializer
+        for item in cart_items_data:
+            product_id = item.get('product')
+            quantity = item.get('quantity', 1)  # Default quantity = 1
+
+            try:
+                product = Product.objects.get(id=product_id)
+                CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+            except Product.DoesNotExist:
+                continue  # Or handle error if needed
+
+        # Serialize and return updated cart
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+
 @api_view(['GET'])
 def view_cart(request, user_id):
     try:
@@ -973,10 +1009,10 @@ def view_cart(request, user_id):
 
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
     except CustomUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-    
+
 class AdminUserSignupView(APIView):
     def post(self, request):
         serializer = AdminUserSignupSerializer(data=request.data)

@@ -218,7 +218,7 @@ class BakedDelight(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, related_name='carts')
+    # products = models.ManyToManyField(Product, related_name='carts')
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when the cart is created
     updated_at = models.DateTimeField(auto_now=True)     # Automatically set to the current time when the cart is updated
 
@@ -230,7 +230,12 @@ class Cart(models.Model):
         for product in self.products.all():
             total += product.discount_price if product.discount_price else product.price
         return total
-    
+
+class CartItem(models.Model):
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cart_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group, Permission
 from django.db import models
