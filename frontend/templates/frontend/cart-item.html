@@ -89,17 +89,12 @@
         const token = sessionStorage.getItem("auth_token");
     
         const userId = sessionStorage.getItem("user_id");
-        const cartTableBody = document.querySelector(".cart-table tbody");
+        const cartTableBody = document.querySelector("cart-table-body");
     
         fetch(`/api/view-cart/${userId}/`, {
             method: "GET",
         })
         .then(response => {
-            // if (response.status === 401) {
-            //     redirectToLogin();
-            //     return;
-            // }
-            // return response.json();  // ✅ RETURN THIS
         })
         .then(data => {
             
@@ -225,13 +220,4 @@ document.addEventListener("DOMContentLoaded", () => {
     attachQuantityHandlers();
 });
 
-</script>
-
-<script>
-    window.addEventListener('load', () => {
-      const menuToggles = document.querySelectorAll('.menu-toggle');
-        if (menuToggles) {
-            menuToggles.style.color = 'black';
-        }
-    });
 </script>
