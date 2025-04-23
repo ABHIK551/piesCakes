@@ -278,6 +278,7 @@ main {
     display: none;
     font-size: 24px;
     background: none;
+    padding: 5px;
     border: none;
     cursor: pointer;
     position: absolute;
@@ -290,6 +291,7 @@ main {
     content: '\2630'; /* Unicode for hamburger icon */
     font-size: 24px;
     color: white;
+    background: rgba(0, 0, 0, 7.15);
 }
 
 /* Sidebar Navigation */
@@ -583,7 +585,109 @@ main {
         margin-right: 0;
         margin-bottom: 10px;
     }
+    #filter-sidebar-main{
+        display: none;
+    }
 }
+
+/* categories-product Section */
+.categories-product {
+    display: flex;
+    gap: 20px;
+    padding: 20px;margin: auto 0px;
+}
+
+/* Product Section */
+.categories-product .product-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start; /* prevents cards from stretching */
+}
+
+.categories-product .product-card {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0px;
+}
+
+.categories-product .product-card:hover {
+    transform: scale(1.05);
+}
+
+/* Product Image */
+.categories-product .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    margin: 0px;
+    border-radius: 0px;
+}
+
+.categories-product .product-info{
+    margin-bottom: 10px !important;
+}
+
+.categories-product .product-info h3 {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.categories-product .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffcc66;
+}
+
+/* Buttons */
+.categories-product .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.categories-product .add-to-cart,
+.categories-product .buy-now {
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.categories-product .add-to-cart {
+    background: #ff9900;
+    color: #fff;
+}
+
+.categories-product .buy-now {
+    background: #6b4f4f;
+    color: #fff;
+}
+
+.categories-product .product-info > * {
+  float: left !important;
+}
+
+.categories-product.product-info > h3 {
+  float: left !important;
+  display: block !important;
+  width: 100%; /* Optional: Ensures full width */
+}
+
+.categories-product h4{
+  float: right !important;
+  display: block !important;
+  width: 100%; /* Optional: Ensures full width */
+}
+
+
 .categories {
     /* background-color: black; */
     padding: 40px 20px;
@@ -1065,7 +1169,28 @@ main {
     .category-filters li {
         padding: 5px 10px;
     }
+    #filter-sidebar-main{
+        display: none;
+    }
+    .categories-product{
+        margin-top: 80px;
+        padding: 0px;
+    }
+    .categories-product .product-section .product-info > *{
+        width: 100%;
+        padding: 0px;
+    }
+    #filter-sidebar-main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1999;
+    background: white;
+    width: 250px;
+    }
 }
+
 /* Product Grid */
 .product-grid {
     display: flex;
@@ -2247,6 +2372,12 @@ body {
     font-weight: bold;
 }
 
+
+
+
+
+
+
 /* Cart Section */
 .cart {
     display: flex;
@@ -2270,7 +2401,7 @@ body {
     text-align: center;
     justify-content: center;
 }
-.shop-more{
+.shop-more {
     margin-top: 18px;
 }
 
@@ -2293,13 +2424,18 @@ body {
     font-weight: bold;
     margin-left: 20px;
 }
-.remove{
+
+.remove {
     border: none;
     background-color: #ffff;
 }
 
+/* Table Wrapper */
+.table-scroll-wrapper {
+    overflow-x: unset;
+}
 
-
+/* Cart Table */
 .cart-table {
     width: 100%;
     border-collapse: collapse;
@@ -2319,13 +2455,14 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.cart-table th, .cart-table td {
-    text-align: center; /* Ensures alignment */
+.cart-table th,
+.cart-table td {
+    text-align: center;
 }
 
 .cart-table th:first-child,
 .cart-table td:first-child {
-    text-align: left; /* Align Product name to left */
+    text-align: left;
 }
 
 .product-img {
@@ -2335,8 +2472,6 @@ body {
     margin-right: 10px;
     vertical-align: middle;
 }
-
-
 
 /* Summary Section */
 .summary {
@@ -2418,34 +2553,35 @@ body {
         flex-direction: column;
     }
 
-    .cart-items {
-        min-width: 100%;
-    }
-
+    .cart-items,
     .summary {
         min-width: 100%;
     }
 }
 
 @media (max-width: 768px) {
-    .cart-item {
-        flex-wrap: wrap;
-        justify-content: space-between;
+    .shop-more {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
     }
 
-    .cart-item img {
-        width: 60px;
-        height: 60px;
+    .shop-more a,
+    .shop-more .checkout {
+        float: none;
+        width: auto;
     }
 
-    .total-price,
-    .remove {
-        margin-left: 0;
-        margin-top: 10px;
+    .checkout {
+        align-self: flex-start;
     }
 }
 
 @media (max-width: 480px) {
+    .summary{
+        padding: 0px;
+    }
     .quantity {
         padding: 3px;
     }
@@ -2459,6 +2595,31 @@ body {
         padding: 10px;
     }
 }
+
+/* ✅ ENABLE HORIZONTAL SCROLL ONLY AT 468px & 768px */
+@media (width: 468px), (width: 768px) {
+    .table-scroll-wrapper {
+        overflow-x: auto;
+        /* Allow momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cart-table {
+        min-width: 700px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .header {
@@ -2612,6 +2773,38 @@ th, td {
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+/* Ensure the scrollable wrapper works on all devices */
+.table-scroll-wrapper {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  width: 100% !important;
+  /* display: block !important; */
+}
+
+/* Make table wider than the wrapper so it can scroll */
+.cart-table {
+  width: max-content !important;
+  min-width: 100% !important;
+  border-collapse: collapse;
+}
+
+/* Prevent wrapping of content */
+.cart-table th,
+.cart-table td {
+  white-space: nowrap !important;
+}
+
+/* Prevent parent containers from squishing the table */
+.cart-items {
+  width: 100% !important;
+  overflow: hidden;
+}
+
+/* Make sure the body and html don’t restrict the view */
+html, body {
+  max-width: 100% !important;
+  overflow-x: hidden; /* allow scroll inside the wrapper */
 }
 
 
@@ -2887,8 +3080,6 @@ function toggleSidebar() {
     </script>
     
     <!-- Toast Container (place this in your HTML, like inside <body>) -->
-<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
-
 <script>
 function showToast(message, type = "success") {
     const toast = document.createElement("div");
@@ -2934,7 +3125,13 @@ function showToast(message, type = "success") {
 }
 </script>
 
-    
+<script>
+    function toggleFilter() {
+      const category = document.getElementById("filter-sidebar-main");
+      category.style.display = (category.style.display === "block" || category.style.display === "") ? "none" : "block";
+    }
+  </script>
+  
 
 </body>
 </html>

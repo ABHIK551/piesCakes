@@ -1,5 +1,4 @@
 <div class="container">
-
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
         <span>Home ></span> <span class="active">Cart</span>
@@ -7,64 +6,81 @@
 
     <!-- Cart Section -->
     <section class="cart">
+        <style>
+            .table-scroll-wrapper {
+                overflow-x: auto !important;
+                display: block !important;
+                width: 100% !important;
+                -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
+                }
+    
+                .cart-table {
+                min-width: 800px !important; /* Adjust to trigger horizontal scroll if content overflows */
+                width: 100% !important;
+                border-collapse: collapse !important;
+                }
+    
+          </style>
         <div class="cart-items">
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Item Price</th>
-                        <th>Discount</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <td>
-                            <img src="https://s3-alpha-sig.figma.com/img/a9ef/cf1b/07b1fafcc9d898239ef020f47f3bcd90?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=T4ZBQ7hli87o-o83RoWOunmEtgTXA5y4cIqoPwRHDL2h~waEDFTonkqhYMkGbifmH5wrTTFt8Uo7DOSPr7TQu6gS6NkVaHB7gFrFg7YAchnAXr~JQLfTJDKGOkWWKojJw7Gt~1GfQAaoAyICEwmqEreDvy~tMW5eUYOn2cYArr3XNe4Fk5FqU8R9kHn4QaQ-~r~y857YlQ4srqi6B7r3kAQ2DTvVnRtGpQ5DuOhat~3RJUa1n-7JwkE3Burjcf2J7Zy7mwYnKWdy72OlMqJPTSAGiRfAxnODTs9rPjH5HJB-T8E--mkNFqwI2ief23wcQFCKB4l9Is4scRgfntnmFQ__" alt="Red Velvet" class="product-img">
-                            <span>Red Velvet</span>
-                        </td>
-                        <td>₹700.00</td>
-                        <td class="quantity">
-                            <button class="qty-btn">-</button>
-                            <span>1</span>
-                            <button class="qty-btn">+</button>
-                        </td>
-                        <td>₹700</td>
-                        <td><button class="remove"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="https://s3-alpha-sig.figma.com/img/45a5/b7c7/495c436c36424bfee5a0384fa68331fa?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qdDBiU8FClumOXSW7aRdSkE3vMcXBwknkRAm5AF0kF9SbtyxoVI5fVW01A03M7mBBPYeXYSAeRGgA5GGl69YGqX14DgA0LjYU-uJ790XtPrjX6ljncUltu6oPys4xjk0O8CVXXYcLbvR0NqElMDuNH4lhS85jYXjsCwLfPC5G5DQWkw8Wqvz5kN2MtWcXQwmiiwqYfnZ3eXGEOxF5BLsfo6g5lU2PLItEF7g-0pdq9yImEnR2MMZY4ZDRPrPpVg6Pc0Tubx53tcY9P3RjU2gJVV6vvC6eLBJ18eA1IMyArozke9BqTBhXJ31yH0dbptwLTUfcrfVuiKcXouVz-IIzA__" alt="BLUEBERRY CHEESE CAKE" class="product-img">
-                            <span>BLUEBERRY CHEESE CAKE</span>
-                        </td>
-                        <td>₹200.00</td>
-                        <td class="quantity">
-                            <button class="qty-btn">-</button>
-                            <span>1</span>
-                            <button class="qty-btn">+</button>
-                        </td>
-                        <td>₹200</td>
-                        <td><button class="remove"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="https://s3-alpha-sig.figma.com/img/0406/0f5e/2352a86563a173ec4d68f918cc3d72ff?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Vgd54yRnBTopaZFrVWD153rhTK6VUkmfw1t5~tuOrXcvBc92Ny8X-uVw~XD3P1Sj5cFOhADStK15g3KCSl~XZdAhcy-1d9eSujQvfbo0Lh8QCORQZQ2F2hudRzvifSSZ0zYjUDrVbUYisj0EX5Jjj1MvnLldcB6HyKUMNlxn7ZB~urqKQEaFkLb1uUU7yom8XtYELfwryodi-JVEqczFExdNiGG0KLeECroynepgTp2BlX8e-8CvVJqm1ppHJb6liDEqV1P70Q3Fhwyyt2nFM-UFlrvP3asLOiZ704spj1J45FGt3hFDWzaZs4SYLq3gWelhAYgWcpaRvdPcgSqNiQ__" alt="MOTICHOOR RABDI MOUSSE CAKE" class="product-img">
-                            <span>MOTICHOOR RABDI MOUSSE CAKE</span>
-                        </td>
-                        <td>₹65.00</td>
-                        <td class="quantity">
-                            <button class="qty-btn">-</button>
-                            <span>1</span>
-                            <button class="qty-btn">+</button>
-                        </td>
-                        <td>₹65</td>
-                        <td><button class="remove"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-scroll-wrapper">
+                <table class="cart-table" id="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Item Price</th>
+                            <th>Discount</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-table-body">
+                        
+                        <tr>
+                            <td>
+                                <img src="https://s3-alpha-sig.figma.com/img/a9ef/cf1b/07b1fafcc9d898239ef020f47f3bcd90?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=T4ZBQ7hli87o-o83RoWOunmEtgTXA5y4cIqoPwRHDL2h~waEDFTonkqhYMkGbifmH5wrTTFt8Uo7DOSPr7TQu6gS6NkVaHB7gFrFg7YAchnAXr~JQLfTJDKGOkWWKojJw7Gt~1GfQAaoAyICEwmqEreDvy~tMW5eUYOn2cYArr3XNe4Fk5FqU8R9kHn4QaQ-~r~y857YlQ4srqi6B7r3kAQ2DTvVnRtGpQ5DuOhat~3RJUa1n-7JwkE3Burjcf2J7Zy7mwYnKWdy72OlMqJPTSAGiRfAxnODTs9rPjH5HJB-T8E--mkNFqwI2ief23wcQFCKB4l9Is4scRgfntnmFQ__" alt="Red Velvet" class="product-img">
+                                <span>Red Velvet</span>
+                            </td>
+                            <td>₹700.00</td>
+                            <td class="quantity">
+                                <button class="qty-btn">-</button>
+                                <span>1</span>
+                                <button class="qty-btn">+</button>
+                            </td>
+                            <td>₹700</td>
+                            <td><button class="remove"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="https://s3-alpha-sig.figma.com/img/45a5/b7c7/495c436c36424bfee5a0384fa68331fa?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qdDBiU8FClumOXSW7aRdSkE3vMcXBwknkRAm5AF0kF9SbtyxoVI5fVW01A03M7mBBPYeXYSAeRGgA5GGl69YGqX14DgA0LjYU-uJ790XtPrjX6ljncUltu6oPys4xjk0O8CVXXYcLbvR0NqElMDuNH4lhS85jYXjsCwLfPC5G5DQWkw8Wqvz5kN2MtWcXQwmiiwqYfnZ3eXGEOxF5BLsfo6g5lU2PLItEF7g-0pdq9yImEnR2MMZY4ZDRPrPpVg6Pc0Tubx53tcY9P3RjU2gJVV6vvC6eLBJ18eA1IMyArozke9BqTBhXJ31yH0dbptwLTUfcrfVuiKcXouVz-IIzA__" alt="BLUEBERRY CHEESE CAKE" class="product-img">
+                                <span>BLUEBERRY CHEESE CAKE</span>
+                            </td>
+                            <td>₹200.00</td>
+                            <td class="quantity">
+                                <button class="qty-btn">-</button>
+                                <span>1</span>
+                                <button class="qty-btn">+</button>
+                            </td>
+                            <td>₹200</td>
+                            <td><button class="remove"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="https://s3-alpha-sig.figma.com/img/0406/0f5e/2352a86563a173ec4d68f918cc3d72ff?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Vgd54yRnBTopaZFrVWD153rhTK6VUkmfw1t5~tuOrXcvBc92Ny8X-uVw~XD3P1Sj5cFOhADStK15g3KCSl~XZdAhcy-1d9eSujQvfbo0Lh8QCORQZQ2F2hudRzvifSSZ0zYjUDrVbUYisj0EX5Jjj1MvnLldcB6HyKUMNlxn7ZB~urqKQEaFkLb1uUU7yom8XtYELfwryodi-JVEqczFExdNiGG0KLeECroynepgTp2BlX8e-8CvVJqm1ppHJb6liDEqV1P70Q3Fhwyyt2nFM-UFlrvP3asLOiZ704spj1J45FGt3hFDWzaZs4SYLq3gWelhAYgWcpaRvdPcgSqNiQ__" alt="MOTICHOOR RABDI MOUSSE CAKE" class="product-img">
+                                <span>MOTICHOOR RABDI MOUSSE CAKE</span>
+                            </td>
+                            <td>₹65.00</td>
+                            <td class="quantity">
+                                <button class="qty-btn">-</button>
+                                <span>1</span>
+                                <button class="qty-btn">+</button>
+                            </td>
+                            <td>₹65</td>
+                            <td><button class="remove"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             
             <div class="shop-more">
                 <a href="/" style="float: left;margin: auto 0%;">Continue Shopping</a>
@@ -181,6 +197,10 @@
                 `;
     
                 cartTableBody.insertAdjacentHTML("beforeend", rowHTML);
+                const scrollWrapper = document.querySelector(".table-scroll-wrapper");
+                scrollWrapper.style.display = 'none';
+                scrollWrapper.offsetHeight; // trigger reflow
+                scrollWrapper.style.display = '';
             });
     
             sessionStorage.setItem("cart_count", data.products.length.toString());
@@ -261,4 +281,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
-    
+
+<script>
+    window.addEventListener('load', () => {
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+        if (menuToggles) {
+            menuToggles.style.color = 'black';
+        }
+    });
+</script>

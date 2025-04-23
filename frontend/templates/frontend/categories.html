@@ -1,9 +1,25 @@
 {% extends "frontend/base.html" %}
 {% block content %}
 {% include "frontend/nav.html" %}
-<section class="categories">
-    <div class="filter-sidebar">
 
+<div class="margin-bottom:30px;" style="float: right;margin-top: 20px;margin-right: 20px;font-size: 20px;">
+<b>
+    <div class="mobile-filter-toggle" id="mobile-filter-toggle" onclick="toggleFilter()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+          </svg>
+    </div>
+
+</b>
+</div>
+
+<section class="categories-product">
+    <div class="filter-sidebar" id="filter-sidebar-main">
         <!-- CATEGORY FILTER -->
         <div class="filter-section" id="category-filters">
             <h3>Category</h3>
@@ -35,8 +51,8 @@
 
         <!-- PRICE FILTER -->
         <div class="filter-section">
-            <h3>Price</h3>
-            <input type="range" min="0" max="6000" value="350" id="price-range">
+            <label for="priceRange">Price: ₹<span id="priceValue">0</span></label>
+            <input type="range" min="0" max="20000" value="350" id="price-range">
         </div>
 
         <!-- TAGS -->
@@ -60,16 +76,6 @@
     <!-- PRODUCTS -->
     <div class="product-section">
         <div class="product-card">
-            <img src="https://s3-alpha-sig.figma.com/img/862d/44e0/061e29c6e50f12618b0ba34042f3fd79?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=cG-mcU7qlmsC6EH3ElXgE0f-8-RUKi7-HLfx8lxLgViTNAyNU3-0q9cywKfziETo5pwYcuDbxETJQGpeqwTDmqbH003CUDfQhjr7yWnHS-HuHIbxJDWNEW6xPk6ZdWWKQ~CtXFsn4rzhWkvGSifZgMJZ6gLN8S5eL6W28eduUDcPoV1NrQjgFReX9f0Q8TGrtJCzZdhMiKcJ~Zj3mOO7KCJiKGmmzFcUgY~CzLFfrwWgNJpF3cBlt7Od8EVfRB14yPeXMfFQmTXJRF1Oq5pGIXWsDGOShaQQWXrotf8J2Uym0SKXwVRTQmOFQz-yqeuPrtHBRpJ9iSB-mRNa83AttA__" alt="Triple Chocolate Mousse Cake">
-            <div class="product-info">
-                <h4>Cake</h4>
-                <h3>Triple Chocolate Mousse Cake</h3>
-                <p class="price">₹260.00</p>
-                <div class="buttons">
-                    <button class="add-to-cart">ADD TO CART</button>
-                    <button class="buy-now">BUY NOW</button>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -145,29 +151,31 @@
 
                     const json_data = JSON.stringify(sendData);
                     const encoded_data = btoa(unescape(encodeURIComponent(json_data)));
-    
+                    const encodedId = btoa(`${product.id}-piescakes`);
                 const productHTML = `
-                    <div class="product-card" style="max-height:400px;">
-                        <div class="product-image">
-                            <img src="${imgSrc}" alt="${product.name}">
-                        </div>
-                        <div class="product-info">
-                            <h4 style="color: grey; margin: 0;">${product.category.name}</h4>
-                            <h3 style="margin: 5px 0;">${product.name}</h3>
-                            <p class="price" style="margin: 5px 0;">
-                                <span class="current-price" style="color: orange; font-weight: bold;">
-                                    ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
-                                </span>
-                                ${product.discount_price ? `<span class="old-price" style="text-decoration: line-through; color: grey; margin-left: 8px;">₹${product.price.toFixed(2)}</span>` : ''}
-                            </p>
-                            <div class="rating" style="color: #FFD700; font-size: 1.2em; margin-bottom: 10px;">
-                                ★★★★★
+                    <div class="product-card">
+                        <a href="/product/${encodedId}">
+                            <div class="product-image">
+                                <img src="${imgSrc}" alt="${product.name}">
                             </div>
-                            <div class="buttons" style="display: flex; gap: 10px;">
-                                <button class="add-to-cart" style="background-color: orange; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;" onclick="addToCart('${encoded_data}')">ADD TO CART</button>
-                                <button class="buy-now" style="background-color: #4a3f3f; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;">BUY NOW</button>
+                            <div class="product-info">
+                                <h4 style="color: grey; margin: 0;">${product.category.name}</h4>
+                                <h3 style="margin: 5px 0;">${product.name}</h3>
+                                <p class="price" style="margin: 5px 0;">
+                                    <span class="current-price" style="color: orange; font-weight: bold;">
+                                        ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
+                                    </span>
+                                    ${product.discount_price ? `<span class="old-price" style="text-decoration: line-through; color: grey; margin-left: 8px;">₹${product.price.toFixed(2)}</span>` : ''}
+                                </p>
+                                <div class="rating" style="color: #FFD700; font-size: 1.2em; margin-bottom: 10px;">
+                                    ★★★★★
+                                </div>
+                                <div class="buttons" style="display: flex; gap: 10px;">
+                                    <button class="add-to-cart" style="background-color: orange; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;" onclick="addToCart('${encoded_data}')">ADD TO CART</button>
+                                    <button class="buy-now" style="background-color: #4a3f3f; color: white; padding: 8px 12px; border: none; border-radius: 5px; font-weight: bold;">BUY NOW</button>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>`;
     
                 productSection.insertAdjacentHTML("beforeend", productHTML);
@@ -243,6 +251,14 @@ function addToCart(encodedData) {
 }
 
     </script>
+    <script>
+        const rangeInput = document.getElementById('price-range');
+        const priceDisplay = document.getElementById('priceValue');
+      
+        rangeInput.addEventListener('input', () => {
+          priceDisplay.textContent = rangeInput.value;
+        });
+      </script>
     
 {% include "frontend/bestseller.html" %}
 {% include "frontend/adds.html" %}

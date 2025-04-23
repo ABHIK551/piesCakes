@@ -5,7 +5,7 @@
         </div>
     </div>
 </section>
-<!-- <script>
+<script>
    document.addEventListener("DOMContentLoaded", function () {
     fetchCategories();
 });
@@ -72,78 +72,6 @@ function renderCategories(categories) {
             container.appendChild(categoryDiv);
         });
 }
-</script> -->
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-  fetchCategories();
-});
-
-function fetchCategories() {
-  fetch("/api/categories-list/")
-    .then(res => {
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.json();
-    })
-    .then(data => {
-      if (data.success && data.categories?.main_categories) {
-        renderCategories(data.categories.main_categories);
-      } else {
-        console.error("Invalid category data structure");
-      }
-    })
-    .catch(err => console.error("Error fetching categories:", err));
-}
-
-function renderCategories(categories) {
-  const container = document.querySelector(".category-container");
-  if (!container) {
-    console.error("Category container not found!");
-    return;
-  }
-
-  container.innerHTML = ""; // clear old
-
-  categories
-    .filter(cat => cat.status === 1)
-    .forEach(cat => {
-      const div = document.createElement("div");
-      div.classList.add("category", "loading"); // start in loading state
-
-      const anchor = document.createElement("a");
-      anchor.href = `/category/${cat.slug || cat.id}`;
-      anchor.style.textDecoration = "none";
-
-      const img = new Image();
-      img.alt = cat.name;
-      img.style.display = "none";           // hide until loaded
-      img.classList.add("category-img");
-
-      img.onload = () => {
-        img.style.display = "block";
-        div.classList.remove("loading");
-      };
-      img.onerror = () => {
-        console.warn("Image failed:", cat.name);
-        img.src = "default-image.jpg";
-        div.classList.remove("loading");
-      };
-
-      // kick off loading
-      img.src = cat.image
-        ? `data:image/png;base64,${cat.image}`
-        : "default-image.jpg";
-
-      const label = document.createElement("p");
-      label.textContent = cat.name;
-      label.classList.add("category-name");
-
-      anchor.appendChild(img);
-      anchor.appendChild(label);
-      div.appendChild(anchor);
-      container.appendChild(div);
-    });
-}
-
 </script>
+
+
