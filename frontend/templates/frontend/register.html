@@ -215,6 +215,9 @@ button:hover {
         </div>
       </form>
       <p id="responseMessage" style="text-align:center; margin-top:1rem; color:green;"></p>
+      <div>
+        <center>Alterady have an account ? <a href="/login"></a></center>
+      </div>
     </div>
   </div>
 
@@ -258,6 +261,7 @@ button:hover {
         if (res.ok) {
           responseMsg.style.color = "green";
           responseMsg.textContent = result.message || "Registered successfully!";
+          window.location.href = "/login";          
           form.reset();
         } else {
           responseMsg.style.color = "red";
