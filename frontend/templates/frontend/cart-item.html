@@ -89,7 +89,7 @@
         const token = sessionStorage.getItem("auth_token");
     
         const userId = sessionStorage.getItem("user_id");
-        const cartTableBody = document.querySelector("cart-table-body");
+        const cartTableBody = document.querySelector("#cart-table-body");
     
         fetch(`/api/view-cart/${userId}/`, {
             method: "GET",
