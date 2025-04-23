@@ -152,11 +152,13 @@
                     const json_data = JSON.stringify(sendData);
                     const encoded_data = btoa(unescape(encodeURIComponent(json_data)));
                     const encodedId = btoa(`${product.id}-piescakes`);
+                    const isBase64 = imgSrc.startsWith('data:image');
+                    const imgSrcFinal = isBase64 ? imgSrc : `data:image/jpeg;base64,${imgSrc}`;
                 const productHTML = `
                     <div class="product-card">
                         <a href="/product/${encodedId}">
                             <div class="product-image">
-                                <img src="${imgSrc}" alt="${product.name}">
+                            <img src="${imgSrcFinal}" alt="${product.name}" loading="lazy">
                             </div>
                             <div class="product-info">
                                 <h4 style="color: grey; margin: 0;">${product.category.name}</h4>
