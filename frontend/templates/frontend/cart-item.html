@@ -113,13 +113,16 @@
     
             cartItems.forEach(item => {
                 const product = item.product;
-                const price = parseFloat(product.price || 0);
-                const discount = parseFloat(product.discount_price || 0);  // assuming it's a percentage
-                const effectivePrice = price - discount;  // apply discount
+                const price = parseFloat(product.price || 0);              // Original price per item
+                const discountPerItem = parseFloat(product.discount_price || 0); // Discount per item
                 const quantity = item.quantity || 1;
-                const total = effectivePrice * quantity;
+
+                const subtotal = price * quantity;
+                const totalDiscount = discountPerItem * quantity;
+                const total = subtotal - totalDiscount;
+
                 totalAmount += total;
-    
+
                 const imageSrc = product.product_images_base64_output
                     ? `data:image/jpeg;base64,${product.product_images_base64_output}`
                     : 'default.jpg';
@@ -131,7 +134,7 @@
                             <span>${product.name}</span>
                         </td>
                         <td>₹${price.toFixed(2)}</td>
-                        <td>₹${discount.toFixed(2)}</td>
+                        <td>₹${discountPerItem.toFixed(2)}</td>
                         <td class="quantity">
                             <button class="qty-btn minusQtyBTN">-</button>
                             <span class="quantityControl">${quantity}</span>

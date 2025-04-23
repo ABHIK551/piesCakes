@@ -966,39 +966,79 @@ def update_baked_delights(request):
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# @api_view(['POST'])
+# def add_to_cart(request):
+#     if request.method == 'POST':
+#         user_id = request.data.get('userId')
+#         cart_items_data = request.data.get('cartItems', [])
+
+#         if not user_id or not cart_items_data:
+#             return Response({'error': 'userId and cartItems are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         try:
+#             user = CustomUser.objects.get(id=user_id)
+#         except CustomUser.DoesNotExist:
+#             return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+#         # Get or create cart
+#         cart, created = Cart.objects.get_or_create(user=user)
+
+#         # Optionally clear existing items (depends on whether you're replacing or appending)
+#         cart.cart_items.all().delete()
+
+#         for item in cart_items_data:
+#             product_id = item.get('product')
+#             quantity = item.get('quantity', 1)  # Default quantity = 1
+
+#             try:
+#                 product = Product.objects.get(id=product_id)
+#                 CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+#             except Product.DoesNotExist:
+#                 continue  # Or handle error if needed
+
+#         # Serialize and return updated cart
+#         serializer = CartSerializer(cart)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def add_to_cart(request):
-    if request.method == 'POST':
-        user_id = request.data.get('userId')
-        cart_items_data = request.data.get('cartItems', [])
+    user_id = request.data.get('userId')
+    cart_items_data = request.data.get('cartItems', [])
 
-        if not user_id or not cart_items_data:
-            return Response({'error': 'userId and cartItems are required.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not user_id or not cart_items_data:
+        return Response({'error': 'userId and cartItems are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Get or create cart
+    cart, created = Cart.objects.get_or_create(user=user)
+
+    for item in cart_items_data:
+        product_id = item.get('product')
+        quantity = item.get('quantity', 1)
 
         try:
-            user = CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            continue  # Skip if product doesn't exist
 
-        # Get or create cart
-        cart, created = Cart.objects.get_or_create(user=user)
+        # Check if this product is already in the cart
+        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-        # Optionally clear existing items (depends on whether you're replacing or appending)
-        cart.cart_items.all().delete()
+        if item_created:
+            cart_item.quantity = quantity  # Set quantity if new item
+        else:
+            cart_item.quantity += quantity  # Increase quantity if item exists
 
-        for item in cart_items_data:
-            product_id = item.get('product')
-            quantity = item.get('quantity', 1)  # Default quantity = 1
+        cart_item.save()
 
-            try:
-                product = Product.objects.get(id=product_id)
-                CartItem.objects.create(cart=cart, product=product, quantity=quantity)
-            except Product.DoesNotExist:
-                continue  # Or handle error if needed
+    serializer = CartSerializer(cart)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # Serialize and return updated cart
-        serializer = CartSerializer(cart)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 @api_view(['GET'])
