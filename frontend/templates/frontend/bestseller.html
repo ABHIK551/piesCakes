@@ -102,20 +102,24 @@ function loadBestsellers() {
           slide.querySelector("img").src = "default.jpg";
         };
         img.src = `data:image/png;base64,${product.product_images}`;
+        const encodedId = `${product.id}-piescakes`
+        const encodedIdPrefilled = btoa(encodedId)
 
         slide.innerHTML = `
-          <div class="product-image">
-            <img src="" alt="${product.name}">
-            <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
-          </div>
-          <div class="product-info">
-            <p class="category">${product.category.name}</p>
-            <h3>${product.name}</h3>
-            <div class="rating">
-              ${"⭐".repeat(Math.min(5, Math.floor(product.reviews.length/10)))}
-            </div>
-            <p class="price">₹${product.price.toFixed(2)}</p>
-          </div>
+            <a href="/product/${encodedIdPrefilled}" style="text-decoration:none !important;color:inherit;">
+                <div class="product-image">
+                    <img src="" alt="${product.name}">
+                    <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
+                </div>
+                <div class="product-info">
+                    <p class="category">${product.category.name}</p>
+                    <h3>${product.name}</h3>
+                    <div class="rating">
+                    ${"⭐".repeat(Math.min(5, Math.floor(product.reviews.length/10)))}
+                    </div>
+                    <p class="price">₹${product.price.toFixed(2)}</p>
+                </div>
+            </a>
         `;
         wrapper.appendChild(slide);
       });
