@@ -705,7 +705,7 @@ tr:nth-child(even) {
 				let data = await response.json();
 
 				let parentCategorySelect = document.getElementById(selectId);
-				parentCategorySelect.innerHTML = '<option selected disabled>Choose a Parent Category</option>';
+				parentCategorySelect.innerHTML = '<option disabled value="">Choose a Parent Category</option>';
 
 				data.forEach(category => {
 					let option = document.createElement("option");
@@ -1075,10 +1075,15 @@ document.getElementById("categoryForm").addEventListener("submit", async functio
 	event.preventDefault();
 	document.getElementById("loader-container").style.display = "flex";
 
+	const categoryType = document.getElementById("categoryType").value;
+	let parentCategory = null;
+
+	if (categoryType) {
+		parentCategory = document.getElementById("parentCategory").value;
+	}
 	const categoryName = document.getElementById("categoryName").value.trim();
 	const categoryDescription = document.getElementById("categoryDescription").value.trim();
 	const categoryStatus = parseInt(document.getElementById("categoryStatus").value, 10) || 0;
-	const parentCategory = document.getElementById("parentCategory").value || null;
 	const imageFile =  document.getElementById("categoryImage").files[0];
 	const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value; // Fetch CSRF token
 

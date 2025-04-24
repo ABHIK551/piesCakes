@@ -66,7 +66,7 @@ class ProductCreateAPIView(APIView):
                 "success": True,
                 "message": "Product created successfully!"
             }, status=status.HTTP_201_CREATED)
-
+        
         return Response({
             "success": False,
             "message": "Failed to add product!",
@@ -98,6 +98,7 @@ class CategoryCreateView(generics.CreateAPIView):
             "name": data.get("name"),
             "description": data.get("description"),
             "status": data.get("status"),
+            "parent": data.get("parent"),
             "image_base64": data.get("image_base64", None),
         }
 
@@ -179,8 +180,12 @@ class ProductListView(generics.ListAPIView):
                 "name": product.name,
                 "category": {
                     "id": product.category.id,
-                    "name": product.category.name
-                } if product.category else None,  # Include category info if available
+                    "name": product.category.name,
+                    "parent": {
+                        "id": product.category.parent.id,
+                        "name": product.category.parent.name
+                    } if product.category.parent else None
+                } if product.category else None,
                 "description": product.description,
                 "ingredients": product.ingredients,
                 "allergen_info": product.allergen_info,
@@ -1087,3 +1092,35 @@ class AdminLogoutView(APIView):
     def post(self, request):
         request.session.flush()  # Clears the session
         return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
+
+
+class ProductByEncodedView(APIView):
+    """
+    GET /api/products-encoded/<encoded>/
+    where <encoded> == btoa(f"{id}-{slug}")
+    """
+
+    def get(self, request, encoded, *args, **kwargs):
+        # 1) Decode Base64 back into "<id>-<slug>"
+        try:
+            decoded = base64.b64decode(encoded).decode('utf-8')
+            id_str, _ = decoded.split('-', 1)
+            product_id = int(id_str)
+        except (ValueError, base64.binascii.Error, UnicodeDecodeError):
+            return Response(
+                {"success": False, "error": "Invalid or malformed token."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 2) Fetch or 404
+        product = get_object_or_404(Product, pk=product_id)
+
+        # 3) Format exactly like your list view does
+        formatter = ProductListView()
+        # bypass pagination by sending a one-item list
+        formatted = formatter.format_product_data([product])
+        # format_product_data returns {"products": [...]}
+        return Response(
+            {"success": True, **formatted},
+            status=status.HTTP_200_OK
+        )

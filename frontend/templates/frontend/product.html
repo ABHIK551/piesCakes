@@ -5,35 +5,84 @@
 <section class="product-section">
     <div class="product-container">
         <div class="product-image">
-            {% if product.product_images_base64 %}
-                <img src="data:image/png;base64,{{ product.product_images_base64 }}" alt="{{ product.name }}">
-            {% endif %}
+          <img id="product-image" src="" alt="">
         </div>
-
+      
         <div class="product-details">
-            <h1>{{ product.name }}</h1>
-            <div class="rating">⭐ ⭐ ⭐ ⭐ ☆</div>
-            <p class="price">₹{{ product.price }}</p>
-            <p>{{ product.description }}</p>
-
-            <!-- Optional: You can loop weights if they are stored separately -->
-            <div class="weight-selection">
-                <h3>WEIGHT</h3>
-                <button class="weight active">{{ product.weight }}</button>
-                <!-- <button class="weight">500g</button>
-                <button class="weight">1000g</button> -->
-            </div>
-
-            <div class="quantity" style="max-width: 100px;">
-                <button class="minus">-</button>
-                <input type="text" value="1" class="quantity-input" id="product-page-quantity">
-                <button class="plus">+</button>
-            </div>
-
-            <button class="add-to-cart" data-encoded="{{ product.id }}">ADD TO CART</button>
+          <h1 id="product-name"></h1>
+          <div class="rating">⭐ ⭐ ⭐ ⭐ ☆</div>
+          <p class="price" id="product-price"></p>
+          <p id="product-description"></p>
+      
+          <div class="weight-selection">
+            <h3>WEIGHT</h3>
+            <button class="weight active" id="product-weight"></button>
+          </div>
+      
+          <div class="quantity" style="max-width: 100px;">
+            <button class="minus">-</button>
+            <input type="text" value="1" class="quantity-input" id="product-page-quantity">
+            <button class="plus">+</button>
+          </div>
+      
+          <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
         </div>
-    </div>
+      </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Grab the last segment of the path (e.g. "Ni1waWVzY2FrZXM=")
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const encoded = segments[segments.length - 1];
+
+    // 2. Base64-decode it: e.g. "6-piescakes"
+    let decoded;
+    try {
+      decoded = atob(encoded);
+    } catch (e) {
+      console.error('Failed to decode ID from URL:', e);
+      return;
+    }
+
+    // 3. Split into [id, slug]
+    const [id, ...slugParts] = decoded.split('-');
+    const slug = slugParts.join('-');  // if you ever need the slug
+    fetch(`/api/products/${encoded}/`)
+    .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+    })
+    .then(data => {
+        const product = data.products[0];
+
+        // Set image
+        const imageEl = document.getElementById('product-image');
+        if (product.product_images) {
+        imageEl.src = `data:image/png;base64,${product.product_images}`;
+        imageEl.alt = product.name;
+        }
+
+        // Set name, price, description, weight
+        document.getElementById('product-name').textContent = product.name;
+        document.getElementById('product-price').textContent = `₹${product.price}`;
+        document.getElementById('product-description').textContent = product.description;
+
+        const weightText = product.weight || product.serving_size || 'N/A';
+        document.getElementById('product-weight').textContent = weightText;
+
+        // Set button data-id
+        const cartBtn = document.getElementById('add-to-cart-btn');
+        cartBtn.setAttribute('data-encoded', product.id);
+    })
+    .catch(err => {
+        console.error('Error fetching product:', err);
+        // TODO: Display a user-friendly "product not found" message here
+    });
+
+  });
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         // Quantity Button Logic
@@ -210,6 +259,8 @@
         console.error("Failed to load recommendations:", err);
       }
     }
+    
+    
     </script>
     
 {% include "frontend/why-choose-us.html" %}

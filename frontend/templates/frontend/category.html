@@ -48,7 +48,7 @@ function renderCategories(categories) {
     container.innerHTML = ""; // Clear existing content
 
     categories
-        .filter(category => category.status === 1)
+        .filter(category => category.status === 1 && category.parent === null)
         .forEach(category => {
             const categoryDiv = document.createElement("div");
             categoryDiv.classList.add("category");

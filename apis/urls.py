@@ -41,4 +41,9 @@ urlpatterns = [
     path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
     path('admin/customers/', CustomerListView.as_view(), name='customer-list'),
     path('admin/logout/', AdminLogoutView.as_view(), name='admin-logout'),
+    path(
+        'products/<str:encoded>/',
+        ProductByEncodedView.as_view(),
+        name='product-by-encoded'
+    ),
 ]
