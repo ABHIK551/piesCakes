@@ -1,0 +1,258 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+<style>
+    :root {
+  --primary-color: #4a2f1d;
+  --accent-color: #6d3d0f;
+  --bg-color: #fff9f4;
+  --text-color: #333;
+  --section-padding: 2rem;
+  --max-width: 960px;
+}
+
+
+.privacy-section {
+  max-width: 100%;
+  padding: var(--section-padding) 1rem;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  clear: both;
+}
+
+
+.container-privacy{
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+    background-color: var(--bg-color);
+    padding: var(--section-padding) 1rem;
+    margin: 0 auto;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    clear: both;
+}
+
+
+.privacy-section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.privacy-section h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.privacy-section h3 {
+  color: var(--accent-color);
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+}
+
+.privacy-section ul {
+  padding-left: 1.5rem;
+}
+
+.privacy-section ul li {
+  margin: 0.5rem 0;
+}
+
+.privacy-section p {
+  margin: 0.7rem 0;
+}
+
+.contact-block {
+  background-color: #f8eee7;
+  padding: 1rem;
+  border-left: 4px solid var(--accent-color);
+  margin-top: 1.5rem;
+}
+
+/* Floated content blocks */
+.privacy-block {
+  width: 90%;
+  max-width: 600px;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.privacy-block h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.privacy-section .change-left {
+  float: left !important;
+  margin-left: 5% !important;
+}
+
+.privacy-section .change-right {
+  float: right !important;
+  margin-right: 5% !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .privacy-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .privacy-section {
+    padding: 1.2rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .contact-block {
+    font-size: 0.95rem;
+  }
+
+  /* Stack blocks on small screens */
+  .privacy-section .change-left,
+  .privacy-section .change-right {
+    float: none !important;
+    margin: 1rem auto !important;
+  }
+
+  .privacy-block {
+    width: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-section {
+    padding: 1rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1rem;
+  }
+}
+.main-block{
+    min-width: 100%;
+}
+
+</style>
+<section class="privacy-section">
+    <div class="container-privacy">
+        <h2>🍪 Privacy Policy</h2>
+        <p>
+          At <strong>Pies and Thighs</strong>, your privacy is our priority. Here's how we collect, use, and protect your information.
+        </p>
+      
+        <div class="main-block">
+            <div class="privacy-block change-left">
+                <h3>1. Information We Collect</h3>
+                <ul>
+                  <li><strong>Personal Info:</strong> Name, email, phone, address, and payment details</li>
+                  <li><strong>Order Details:</strong> Products ordered, special instructions, and history</li>
+                  <li><strong>Technical Info:</strong> IP address, browser, device, and visited pages (via cookies)</li>
+                </ul>
+              </div>
+        </div>
+    
+        <div class="main-block">
+            <div class="privacy-block change-right">
+                <h3>2. How We Use It</h3>
+                <ul>
+                  <li>To process and deliver your orders</li>
+                  <li>To communicate order updates</li>
+                  <li>To assist with queries</li>
+                  <li>To improve your experience on our site</li>
+                </ul>
+              </div>
+        </div>
+      
+        
+        <div class="main-block">
+            <div class="privacy-block change-left">
+                <h3>3. Sharing Policy</h3>
+                <p>We never sell or rent your data. We only share with:</p>
+                <ul>
+                  <li>Payment processors (like Razorpay)</li>
+                  <li>Delivery partners</li>
+                  <li>Legal or compliance purposes</li>
+                </ul>
+              </div>
+        </div>
+        
+        <div class="main-block">
+            <div class="privacy-block change-right">
+                <h3>4. Cookies</h3>
+                <p>We use cookies to improve site functionality. You can disable them in your browser, though it may affect some features.</p>
+              </div>
+          
+        </div>
+       
+        <div class="main-block">
+            
+        </div>
+      
+        
+        <div class="main-block">
+            <div class="privacy-block change-left">
+                <h3>5. Data Security</h3>
+                <p>We use SSL encryption for payments and follow best practices to keep your data secure, but we can't guarantee absolute safety online.</p>
+              </div>
+        </div>
+    
+        <div class="main-block">
+            <div class="privacy-block change-right">
+                <h3>6. Your Rights</h3>
+                <ul>
+                  <li>Access or correct your data</li>
+                  <li>Request deletion</li>
+                  <li>Withdraw consent anytime</li>
+                </ul>
+                <p>Contact us at <strong>support@prajnabyparth.com</strong> to exercise your rights.</p>
+              </div>
+        </div>
+      
+        <div class="main-block">
+            <div class="privacy-block change-left">
+                <h3>7. Third-Party Links</h3>
+                <p>We may link to external sites, but we're not responsible for their privacy policies.</p>
+              </div>
+        </div>
+      
+        <div class="main-block">
+            <div class="privacy-block change-right">
+                <h3>8. Changes to This Policy</h3>
+                <p>Updates will be posted here with the latest effective date.</p>
+              </div>
+        </div>
+      
+    </div>
+</section>
+
+{% endblock %}

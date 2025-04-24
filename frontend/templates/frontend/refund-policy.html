@@ -1,0 +1,221 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+<style>
+    :root {
+  --primary-color: #4a2f1d;
+  --accent-color: #6d3d0f;
+  --bg-color: #fff9f4;
+  --text-color: #333;
+  --section-padding: 2rem;
+  --max-width: 960px;
+}
+
+
+.privacy-section {
+  max-width: 100%;
+  padding: var(--section-padding) 1rem;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  clear: both;
+}
+
+
+.container-privacy{
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+    background-color: var(--bg-color);
+    padding: var(--section-padding) 1rem;
+    margin: 0 auto;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    clear: both;
+}
+
+
+.privacy-section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.privacy-section h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.privacy-section h3 {
+  color: var(--accent-color);
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+}
+
+.privacy-section ul {
+  padding-left: 1.5rem;
+}
+
+.privacy-section ul li {
+  margin: 0.5rem 0;
+}
+
+.privacy-section p {
+  margin: 0.7rem 0;
+}
+
+.contact-block {
+  background-color: #f8eee7;
+  padding: 1rem;
+  border-left: 4px solid var(--accent-color);
+  margin-top: 1.5rem;
+}
+
+/* Floated content blocks */
+.privacy-block {
+  width: 90%;
+  max-width: 600px;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.privacy-block h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.privacy-section .change-left {
+  float: left !important;
+  margin-left: 5% !important;
+}
+
+.privacy-section .change-right {
+  float: right !important;
+  margin-right: 5% !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .privacy-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .privacy-section {
+    padding: 1.2rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .contact-block {
+    font-size: 0.95rem;
+  }
+
+  /* Stack blocks on small screens */
+  .privacy-section .change-left,
+  .privacy-section .change-right {
+    float: none !important;
+    margin: 1rem auto !important;
+  }
+
+  .privacy-block {
+    width: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-section {
+    padding: 1rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1rem;
+  }
+}
+.main-block{
+    min-width: 100%;
+}
+
+</style>
+<section class="privacy-section" id="cancellation-refund-policy">
+    <div class="container-privacy">
+        <h2>🔄 Cancellation & Refund Policy</h2>
+        <p>
+            At <strong>Pies and Thighs</strong>, we take pride in preparing each cake with care and love. As our products are freshly made to order, we have outlined our cancellation and refund policy below to ensure clarity for our valued customers.
+        </p>
+
+        <div class="privacy-block change-left">
+            <h3>1. Order Cancellations</h3>
+            <ul>
+              <li><strong>Same-Day Orders:</strong> Once an order is placed for same-day delivery, it cannot be cancelled or modified under any circumstances.</li>
+              <li><strong>Advance Orders (Next-Day or Later):</strong> You may cancel your order up to 24 hours before the scheduled delivery time by contacting us via phone or email.</li>
+              <li><strong>Custom or Large Orders:</strong> Custom cakes and bulk orders must be cancelled at least 48 hours in advance. Any cancellations made after this period may not be eligible for a refund due to incurred preparation costs.</li>
+            </ul>
+          </div>
+        
+          <div class="privacy-block change-right">
+            <h3>2. Refund Policy</h3>
+            <ul>
+              <li><strong>Eligible Refunds:</strong>
+                <ul>
+                  <li>If a cancellation request is approved within the valid time frame.</li>
+                  <li>If we are unable to fulfil your order due to unforeseen circumstances.</li>
+                  <li>If the product delivered is incorrect, damaged, or not as described (with valid proof provided within 2 hours of delivery).</li>
+                </ul>
+              </li>
+              <li><strong>Non-Refundable Situations:</strong>
+                <ul>
+                  <li>Delays due to incorrect delivery details provided by the customer.</li>
+                  <li>Minor differences in decoration/design as cakes are handcrafted.</li>
+                  <li>Change of mind after delivery.</li>
+                  <li>Orders refused upon delivery without a valid issue.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        
+          <div class="privacy-block change-left">
+            <h3>3. Refund Process</h3>
+            <p>Once approved, refunds will be processed within 5–7 working days to your original mode of payment.</p>
+            <p>If payment was made via COD (Cash on Delivery), we will issue a credit voucher valid for future purchases.</p>
+          </div>
+        
+          <div class="privacy-block change-right">
+            <h3>4. Contact for Cancellations or Issues</h3>
+            <p>To cancel your order or raise a concern, contact us at:</p>
+            <p><strong>Pies and Thighs</strong><br>
+            Email: <a href="mailto:support@prajnabyparth.com">support@prajnabyparth.com</a><br>
+            Phone: <a href="tel:+919304766907">+91 9304766907</a><br>
+            Location: Shop 60C, Lower Ground Floor, Ranchi</p>
+          </div>
+    </div>
+</section>
+  
+
+{% endblock %}

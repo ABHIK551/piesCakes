@@ -42,3 +42,9 @@ def login(request):
 
 def register(request):
     return render(request, 'frontend/register.html')
+
+def privacyPolicy(request):
+    return render(request, 'frontend/privacy-policy.html')
+
+def refundPolicy(request):
+    return render(request, 'frontend/refund-policy.html')
