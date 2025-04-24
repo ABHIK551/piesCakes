@@ -527,56 +527,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 <script>
-async function editProduct(productId, products) {
-    // Parse product data
-    let productData = JSON.parse(decodeURIComponent(products));
+async function editProduct(encoded) {
+    try {
+        const response = await fetch(`/api/products/${encoded}/`);
+        const data = await response.json();
 
-    console.log("productData", productData);
-    console.log("productId", productId, typeof productId);
+        if (!data.success || !data.products || data.products.length === 0) {
+            console.error("Product not found or API error.");
+            return;
+        }
 
-    // Ensure productId is a number
-    let product = productData.find(p => p.id === Number(productId));
+        const product = data.products[0];
 
-    console.log("product", product);
+        // Populate form fields with product data
+        document.getElementById("editProductName").value = product.name || "";
+        document.getElementById("editProductCategory").value = product.category?.id || "";
+        document.getElementById("editProductStatus").value = product.status === "Active" ? "Active" : "Inactive";
+        document.getElementById("editProductDescription").value = product.description || "";
+        document.getElementById("editProductIngredients").value = product.ingredients || "";
+        document.getElementById("editProductAllergen").value = product.allergen_info || "";
+        document.getElementById("editProductPrice").value = product.price || 0;
+        document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
+        document.getElementById("editProductStock").value = product.stock_status || "";
+        document.getElementById("editProductServingSize").value = product.serving_size || "";
+        document.getElementById("editProductTotalStock").value = product.total_stock || 0;
+        document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
+        document.getElementById("editProductCakeSize").value = product.cake_size || "";
+        document.getElementById("editProductFlavorVariants").value = product.flavor_variants || "";
+        document.getElementById("editProductCalories").value = product.calories || "";
+        document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
+        document.getElementById("editProductTags").value = product.tags || "";
+        document.getElementById("editProductReviews").value = product.reviews || "";
+        document.getElementById("editProductRelatedProducts").value = product.related_products || "";
+        document.getElementById("editProductId").value = product.id;
 
-    if (!product) {
-        console.error("Product not found!");
-        return;
+        // Display image preview if available
+        const imagePreview = document.getElementById("editProductPreviewImages");
+        if (product.product_images) {
+            imagePreview.src = `data:image/png;base64,${product.product_images}`;
+            imagePreview.style.display = "block";
+        } else {
+            imagePreview.style.display = "none";
+        }
+
+        // Show the edit modal
+        const editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
+        editModal.show();
+    } catch (error) {
+        console.error("Error fetching product data:", error);
     }
-
-    // Set form values
-    document.getElementById("editProductName").value = product.name || "";
-    document.getElementById("editProductCategory").value = product.category.id || "";
-    document.getElementById("editProductStatus").value = product.status || "Inactive";
-    document.getElementById("editProductDescription").value = product.description || "";
-    document.getElementById("editProductIngredients").value = product.ingredients || "";
-    document.getElementById("editProductAllergen").value = product.allergen_info || "";
-    document.getElementById("editProductPrice").value = product.price || 0;
-    document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
-    document.getElementById("editProductStock").value = product.stock_status || 0;
-    document.getElementById("editProductServingSize").value = product.serving_size || 0; 
-    document.getElementById("editProductTotalStock").value = product.total_stock || 0;
-    document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
-    document.getElementById("editProductCakeSize").value = product.cake_size;   
-    document.getElementById("editProductFlavorVariants").value = product.flavor_variants;
-    // Show image preview if available
-    let imagePreview = document.getElementById("editProductPreviewImages");
-    if (product.product_images) {
-        imagePreview.src = `data:image/png;base64,${product.product_images}`;
-        imagePreview.style.display = "block";
-    } else {
-        imagePreview.style.display = "none";
-    }
-    document.getElementById("editProductCalories").value = product.calories || "";
-    document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
-    document.getElementById("editProductTags").value = product.tags || "";
-    document.getElementById("editProductReviews").value = product.reviews || "";
-    document.getElementById("editProductRelatedProducts").value = product.related_products || "";
-    document.getElementById("editProductId").value = product.id;
-    // Show the modal
-    let editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
-    editModal.show();
 }
+
 
 
 let currentPage = 1;  // ✅ Move this to the global scope
@@ -597,7 +598,10 @@ let currentPage = 1;  // ✅ Move this to the global scope
                 const tableBody = document.getElementById('productTableBody');
                 tableBody.innerHTML = '';
 
+              
+
                products.forEach(product => {
+                    const encodedProductId = btoa(`${product.id}-piescakes`);
                     const row = document.createElement('tr');
 
                     // Insert product details into table cells
@@ -636,7 +640,7 @@ let currentPage = 1;  // ✅ Move this to the global scope
                         <td class="d-none d-md-table-cell">${new Date(product.created_at).toLocaleString()}</td>
                         <td class="d-none d-md-table-cell">${product.updated_at ? new Date(product.updated_at).toLocaleString() : ""}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="editProduct('${product.id}', '${productData}')">Edit</button>
+                            <button class="btn btn-sm btn-primary" onclick="editProduct('${encodedProductId}')">Edit</button>
                             <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
                         </td>
                         
