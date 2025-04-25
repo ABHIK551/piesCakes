@@ -2,7 +2,7 @@
 {% block content %}
 {% include "frontend/nav.html" %}
 <style>
-    :root {
+:root {
   --primary-color: #4a2f1d;
   --accent-color: #6d3d0f;
   --bg-color: #fff9f4;
@@ -149,13 +149,24 @@
   .privacy-section {
     padding: 1rem;
   }
+
+  .privacy-block {
+    width: 100%;
+    padding: 5px !important;
+  }
+  
   .container-privacy{
-    margin: 0px !important;
+    margin-top: 50px !important;
+    /* margin: 0px auto!important; */
     padding: 0px !important;
   }
 
   .privacy-section h2 {
     font-size: 1.3rem;
+  }
+
+  .privacy-section ul li {
+    line-height: 1.2 !important;
   }
 
   .privacy-section h3 {
