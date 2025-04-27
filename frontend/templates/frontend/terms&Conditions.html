@@ -1,0 +1,312 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+<style>
+    :root {
+  --primary-color: #4a2f1d;
+  --accent-color: #6d3d0f;
+  --bg-color: #fff9f4;
+  --text-color: #333;
+  --section-padding: 2rem;
+  --max-width: 960px;
+}
+
+
+.privacy-section {
+  max-width: 100%;
+  padding: var(--section-padding) 1rem;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  clear: both;
+}
+
+
+.container-privacy{
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+    background-color: var(--bg-color);
+    padding: var(--section-padding) 1rem;
+    margin: 0 auto;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    clear: both;
+}
+
+
+.privacy-section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.privacy-section h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.privacy-section h3 {
+  color: var(--accent-color);
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+}
+
+.privacy-section ul {
+  padding-left: 1.5rem;
+}
+
+.privacy-section ul li {
+  margin: 0.5rem 0;
+}
+
+.privacy-section p {
+  margin: 0.7rem 0;
+}
+
+.contact-block {
+  background-color: #f8eee7;
+  padding: 1rem;
+  border-left: 4px solid var(--accent-color);
+  margin-top: 1.5rem;
+}
+
+/* Floated content blocks */
+.privacy-block {
+  width: 90%;
+  max-width: 600px;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.privacy-block h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.privacy-section .change-left {
+  float: left !important;
+  margin-left: 5% !important;
+}
+
+.privacy-section .change-right {
+  float: right !important;
+  margin-right: 5% !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .privacy-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .privacy-section {
+    padding: 1.2rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .contact-block {
+    font-size: 0.95rem;
+  }
+
+  /* Stack blocks on small screens */
+  .privacy-section .change-left,
+  .privacy-section .change-right {
+    float: none !important;
+    margin: 1rem auto !important;
+  }
+
+  .privacy-block {
+    width: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-section {
+    padding: 1rem;
+
+  }
+
+  .privacy-block {
+    width: 100%;
+    padding: 5px !important;
+  }
+  
+  .container-privacy{
+    margin-top: 50px !important;
+    /* margin: 0px auto!important; */
+    padding: 0px !important;
+  }
+
+  .privacy-section ul li {
+    line-height: 1.2 !important;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .privacy-section h3 {
+    font-size: 1rem;
+  }
+}
+.main-block{
+    min-width: 100%;
+}
+
+</style>
+<section class="privacy-section">
+    <div class="container-privacy">
+  
+      <h2>About Us</h2>
+      <p>
+        At <strong>Pies & Thighs</strong>, we’re all about spreading joy through the simple pleasure of great desserts. Based in Ranchi, our cake shop brings warmth, nostalgia, and creativity into every slice. From classic cakes to flaky, buttery pies, we bake everything fresh, using quality ingredients and a whole lot of heart.
+      </p>
+      <p>
+        What began as a small passion project has grown into a sweet destination for dessert lovers across the city. Whether you’re celebrating life’s big moments or just need a pick-me-up, we’re here to serve comfort on a plate — with a smile.
+      </p>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>Our Vision</h3>
+          <p>
+            To become Ranchi’s most loved cake and dessert destination, known for our heartfelt service, handcrafted quality, and the joy we bring to every celebration.
+          </p>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-right">
+          <h3>Our Mission</h3>
+          <ul>
+            <li>To create delicious, memorable desserts that bring people together.</li>
+            <li>To blend traditional baking techniques with unique flavors and local charm.</li>
+            <li>To deliver warmth, happiness, and a personal touch with every order.</li>
+            <li>To support our community by sourcing locally and sharing our love of baking through events, collaborations, and outreach.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <h2>Terms & Conditions</h2>
+      <p>Welcome to Pies & Thighs! By accessing or placing an order through our website, you agree to the following Terms & Conditions. Please read them carefully before using our services.</p>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>1. Orders & Acceptance</h3>
+          <ul>
+            <li>Orders can be placed through our official website, social media platforms, or WhatsApp.</li>
+            <li>Confirmation message received after order placement does not guarantee acceptance until payment is confirmed and details verified.</li>
+            <li>We reserve the right to refuse or cancel any order due to unavailability, incorrect pricing, or other reasons.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-right">
+          <h3>2. Payments</h3>
+          <ul>
+            <li>All payments must be made in advance via available options (UPI, net banking, credit/debit card, etc.).</li>
+            <li>Prices are listed in INR and include applicable taxes unless otherwise stated.</li>
+            <li>Orders are processed only after full payment is received.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>3. Delivery & Pick-Up</h3>
+          <ul>
+            <li>Delivery available within Ranchi city limits. Delivery slots and charges communicated at order time.</li>
+            <li>Accurate delivery information is customer’s responsibility. Delays due to incorrect addresses are not our liability.</li>
+            <li>Pick-up orders must be collected on time to avoid quality issues.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-right">
+          <h3>4. Cancellations & Refunds</h3>
+          <ul>
+            <li>Orders can be canceled up to 24 hours before scheduled delivery/pick-up.</li>
+            <li>No cancellations or refunds after this period.</li>
+            <li>Refunds processed to the original payment method within 7 working days, if approved.</li>
+            <li>Custom/large orders may involve partial refunds and longer notice.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>5. Product Information & Allergens</h3>
+          <ul>
+            <li>Products are handcrafted; minor design, color, or size variations may occur.</li>
+            <li>Ingredients may include dairy, nuts, eggs, gluten. Inform us about allergies beforehand, but allergen-free is not guaranteed.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-right">
+          <h3>6. Customer Responsibilities</h3>
+          <ul>
+            <li>Inspect your order upon delivery or pick-up. Report issues within 2 hours with photos.</li>
+            <li>Once accepted, Pies & Thighs is not responsible for damage due to improper storage or delays in consumption.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>7. Intellectual Property</h3>
+          <p>All content on our website, including images, designs, and logos, is owned by Pies & Thighs and may not be reused without permission.</p>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-right">
+          <h3>8. Changes to Terms</h3>
+          <p>We reserve the right to update these terms at any time. Continued use of our services indicates agreement with the revised terms.</p>
+        </div>
+      </div>
+  
+      <div class="main-block">
+        <div class="privacy-block change-left">
+          <h3>9. Contact Us</h3>
+          <p>For questions, feedback, or support, please contact us:</p>
+          <ul>
+            <li>📞 [Insert Phone Number]</li>
+            <li>📧 [Insert Email Address]</li>
+            <li>📍 Ranchi, Jharkhand</li>
+          </ul>
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+
+{% endblock %}

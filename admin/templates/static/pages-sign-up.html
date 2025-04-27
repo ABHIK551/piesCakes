@@ -121,7 +121,7 @@ document.getElementById("signupForm").addEventListener("submit", async function 
 		if (response.ok) {
 			showToast("Registration successful!", "success");
 			// Optionally redirect after a short delay
-			setTimeout(() => window.location.href = "/admin/login/", 1500);
+			setTimeout(() => window.location.href = "/admin/login", 1500);
 		} else {
 			// Show all error messages (loop through error fields)
 			Object.keys(data).forEach((key) => {

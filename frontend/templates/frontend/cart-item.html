@@ -870,9 +870,9 @@ function closeModal() {
         })
         .then(data => {
             console.log('Order Created:', data);
-            showToast('Order placed successfully! 🎉', "danger");
+            showToast('Order placed successfully! 🎉', "success");
             // Optionally, redirect
-            window.location.href = "/admin/orders";
+           
         })
         .catch(error => {
             console.error('Error:', error);

@@ -19,13 +19,15 @@
             <button class="weight active" id="product-weight"></button>
           </div>
       
-          <div class="quantity" style="max-width: 100px;">
-            <button class="minus">-</button>
-            <input type="text" value="1" class="quantity-input" id="product-page-quantity">
-            <button class="plus">+</button>
+          <div style="text-decoration: none;color: inherit;" class="action-row">
+            <div class="quantity" style="max-width: 100px;">
+                <button class="minus">-</button>
+                <input type="text" value="1" class="quantity-input" id="product-page-quantity">
+                <button class="plus">+</button>
+              </div>
+          
+            <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
           </div>
-      
-          <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
         </div>
       </div>
 </section>
@@ -133,6 +135,7 @@
             .then(data => {
                 if (data && !data.error) {
                     showToast("Products added to cart successfully!", "success");
+                    window.location.href = "/cart";
                 } else {
                     showToast("Failed to add products to cart.", "danger");
                 }

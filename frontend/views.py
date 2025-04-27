@@ -48,3 +48,9 @@ def privacyPolicy(request):
 
 def refundPolicy(request):
     return render(request, 'frontend/refund-policy.html')
+
+def aboutUs(request):
+    return render(request, 'frontend/about-us.html')
+
+def termCon(request):
+    return render(request, 'frontend/terms&Conditions.html')
