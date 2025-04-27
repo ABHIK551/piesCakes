@@ -312,9 +312,24 @@
       if (!userId) { showToast('Please login to add items to the cart','danger'); return; }
       const cartItems = productIds.map(id => ({ product: id, quantity: 1 }));
       fetch('/api/add-to-cart/', {
-        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId, cartItems })
-      }).then(r=>r.json()).then(d=> showToast(d.error?'Failed to add products to cart.':'Products added to cart successfully!',''+(d.error?'danger':'success')))
-      .catch(e=>{ console.error(e); showToast('An error occurred while adding to cart.','danger'); });
+        method:'POST', 
+        headers:{'Content-Type':'application/json'}, 
+        body: JSON.stringify({ userId, cartItems })
+      })
+      .then(d => {
+            showToast(
+                d.error ? 'Failed to add products to cart.' : 'Products added to cart successfully!',
+                d.error ? 'danger' : 'success'
+            );
+
+            // After showing toast, redirect to orders page
+            if (!d.error) {
+                setTimeout(() => {
+                    window.location.href = '/orders';
+                }, 1500);
+            }
+        })
+        .catch(e=>{ console.error(e); showToast('An error occurred while adding to cart.','danger'); });
     }
   </script>
   
