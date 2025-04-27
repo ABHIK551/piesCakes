@@ -322,20 +322,19 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['product_id', 'product_name', 'quantity', 'item_price', 'discount', 'total']
 
 class OrderSerializers(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()  # <-- Change user to SerializerMethodField
+    user_name = serializers.SerializerMethodField()  # Add separate field for user full name
     order_items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
         fields = [
-            'id', 'user', 'order_items', 'delivery_address', 'city', 'state', 'pincode',
+            'id', 'user', 'user_name', 'order_items', 'delivery_address', 'city', 'state', 'pincode',
             'phone_number', 'payment_method', 'payment_status', 'transaction_id',
             'coupon_code', 'discount_amount', 'total_amount', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
 
-    def get_user(self, obj):
-        # obj.user is the related CustomUser instance
+    def get_user_name(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}" if obj.user else None
 
     def create(self, validated_data):
