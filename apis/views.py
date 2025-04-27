@@ -1058,6 +1058,28 @@ def view_cart(request, user_id):
     except CustomUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['DELETE'])
+def delete_cart_item(request, user_id, product_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        cart = Cart.objects.get(user=user)
+        cart_item = CartItem.objects.get(cart=cart, product_id=product_id)
+        
+        cart_item.delete()
+
+        return Response({'message': 'Product removed from cart successfully.'}, status=status.HTTP_200_OK)
+    
+    except CustomUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    except Cart.DoesNotExist:
+        return Response({'error': 'Cart not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    except CartItem.DoesNotExist:
+        return Response({'error': 'Product not found in cart.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 class AdminUserSignupView(APIView):
     def post(self, request):
         serializer = AdminUserSignupSerializer(data=request.data)
@@ -1124,3 +1146,65 @@ class ProductByEncodedView(APIView):
             {"success": True, **formatted},
             status=status.HTTP_200_OK
         )
+    
+# class OrderCreateView(generics.CreateAPIView):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializers
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)\
+
+import logging
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+
+from .models import Order
+from .serializers import OrderSerializers
+
+# Setup a logger
+logger = logging.getLogger(__name__)
+class OrderCreateView(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializers
+
+    def create(self, request, *args, **kwargs):
+        try:
+            # NO need to mutate
+            request_data = request.data.copy()  # Make a safe copy
+
+            serializer = self.get_serializer(data=request_data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        except ValidationError as e:
+            logger.warning(f"Validation error during order creation: {e.detail}")
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            logger.error(f"Unexpected error during order creation: {str(e)}", exc_info=True)
+            return Response({'error': 'Something went wrong while creating the order.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UserOrderListView(generics.ListAPIView):
+    serializer_class = OrderSerializers
+
+    def get_queryset(self):
+        logger.info("coming in api")
+        
+        encoded_user_id = self.kwargs.get('encoded_user_id')  # <--- Fix here!
+
+        if not encoded_user_id:
+            logger.warning("No encoded_user_id provided in URL.")
+            return Order.objects.none()
+
+        try:
+            decoded_user_id = base64.b64decode(encoded_user_id).decode('utf-8')
+            logger.info(f"Decoded user ID: {decoded_user_id}")
+            return Order.objects.filter(user__id=decoded_user_id)
+        except Exception as e:
+            logger.error(f"Error decoding user ID: {str(e)}", exc_info=True)
+            return Order.objects.none()

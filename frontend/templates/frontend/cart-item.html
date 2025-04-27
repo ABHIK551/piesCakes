@@ -42,46 +42,445 @@
             
             <div class="shop-more">
                 <a href="/" style="float: left;margin: auto 0%;">Continue Shopping</a>
-                <button class="checkout" style="width: 200px;float: right;">Check Out</button>
+                <button class="checkout" onclick="openPaymentModal()" style="width: 200px;float: right;">Check Out</button>
             </div>
         </div>
 
-        <!-- Summary Section -->
-        <div class="summary">
-            <h2>Summary</h2>
-            <p>Estimate Shipping</p>
-            <form>
-                <label>City *</label>
-                <select>
-                    <option value="">Select City</option>
-                    <option>Ranchi</option>
-                    <option>Jamshedpur</option>
-                    <option>Dhanbad</option>
-                    <option>Bokaro</option>
-                    <option>Hazaribagh</option>
-                    <option>Deoghar</option>
-                    <option>Giridih</option>
-                    <option>Ramgarh</option>
-                    <option>Palamu</option>
-                    <option>Chaibasa</option>
-                </select>
-            
-                <label>Location</label>
-                <select>
-                    <option>Choose Location</option>
-                </select>
-            
-                <label>Zip/Postal Code</label>
-                <input type="text" placeholder="Zip/Postal Code">
-            </form>
-            
-            <div class="cost">
-                <p>Sub-Total: <span>₹965.00</span></p>
-                <p>Delivery Charges: <span>₹0.00</span></p>
-                <p>Coupon Discount: <a href="#">Apply Discount</a></p>
-            </div>
-            <h3>Total Amount: ₹965.00</h3>
-        </div>
+        <!-- Modal HTML -->
+<!-- Payment Modal -->
+<div id="paymentModal">
+    <div id="paymentModalContent">
+      <span class="close" id="close-payment-modal">&times;</span>
+      <h2>Choose Payment Method</h2>
+  
+      <form id="payment-options">
+        <label class="payment-option">
+          <input type="radio" name="payment" value="cod">
+          <span>Cash on Delivery</span>
+        </label>
+  
+        <label class="payment-option">
+          <input type="radio" name="payment" value="online">
+          <span>Online Payment</span>
+        </label>
+      </form>
+  
+      <div class="modal-actions">
+        <button id="confirm-payment-btn" class="primary-btn">Confirm Payment</button>
+        <button id="cancel-payment-btn" class="cancel-btn" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CSS -->
+  <style>
+  /* Modal base */
+  #paymentModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  /* Modal content */
+  #paymentModalContent {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 380px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  }
+  
+  /* Close button */
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  /* Heading */
+  #paymentModalContent h2 {
+    margin-bottom: 1.5rem;
+    color: #D17829;
+  }
+  
+  /* Payment Options */
+  #payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  
+  .payment-option input[type="radio"] {
+    accent-color: #D17829;
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Action Buttons */
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .primary-btn {
+    background-color: #D17829;
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .primary-btn:hover {
+    background-color: #b96118;
+  }
+  
+  .cancel-btn {
+    background-color: transparent;
+    color: #D17829;
+    border: 2px solid #D17829;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #fff1e5;
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    #paymentModalContent {
+      padding: 1.5rem;
+    }
+  }
+  </style>
+  
+  
+
+<!-- Summary Section -->
+<div class="summary">
+    <h2>Summary</h2>
+    <p>Estimate Shipping</p>
+    <form id="shipping-form">
+      <label for="city">City *</label>
+      <select id="city" required>
+        <option value="">Select City</option>
+        <option>Ranchi</option>
+        <option>Jamshedpur</option>
+        <option>Dhanbad</option>
+        <option>Bokaro</option>
+        <option>Hazaribagh</option>
+      </select>
+  
+      <label for="location">Location *</label>
+      <select id="location" required>
+        <option value="">Choose Location</option>
+        <!-- Locations will load dynamically if needed -->
+      </select>
+  
+      <label for="address">Delivery Address *</label>
+      <textarea id="address" placeholder="Enter full delivery address" class="form-control" required></textarea>
+  
+      <label for="zip">Zip/Postal Code *</label>
+      <input type="text" id="zip" placeholder="Zip/Postal Code" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" placeholder="Phone Number" maxlength="10" required>
+    </form>
+  
+    <!-- <div class="cost">
+      <p>Sub-Total: <span id="subTotalMain">₹965.00</span></p>
+      <p>Delivery Charges: <span>₹0.00</span></p>
+      <p>Coupon Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
+    </div> -->
+
+    <!-- <div class="cost">
+        <p>Sub-Total: <span id="subTotalMain">₹0.00</span></p>
+    
+        <p>Delivery Charges: <span id="deliveryChargeMain">₹0.00</span></p>
+    
+        <p>Coupon Discount: <span id="couponDiscountMain">₹0.00</span></p>
+    
+        <p>Coupon Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
+
+        <hr>
+    
+        <h3>Total Amount: ₹<span id="grandTotalMainTest">0.00</span></h3>
+    </div> -->
+    <div class="cost">
+        <p>Sub-Total: <span id="subTotalMain">₹0.00</span></p>
+        <p>Delivery Charges: <span id="deliveryChargeMain">₹0.00</span></p>
+        <p>Coupon Discount: <span id="couponDiscountMain">₹0.00</span></p>
+        <p>Coupon Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
+        <hr>
+        <h3>Total Amount: ₹<span id="grandTotalMainTest">0.00</span></h3>
+    </div>
+
+
+</div>
+  <!-- Coupon Modal -->
+  <div class="modal" id="couponModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" id="close-coupon-modal">&times;</span>
+      <h2>Apply Coupon</h2>
+      <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
+      <button id="apply-coupon-btn">Apply</button>
+  
+      <h4>Available Coupons</h4>
+      <ul id="available-coupons">
+        <li><button class="coupon-option" data-code="SAVE50">SAVE50 - ₹50 off</button></li>
+        <li><button class="coupon-option" data-code="FREESHIP">FREESHIP - Free Shipping</button></li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Basic CSS for modal (you can improve) -->
+  <style>
+  .modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+  }
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+  }
+  #available-coupons {
+    list-style: none;
+    padding: 0;
+  }
+  #available-coupons li {
+    margin: 10px 0;
+  }
+  .coupon-option {
+    background: #eee;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  </style>
+  
+  <!-- JavaScript to open/close coupon modal -->
+   <!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const applyDiscountLink = document.getElementById('apply-discount-link');
+    const couponModal = document.getElementById('couponModal');
+    const closeCouponModal = document.getElementById('close-coupon-modal');
+    const couponOptions = document.querySelectorAll('.coupon-option');
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+
+    const subTotalSpan = document.getElementById('subTotalMain');
+    const deliveryChargeSpan = document.querySelector('.cost p:nth-child(2) span');
+    const couponDiscountSpan = document.getElementById('couponDiscountMain');
+    const grandTotalSpan = document.getElementById('grandTotalMainTest');
+
+    let deliveryCharge = 0;
+    let couponDiscount = 0;
+    let subTotal = 0;
+
+    function getSubTotalValue() {
+        const subTotalText = subTotalSpan.textContent.replace('₹', '').replace(',', '');
+        return parseFloat(subTotalText) || 0;
+    }
+
+    function updateTotals() {
+        subTotal = getSubTotalValue();
+        const grandTotal = subTotal + deliveryCharge - couponDiscount;
+        alert("grandTotal" + grandTotal);  // you can remove this later after testing
+        console.log(grandTotalSpan)
+        console.log(grandTotalSpan.textContent)
+        if (grandTotalSpan) {
+            grandTotalSpan.textContent = `${grandTotal.toFixed(2)}`; // Remove ₹ here
+            grandTotalSpan.style.display = "block";
+        }else{
+            alert("grandTotalSpan is not there")
+        }
+
+        // grandTotalSpan.textContent = `₹${grandTotal.toFixed(2)}`;
+        deliveryChargeSpan.textContent = `₹${deliveryCharge.toFixed(2)}`;
+        couponDiscountSpan.textContent = `₹${couponDiscount.toFixed(2)}`;
+    }
+
+    applyDiscountLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        couponModal.style.display = 'flex';
+    });
+
+    closeCouponModal.addEventListener('click', function() {
+        couponModal.style.display = 'none';
+    });
+
+    couponOptions.forEach(button => {
+        button.addEventListener('click', function() {
+            document.getElementById('coupon-code').value = button.getAttribute('data-code');
+        });
+    });
+
+    applyCouponBtn.addEventListener('click', function() {
+        const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+        subTotal = getSubTotalValue();
+
+        if (!code) {
+            alert("Please enter a coupon code.");
+            return;
+        }
+
+        if (subTotal < 500) {
+            alert("Subtotal must be at least ₹500 to apply a coupon.");
+            return;
+        }
+
+        if (code === "SAVE50") {
+            couponDiscount = 50;
+        } else if (code === "FREESHIP") {
+            deliveryCharge = 0;
+        } else {
+            alert("Invalid coupon code.");
+            return;
+        }
+
+        updateTotals();
+        couponModal.style.display = 'none';
+        alert('Coupon Applied: ' + code);
+    });
+});
+
+   </script> -->
+  
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const applyDiscountLink = document.getElementById('apply-discount-link');
+        const couponModal = document.getElementById('couponModal');
+        const closeCouponModal = document.getElementById('close-coupon-modal');
+        const couponOptions = document.querySelectorAll('.coupon-option');
+        const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    
+        const subTotalSpan = document.getElementById('subTotalMain');
+        const deliveryChargeSpan = document.getElementById('deliveryChargeMain');
+        const couponDiscountSpan = document.getElementById('couponDiscountMain');
+        const grandTotalSpan = document.getElementById('grandTotalMainTest');
+    
+        let deliveryCharge = 0;
+        let couponDiscount = 0;
+        let subTotal = 0;
+
+    
+        function getSubTotalValue() {
+            const subTotalText = subTotalSpan.textContent.replace('₹', '').replace(',', '');
+            return parseFloat(subTotalText) || 0;
+        }
+    
+        function updateTotals() {
+            subTotal = getSubTotalValue();
+            let grandTotalBeforeDelivery = subTotal - couponDiscount;  // Calculate without delivery charge first
+
+            // Set delivery charge based on grand total
+            if (grandTotalBeforeDelivery < 500) {
+                deliveryCharge = 150;
+            } else {
+                deliveryCharge = 0; // Or whatever logic you want for free delivery
+            }
+
+            const grandTotal = grandTotalBeforeDelivery + deliveryCharge;
+
+            // Update texts
+            if (grandTotalSpan) {
+                grandTotalSpan.textContent = grandTotal.toFixed(2);
+            }
+
+            deliveryChargeSpan.textContent = `₹${deliveryCharge.toFixed(2)}`;
+            couponDiscountSpan.textContent = `₹${couponDiscount.toFixed(2)}`;
+        }
+
+    
+        applyDiscountLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            couponModal.style.display = 'flex';
+        });
+    
+        closeCouponModal.addEventListener('click', function() {
+            couponModal.style.display = 'none';
+        });
+    
+        couponOptions.forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('coupon-code').value = button.getAttribute('data-code');
+            });
+        });
+    
+        applyCouponBtn.addEventListener('click', function() {
+            const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+            subTotal = getSubTotalValue();
+    
+            if (!code) {
+                alert("Please enter a coupon code.");
+                return;
+            }
+    
+            if (subTotal < 500) {
+                alert("Subtotal must be at least ₹500 to apply a coupon.");
+                return;
+            }
+    
+            if (code === "SAVE50") {
+                couponDiscount = 1500;
+            } else if (code === "FREESHIP") {
+                deliveryCharge = 0;
+            } else {
+                alert("Invalid coupon code.");
+                return;
+            }
+    
+            updateTotals();
+            couponModal.style.display = 'none';
+            alert('Coupon Applied: ' + code);
+        });
+    });
+    </script>
+
     </section>
 </div>
 <script>
@@ -89,6 +488,9 @@
         const token = sessionStorage.getItem("auth_token");
         const userId = sessionStorage.getItem("user_id");
         const cartTableBody = document.querySelector("#cart-table-body");
+
+        const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
+        const totalAmountHeading = document.querySelector('.summary h3');
     
         if (!userId) {
             cartTableBody.innerHTML = `<tr><td colspan="6">Please login to view your cart.</td></tr>`;
@@ -110,6 +512,9 @@
     
             let totalAmount = 0;
             cartTableBody.innerHTML = "";
+            let cartItemTotal = 0;
+
+            console.log(cartItems)
     
             cartItems.forEach(item => {
                 const product = item.product;
@@ -140,8 +545,9 @@
                             <span class="quantityControl">${quantity}</span>
                             <button class="qty-btn addQtyBTN">+</button>
                         </td>
-                        <td>₹${total.toFixed(2)}</td>
-                        <td><button class="remove"><i class="fas fa-trash"></i></button></td>
+                        <td data-total="${total.toFixed(2)}">₹${total.toFixed(2)}</td>
+                        <td><button class="remove" onclick="deleteCartItem('${product.id}')"><i class="fas fa-trash"></i></button></td>
+                        <td hidden>${product.id}</td>
                     </tr>
                 `;
     
@@ -151,14 +557,20 @@
                 scrollWrapper.offsetHeight; // trigger reflow
                 scrollWrapper.style.display = '';
             });
-    
-            sessionStorage.setItem("cart_count", cartItems.length.toString());
-    
-            document.querySelector(".cost span").textContent = `₹${totalAmount.toFixed(2)}`;
-            document.querySelector("h3").textContent = `Total Amount: ₹${totalAmount.toFixed(2)}`;
-    
+
+                
             attachQuantityHandlers();
             updateTotalAmount();
+    
+            sessionStorage.setItem("cart_count", cartItems.length.toString());
+            const subTotalSpan = document.getElementById("subTotalMain");
+            const deliveryChargeSpan = document.querySelector(".cost p:nth-child(2) span");
+            // const couponDiscountSpan = document.querySelector(".cost p:nth-child(3) span"); // But "Apply Discount" is a link <a>!
+
+            // Set your values
+            subTotalSpan.textContent = `₹${totalAmount.toFixed(2)}`;
+            deliveryChargeSpan.textContent = `₹0.00`; // You can dynamically set delivery charges later
+            // couponDiscountSpan.textContent = `₹50.00`; // If discount applied
         })
         .catch(error => {
             console.error("Error loading cart:", error);
@@ -198,11 +610,10 @@ function attachQuantityHandlers() {
     });
   });
 }
-
 function updateTotalAmount() {
     let total = 0;
     document.querySelectorAll(".cart-table tbody tr").forEach(row => {
-        const totalCell = row.children[5];
+        const totalCell = row.children[4]; // Should be column 4 (Total price cell)
         if (!totalCell) return;
 
         const totalText = totalCell.textContent.replace("₹", "").trim();
@@ -212,21 +623,261 @@ function updateTotalAmount() {
         }
     });
 
-    // Update subtotal and total amount
-    const subtotalEl = document.querySelector(".cost span");
-    const totalAmountEl = document.querySelector(".summary h3");
+    // Now properly update subtotal and total amount
+    const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
+    const grandTotalSpan = document.getElementById('grandTotalMainTest');
 
-    if (subtotalEl) {
-        subtotalEl.textContent = `₹${total.toFixed(2)}`;
+    if (subTotalSpan) {
+        subTotalSpan.textContent = `₹${total.toFixed(2)}`;
     }
-    if (totalAmountEl) {
-        totalAmountEl.textContent = `Total Amount: ₹${total.toFixed(2)}`;
+    if (grandTotalSpan) {
+        let deliveryCharge = 0;
+        if (total < 500) {
+            deliveryCharge = 150;
+        }
+        const finalAmount = total + deliveryCharge; // delivery charge rule
+
+        grandTotalSpan.textContent = `${finalAmount.toFixed(2)}`;
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     attachQuantityHandlers();
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    function updateCartSummary() {
+        let subTotal = 0;
+
+        // Select all the <td> which have 'data-total'
+        const totalCells = document.querySelectorAll('#cart-table-body td[data-total]');
+        console.log(totalCells)
+        totalCells.forEach(cell => {
+            const amountText = cell.textContent.replace('₹', '').trim();
+            const amount = parseFloat(amountText) || 0;
+            subTotal += amount;
+            alert("amountText " + amountText + " amount " + amount)
+        });
+
+        // Update the Summary fields
+        const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
+        const totalAmountHeading = document.querySelector('.summary h3');
+
+        subTotalSpan.textContent = `₹${subTotal.toFixed(2)}`;
+
+        const deliveryCharge = 0;  // You can make it dynamic if you want
+        const couponDiscount = 0;  // Update if applying coupons
+
+        const finalAmount = subTotal + deliveryCharge - couponDiscount;
+        totalAmountHeading.textContent = `Total Amount: ₹${finalAmount.toFixed(2)}`;
+    }
+
+    // updateCartSummary();
+});
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const citySelect = document.getElementById('city');
+    const locationSelect = document.getElementById('location');
+
+    const cityLocations = {
+        "Ranchi": [
+            "Ashok Nagar",
+            "Harmu",
+            "Morabadi",
+            "Kanke",
+            "Lalpur",
+            "Kantatoli",
+            "Hatia",
+            "Argora",
+            "Doranda",
+            "Upper Bazar"
+        ],
+        "Jamshedpur": [
+            "Sakchi",
+            "Bistupur",
+            "Sonari",
+            "Kadma",
+            "Mango",
+            "Adityapur",
+            "Baridih",
+            "Telco Colony",
+            "Golmuri"
+        ],
+        "Dhanbad": [
+            "Saraidhela",
+            "Bank More",
+            "Hirapur",
+            "Bartand",
+            "Bhuli",
+            "Sindri",
+            "Govindpur",
+            "Katras"
+        ],
+        "Bokaro": [
+            "Sector 4",
+            "Sector 5",
+            "Sector 9",
+            "Sector 12",
+            "Chas",
+            "Co-operative Colony",
+            "City Centre",
+            "Jairamnagar"
+        ]
+    };
+
+    citySelect.addEventListener('change', () => {
+        const selectedCity = citySelect.value;
+        locationSelect.innerHTML = '<option value="">Choose Location</option>'; // Reset
+
+        if (cityLocations[selectedCity]) {
+            cityLocations[selectedCity].forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+        }
+    });
+});
+
+</script>
+<script>
+function deleteCartItem(productId) {
+    const userId = sessionStorage.getItem("user_id");  // Replace with the logged-in user's id dynamically
+
+    fetch(`/api/cart/${userId}/item/${productId}/delete/`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to delete product');
+        }
+        return response.json();
+    })
+    .then(data => {
+        showToast("Cart Item Deteletd Sucessfully")
+        location.reload();
+    })
+    .catch(error => {
+        showToast("Failed to delete cart item")
+        console.error('Error:', error);
+    });
+}
+
+</script>
+<script>
+    function openPaymentModal() {
+    document.getElementById('paymentModal').style.display = 'Flex';
+}
+
+
+function closeModal() {
+  document.getElementById('paymentModal').style.display = 'none';
+}
+</script>
+
+<script>
+    document.getElementById('confirm-payment-btn').addEventListener('click', function() {
+        const userId = sessionStorage.getItem('user_id');
+        const token = sessionStorage.getItem('auth_token'); // if needed
+    
+        if (!userId) {
+            alert('Please login first.');
+            return;
+        }
+    
+        // 1. Get all cart items from the table
+        const cartRows = document.querySelectorAll("#cart-table-body tr");
+    
+        const products = [];
+        cartRows.forEach(row => {
+            const productName = row.querySelector("td:nth-child(1) span").textContent;
+            const productImg = row.querySelector("td:nth-child(1) img").src;
+            const itemPrice = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("₹", ""));
+            const discount = parseFloat(row.querySelector("td:nth-child(3)").textContent.replace("₹", ""));
+            const quantity = parseInt(row.querySelector(".quantityControl").textContent);
+            const total = parseFloat(row.querySelector("td:nth-child(5)").getAttribute("data-total"));
+            const product_id = parseInt(row.querySelector("td:nth-child(7)").textContent);
+            products.push({
+                product_name: productName,
+                product_image: productImg,
+                item_price: itemPrice,
+                discount: discount,
+                quantity: quantity,
+                total: total,
+                product_id:product_id
+            });
+        });
+    
+        if (products.length === 0) {
+            alert('No products in cart!');
+            return;
+        }
+    
+        // 2. Get summary details
+        const subTotal = parseFloat(document.getElementById('subTotalMain').textContent.replace("₹", ""));
+        const deliveryCharge = parseFloat(document.getElementById('deliveryChargeMain').textContent.replace("₹", ""));
+        const couponDiscountText = document.getElementById('couponDiscountMain').textContent;
+        const couponDiscount = couponDiscountText.includes('₹') ? parseFloat(couponDiscountText.replace("₹", "")) : 0;
+        const grandTotal = parseFloat(document.getElementById('grandTotalMainTest').textContent);
+    
+        // 3. Get shipping address details
+        const city = document.getElementById('city').value;
+        const location = document.getElementById('location').value;
+        const deliveryAddress = document.getElementById('address').value;
+        const zip = document.getElementById('zip').value;
+        const phone = document.getElementById('phone').value;
+    
+        if (!city || !location || !deliveryAddress || !zip) {
+            alert('Please fill all delivery details.');
+            return;
+        }
+    
+        // 4. Prepare final payload
+        const orderPayload = {
+            user: userId,
+            order_items: products,    // pass products array
+            phone_number:phone,
+            delivery_address: deliveryAddress,
+            city: city,
+            state: "Jharkhand", // or make it dynamic if needed
+            pincode: zip,
+            payment_method: "cod",  // or 'online' - depends on what user selected
+            payment_status: "pending",  // initially pending
+            subtotal: subTotal,
+            delivery_charge: deliveryCharge,
+            discount_amount: couponDiscount,
+            total_amount: grandTotal
+        };
+    
+        console.log("Order Payload", orderPayload);
+    
+        // 5. POST to API
+        fetch('api/orders/create/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            },
+            body: JSON.stringify(orderPayload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Order creation failed.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Order Created:', data);
+            alert('Order placed successfully! 🎉');
+            // Optionally, redirect
+            // window.location.href = "/thank-you";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to place the order. Please try again.');
+        });
+    });
+    </script>
+    

@@ -310,3 +310,32 @@ class CustomUserFetchSerializer(serializers.ModelSerializer):
             'first_login', 'session_started_at', 'session_ended_at',
             'created_at', 'updated_at', 'is_active'
         ]
+
+# serializers.py
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField(source='product.id', read_only=True)
+    product_name = serializers.CharField(source='product.name', read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ['product_id', 'product_name', 'quantity', 'item_price', 'discount', 'total']
+
+class OrderSerializers(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'user', 'order_items', 'delivery_address', 'city', 'state', 'pincode',
+            'phone_number', 'payment_method', 'payment_status', 'transaction_id',
+            'coupon_code', 'discount_amount', 'total_amount', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        order_items_data = validated_data.pop('order_items')
+        order = Order.objects.create(**validated_data)
+        for item_data in order_items_data:
+            OrderItem.objects.create(order=order, **item_data)
+        return order

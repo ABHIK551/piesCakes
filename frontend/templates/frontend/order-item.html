@@ -15,25 +15,178 @@
                             <th>Shipping</th>
                             <th>Quantity</th>
                             <th>Date</th>
-                            <th>Price</th>
-                            <th>Status</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>31264</td>
-                            <td>free</td>
-                            <td>3</td>
-                            <td>23/01/2025</td>
-                            <td>₹965.00</td>
-                            <td class="pending">Pending</td>
-                            <td><button class="view-btn">View</button></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        <style>
+            .invoice-box {
+                max-width: 800px;
+                margin: auto;
+                padding: 30px;
+                border: 1px solid #eee;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            }
+            .company-details {
+                text-align: right;
+            }
+            .company-logo img {
+                width: 150px;
+            }
+            .invoice-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .invoice-details {
+                margin-top: 20px;
+            }
+            .customer-details {
+                margin-top: 30px;
+                padding: 15px;
+                border: 1px solid #ddd;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 30px;
+            }
+            .invoice-box table,.invoice-box th,.invoice-box td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+            .invoice-box th {
+                background-color: #f4f4f4;
+                text-align: left;
+            }
+            .invoice-box .total-section {
+                margin-top: 20px;
+                text-align: right;
+            }
+            .invoice-box .notes {
+                margin-top: 40px;
+                font-size: 0.9em;
+                color: #555;
+            }
+/* Modal background */
+#orderModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Allow background scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Black with transparency */
+}
+
+/* Modal content box */
+#orderModal .modal-content {
+    background-color: #fff;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh; /* Limit height */
+    overflow-y: auto; /* Scroll when content is larger */
+    border-radius: 10px;
+    position: relative;
+}
+
+/* Close button (X) */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+</style>
+        </style>
+        <div id="orderModal" class="modal" style="display:none;">
+            <div class="modal-content  modal-xl">
+                <span class="close-btn" id="invoiceCloseBtn">&times;</span>
+                <!-- <h2>Order Details</h2> -->
+                    <div class="invoice-box">
+                        <div class="invoice-header">
+                            <div class="company-logo">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABd1BMVEX///8yMjLtzZxRNivSeCovLy8pKSkAAAAsLCwmJiZ5eXkiIiLe3t4fHx/z8/NiYmJDQ0Pm5uaTk5MQEBBtbW1OTk7BwcEaGhqrq6vV1dXmunk1NTVbW1vk5OR6enqAgIC4uLjHx8dFJh7v7++Ojo5VVVWcnJyhoaH67tuGhoZTNilMLyPJronDw8Onp6c9PT1DIxRjT0NKMivPeSxQNihrVlLXvY1CHgrXeyZKMyM+HQDIcy58Z2NJLR5VNSyNVClsRSZaOyZLLiuZjYY9IBny0aPu1JmpZiuVel5fQS/kwp6BSSvnwo1FLBU9FQAzBwCOe3bSx79SPTWaWiu0ZyWhjIdmPSS2sqGjaS56YVz4yo3ZkFJcRjiFalCki2jTfyR7SiR4XUaVVCF+STCraypqPC8/Gxqpn5TgoV7VjEbHqoreqXDvw5SKVzLy9uqhh2ZbQCNzUjOJe2i1m3CKcVG2lH3ju3TPro705Mnr1rKMbmBQJR0wDwBMdV6lAAAaRklEQVR4nO1di1/aWNqOIpS7olwrylVcEi8xoIBIFC1aOrarlmHbXdvqTmfcmdlpd7fT2fm2+8d/533PSUgwAbQGbJdn+hsRcjnPOe9570GOG2OMMcYYY4wxxhjjbhFbjgUCAW/yYGdz8+B01KOxAgelUkkk/wRAaScw6vHcPXYEmwY1aWHUA7pr+G28wk6C/wlnox7RXSNQAm6SxNfbv+zJFZstfTDqId0xToHh81arVZgqF45k8ks6Nuox3RSB1GrKa/rplWizFQvlKUT5eUW2CeeZIY7u83G6KYii+OnsW5NhnxBF02YEySq2YStu+Ic7xs9BYLPEVGXt2Z8MjyB6RvpGYTg11RJ43ibwX4xCTUo11Q7IpRODZfSTbSi96DAsvxAIZ0GMDn+wt0Bsp8TI0R+CfPWu+5hTsg2lVochoVgD8yFuXN1723+6I4KA8rZK/bs2sQbAlIy7ax2joo3ff1OeIppUpVgBE1mryZsH4Xu0IQNXL8/ON79NemFMfm/45EykG1BqH5GxV3fRnNt4Mb15dQos/QunwJYoGl7+818Iv912+6iAFFvfV+ia10TxvhjHdyfbNYHoeUEsbW/DP1EAyZTlorRbLdNh81IR1rFYEUU85tkzGznznOiVV43J47+10sTut49wKQu7RTohMln1e2E6YpWOQtFC3q/TZQFULwRJ96mwQ1byKbHwrycJVh6RtyqVvVa5PFV+U90lgk118Mao2RF4BaFowK8i8S8KUxq0LqR9WeNkX5G5IYqm9gEYTv6K6y7t71LzX2jt7lWApHg1an4ct4krKAHU4UtSeu9oqqwlSJamtVvvHCSSYDBJGIpPkOHk1qttCTculeupcrnwgnDmpVHzQ7/LJtV3W9W3u816kZf54vd7u0eFN1MGKFdfXLSLPHHObCVi1r8lk1OfZGgcX6ZBG0nPVb36V8L52aj91IWnRIHI7SpMOqh9ijflshFBujSF1j4R6xI5eZMo3MtJFYcr50S38tKuOh+EoZgcMcOXZJC88NZwxcxIHu3zttomUTRnROE8PpzU4JUIGopRLE/VRr8RqYxeGK1YGdaxqkBr1EH4agego4gq/TCpwweRl2XpG6ajmlTnjhDhEhi5evUau0K19fy7vTpfqUiSDEpIlttMTU6V92xU+MBne7SlZ9hYqRPe0i41o98QnVwbJcHTNGi7ypF2CclGqz7/DlnZimS/8cUisfVgCaQ9ekShThiWSMx4QISQ72JIlGqTUKzTQ1vkGuIIM3BREezb/u4bretcOGrDihlYSL5C17oKH4rv0GcTNroJTk4+aQpSm4ppQR6lmPpPYA/K0nd6+WxJXbwAsJjEx6YM35I1Eoii4TZk9Nmu4/FFlYnD9+AbjGgRozK19HtvdGqm/Mu+YvWFdPrRo0eCTJAWyasf/kqPfA4+2wnHZZ7KtvRHA4LENDIhraN/tzmCGCNwVYEFtBX3L3SeGeRaYA3T6Xrz1fsPK08mGxSTT/69svXz334kR5cvwMqtEZ+NxI/iip7bMfv5Z6J6W3s0wVjaGTLDTOpqs1SjG036hkYDGget3E4LG+9/2mpMHh52Lw2RyOOff2yCRxPD4NDGP9Hxe/jwITv079Vf0FXnxY0hCymJbEs1lnyRKsy3LhxdPKevylM//rz1xGhvdVAnDEUSFR2Qy5zrPnnYYbjSxAWsCcvD5ffuRPzEFAgJHi7AjpN/RJwk4mrBSv7t2ICSHiuggSGfhj6bbjIe/vYbMmxsXaaJcuKF7ZMhJzP8G6KiIQVpT8mv0AC+TgzFz91yaYSPaWYB4Od7LcNDIqVkhg4bj2mGQDwfuhbdSaN6kYi92q0yHVptYxKGbxd+JmMbgOFjgflsRNGkf+qccXzM1v+jnEaLKa8Nmx+XLMkYwV0cVZXY4c0LGVeQF18PQA5xqQSHn2x8WuPRHD5EhisYQxENapR9tBobZPZlol3KamxU+Iba97T806AEG7DiAvPZal0fHpIVxhRdaXMUYSHkHGz7RxrjV9jbx7zYo8eD8iNuJ1zlzE9zA029WDc+8riAtRGlhDFS2uvwe9OCcpiNr9VXBtl/DB9Awbwkl3sGwaHmxMPJrfNHyG/7BFPHsaG7MiBW0vMOwxYtboqvJgdRoQreg1d6QCuHwgcNw63HP8i4ozdRg2ZO/jj0tPdOhYTfan7wTQv9Gll8fxN+RNHIneBQq2he26iFsCXxZmuVWmnoW3GD2OD9FtuBZSKiUESprdyMYAPmRSRjv4IMBXvzkLgwVIP+9wBF83QjLctDz9BkcM1YOF94C76XTaj38dCu4QnZakXRT1sUmmx2nrwSMSIpvcRaaiaIRbnasDM0IFa2fxToClbrZ0CweTN6kE4ja8VDO8IZJPTpe6/RQlREmdYYr36gKWbUR8MEKBrbBVvCuoQEr6Ug+jJ8LdDgMEBEoPYeOTMBfUoFNKV6hpgHGCLencM8U1VauJCKtyI42XgF+TUIDp9CcNhobL1CfrbSDgrowonYabB5alw3tgopqHcWq8zXBjESbk5wstFkPluUMPw02XgvUA3KMhXffmJFuSJU9CvDLctsQDoaE6NlSLTY5PQtCE5uQV5im1YObc2VOiqYWi2HtziVUUBlWbootEBTl4YZW4RLEDJh3rDKY6JipT8fA4awmYscDQ5pDCGIJ9iZ4N3ZRhdQqkFcVviHjeWrhgT/GXRNYBaz8J0Ensf72xBUg0P/htLtJZ7hQvkPWOZAquNeLx/BNG4Pz2Bg5lB6W8a2Hpjdy/5sjIDBIcgkrcnJNVaWSJ6JWOqHAiJzKdowkfvmzUZ3ixy0LkloKqo41ddT1YPhkkxPKUyuGN3WBIHeTZFmttL/rKo5rRbcSDgbTpR4hX0jPNwdc4EkNr8dwclmkVYOOW5WFMXNFLx6d8D6itLND42/qAzLmB2pDaVD6gAJSqhm3sJt9w0z1QNgC7UwHfPCKfWs/8TaAIR92NrHBVa1gvwIKtpzyzukaPbeVsFy0Js21GI+PenLxRgr6e46ROylyBfR+Fxu4bT9PFXYbf8CdrdclXlw7m2r1hL0niNB2n1WPoJmA9EwFT8IXrMslDp7CUVA+RUlyvzxYr8i7RXQ8GKSq/L0WysJxqgXVaHtddg8KDdvKaPUZ9NkKK62mYCmNbbnuC7LvPSiDOJ6VMcQpvQv6wj6bbT+wiqWR+CD1PRqBhLV/fPAFOizKYFtbJM1vgmvtjRBZuNSlmVbGwsF5Ra6+HLJurzNAVbQZFYDxV0o/1M75r8/pBgsDkZ5oMmJzL+oD8qLzS7FDJkcm8RC7eoFdeysMhoZGITUVrLbLdiFektxzBgOtIorouqJrfHUxKfF990yfwgrva90nRZ2geInq5yb8FMQIqVMX76A6dTvwocKkOzfezN8nabBYScITL8yUMu4iBX1rmAXLfNQIerd31XzvxB7p/XJ7YfqGh53Kkc6NCbVKQGf7ekVF2BBIJ/eMMxDHoKoKFm9AvH0YZotSrxBMkV4q0wmOsOP9JPel+HW48tLpaMExO/p6VWNatB92awSADNhaytZPexsEC1yUJGhmuUGh034VT/rx7+p29BoNx5uEYstsJx4A6SveI5dwDyffmzq22JeXGgp921byPCg09tC1Br4Hj90h4XHHUVzfHxN5g4vsbDBznqkJihs4nmP+PIQqjc29b4wIzWLpDQM9VDW2zKFxvB6du34GPiptbEuUI2SpgpTzTHt8x97eQ0NUEmV75X7ChZqmgBaC6bVvgHRMajBNNhKGlJkDOmO+w/NOglGV9Hhiea+GM3ULOuHhmQDDSrIhifS8shYto4fmihSVC5qy8UTqA0KP1xumfoHSnfDJWpT2g8IQvrJsgw/5N6lPXSgqpJsHvmaMWygWuzUCd83+cseseVDWsenp9GGQNqCJFsWJaZEJT2DHYWyWfICnLfreobg32l0PFXGvZ12heHkChiUekGxURampPDpOR59UrQVpvknM00DCVJZHDQloF5lC/R2DewFtiBZtw2xjmmrFZTAqXbz7MXjNAm3bnxWY8PG6s3lXyRdxHXnIGtYxIJTAevrN09ArQgaIe2P44d/RoYQSaLjVr6oWNsKDYlgVNtVY2vYF0RMb5K3+o1anQYkVuXvygrDsKUMZWSITunlzcqhk5P/9wcuKm5w734fsBJ+rGgs6Jwq8shw39o1fKZleBNxQ/xOrvCuBLHdu/+7GUNI//NCmQVPFhZLF0pMa+ON0q9vlqH5A17jXzQdOBjFSaZNG2meRFfQNgdWCoNKa7AKXldbiX67G+uN0UCj16ArSMB85ncN5eOBLiLzTAFYbA+x8PsLMGwXbcXaAAwbP53zl6//Da+6rvU7kPvwn2ZzkP6iBnShQrLmTRV9Gss6T7DkhAWZZtHG1zpeqZniOPwIuZh0uvl+6/fui219vEynBdmWNk1Hdq56+E+ZPV5aaPO0qGoJYhA9VQqFQrXKA8OPKwq2KOh8awcpsrKZUPpPUpcgO80X08qDltrgHs9ml9tSr7/ShLl9Xi0Qky9Y2LB/AgyL7Xqdl1nqtoOaIPB8s9m8vPz1/Qd1cVfSSgxYFETbSYpdKHNwLnaeUlRrc8crH97/ennZbPI8Lwg1zdXZZXi+3obwRLYsxq8/K4nitlirCSp4HA1FrQaPhD7743/P/vQHilOxw6NkW1a3z+rOs04PgvCSHX119t8/PtveFkWT6+MNRLH07OmldQ1SgdPTZHT54OBkZ2dnc3NzQ8Hm5s7OycHVVfL01KsNbSS22mLxRL93MtEN8SnNsZWSnbf9sdNw8urghFz/pe76L+H6BjcYOU7FtFAj8nlq0AwTO9gQRUEoWWfdhgLvwcnBqWkS3nt1cpIc4mjGGGOMLwX+VC7hBiy6GfQv2IM7AfZOjp0VNDxY+yKvu00gnF00PzjFWYfleZ/L0QO+BBshPcoXZAwf9DoJ4JrRTmPC0es2c0nL+GVCPvtETzgUhk76q5sNea73aRMT9lDnNimHq+dtfJblMQLrjn4DvQuGq3N9ptE6hqG+BO+C4UI/ObGO4bKvL8G7YDjt7HesVQz98/3m9nMYOhWGsf7zaBXDFLu13WOk35yDMTTVjx5Fl+bZVnCYK1OrdOmsixKcWfUaIOUZgKFzesHoXITSk8eE1JU3PdLrtaihJkgn12NsbgORgRj2vYt/BveCI3hXw74BgnTQduNM1x0ztM4g9IDC0LjF864ZJu9o1DfBcBl+oWtoXwonzcAoMYauNXOd5LUqVXMHDCfsPjNEZnQMJ+wuc1hlLXozXBiIoTkUn0Zh2AtWiXBvXZqj1tKV/fIZTuSiBshTghOe5BAYKjexiqHLYwAl6pjzDoOhRb0Kwb4+v8Z/vj3D9dGvYS9ElIqCmS41Wn+ET9Gl8z7TY5TIf4QMfVnlYBN7GDLawxTKqGM9wCR4dAwji+rBJj7NZ/rTodEydMzlOgff2mvriSExdBn6JB5XUFu3tJahtbrUvmboVXZ9NUcXQ07Zh581Ai/TNFYFHr19mi50M5xgs7+cMYVypiliISZFEYtqwL390j4M3cwl8DjnjTHR1+LbPewT+2CTPGSGqxF1oMZwqgydJkeoVD93N1vDkAv10cSqTxPq69NErCrMfB7DmKf3yAdn6HGb3fRz8XkMuWSk59AHZuhasoQd4DMZcqtzvcoeAzK0R4LWdZsEXU4Ch2Mwhniw06N10zJBn8fhNIFDzWKYHkIO8k1Y+cVf+fg0YjB7SI+NZ3XvLkTd02ZQvJ+g6RHT01kri79jjPG/AX8iMufL9j/uy0UIUhGaMPmrQzTiygWirsi9ap+8Uyy6HH4uE5n7Yv6C040RdEQWuGmn5+tdw5zLOT3jiHwZf6HqVvD6Jpz2+ftO0J/JBBa8kLtMIcKrqVWoCULGczmXy83OZrP5RGJxkfbYBcEHiyfpucskvndAZ19qNouSOhufph195PBEPpHPZrOzs+Qiy8trkEBNhldXw/Q2cEPvQiBjpYCHF+P2B7cEmkB/3DdhJ/8tcImI6wFmZeK3uppvPZ638ttM/YGA10sWcJVVc6Nk+dYIYPnI+mXz+XyCLmAwiCs4vRQCwcysO+wTJNB3LiWIsM7hYmSXltCbJwfShSQnZ2Ehc7noGubBaR6PCEoK1/Be66isZ8IV5mbIKjpIEPs1OjYhOySQYlBmdA356/GHA7/djgVwKBX7vsooz79ut094uaQTsoKuuPsr9Gvcjgl7JOJzzkCTqvPBqP/4lgXwuhyQtg5lAiGfw/E1MuRi8UhkZpboe3/Ovei+939381bw32tzNsZXgbzbAEE1VAjEwor6SKY6XbypMEC1gAsxxd0Lp2LazZjxppROp9hqrMuYBLo6FizqEQ4ZNV5HZpFGdnrGHplTMjBzEc98KJij3vUctOXN0w+SMw5tZXyCZZczuWBo3hNxsoEn5nz2mXhenZVw3O6LaPEgaRFDo4KCC7sTpn1OMOTKo0tgF+xOOg5s27bTlH1qTl9is7vWUfmsPgBHwL7ONFGW+D12p0+pEgYjzq47W9XX1oNhHEeudO1xrCE82s0weK0048NjotgFb5/RMCReAasxxT3XbjoChvQj1yw7ks45dbC1DK8XsGltapkxZKfThwJYMSoX6T7HQoYObbXZTqtBPmDFKmIupZ/GrvlVw9B/fbB0oWjnpsqQ/YpCG3AYzKtl3ZchwBJlY59ZQoTg7zApncsKQ9p4QYVWy5C2nLjmEE56GaChWzSypBqGa1RGPXpNY3ETuEPHhuswVBt5ejJ0Zf2IuFNlqN94yhra4SNalnUkdW3eVlkLhY5Lt+cAmXU9Q3tPhuxMDcO8nuGyhiEe5Rpufq4HQ+Uvh92YocOA4USHoVUdQiYYFkP7xD1i2K1pbielhpqGMhxu2sOIYchQl16zFmYMc4YMZ1SGQ07sGDDklpw6huz5uv4M7RF0zZjFVxhqzeN9Yci8NuU95rXhtuzB0B6ZSeLLqK9DiVOMh31JvfI9YDht5JfSLlBzhhG7YgTCvo5YcooDQPvz7gtDZpeV2IJqezouU4bTnb9KmdIzTFDVis1G94UhHRNjGGPtYVTHmzJErGIPV8zTUZ7cQm4eT3dgtHlfGFK5wjEl4z4WI/kwUO/FMDY9h9rF61AZxtweFi05UObvC0PqH5NQKDoTUYNcBwbw5gxjEDcjwwB15uf93qD6eJE28rwHDFfZRgppmkjt6+gfmzEEfqqFYE/6xz2aEJl6uVRLz89PaOGxNrYwYsi+JcCujeXY4I0ZeoMseqIHKU9VamnQbRxnLZ86RIbP0OuauAbWjW3IMONy6KYhbtAi7fOafWL1Q8JGDP3a6bfT0bPmWWOGaqaAMkxoEzgK+cB9YqjJwDgjMwmthzMQwzU122R3RbL0BbWO94ahMhC7b2mVGXD2YIsxw3k9w7DybR8ux6yfhibOOH6yFNE/oDeMR9kNGbKv6/CE4N5JXBFfbHCGMZqjcroSIJoOjZB7u7LdeLlRMKQZTwcNLpK4Ig5vL4Yux7qGIf3EGfdqbpDjjBAcFUNmEGmSHukS+42/GDOMJDI0PmQRE70m7WDIuHpI4sgY0qfx2bJhBKuM3ZChf0GJgLVHsWt6UR48xpmLkTGkT9+5KEP0UpUnLfrE+IwhnsKiL2pcTZ7eGh1DNBdMuaB1U1KLgzFEwWbfx4CRhhoOd2F0DJEVyxi5Na8HZIjKlC07MjR7Pm10DHER2J2R1BzLSw/GED9i3yuE5tRElY6QYSrSkUyap2YfDMYQpZytG5p/MxKjY4ijZxMfsmukbECGINk090TFwawZfHQMOUh7M2UI66FK2YAMIYPIXFE0Nj6Tu4+QIdR3qTLEDLg6iAEZwlO09nncu5BMZF7pdSyNjiEsAlWGWMWY0339mo4hW109wwAaRGS46DBXNDSzanEdw4QhaECaAAxAs/O88v71CukErR7jy84D+rB5I2pmR33ifnp+XQMnjbKc1vaMmTDMOJTqkdepNWcGVW5ttKwyBFUTUcP6iMIh7rj+OLdlz3L3Zgg7xB7C7KdP+3HvToUOQwiCqZcQgn535W2jCNjqUpQZQ2ggxZwu+Ced73XQMly81m3SYQjzQs8i89D5DhQDhhGrm8TNGJJFsKOqSEYUeQPoO4a6F7HDEIJi3xp70bn6NYbOSMJSegT+B9gOcW0iYw8iNEWanHdFlPYmaJdyuVyedfrL2nrEo/vmNU/HwQ7NuSaQYcipabZY8umPj4SS1lFTYPIFm5molz0P4Q/EOsNYmwUoyt8fo7+r6LTtJ1OBDDvdG83oT+8c/jX2Fo8xxhhjfI3o85eI/Nof7PkD7f+7X6pv6d67fqzmHYsthp+mi/LUws0ucIFZbjVPPDISInKzwXgefOZwMBHMcKl4PgGGLeFO5LnAUt6dJKdDXLDmdnMLJAJcJMOepcX/ZXc2uLCQp+/5p/NuYvxj4A5M5xOzXM4dSnhT5HQMG7PWPjQVRncjkKVElxe4zCwZSpQy5GLYYJEhzn8mzq0yD3nWzy3HyETAActJdMgI45ksR66RyS/i6uQCXDjKzcaSSZhFwjTo59xRci8SrmS9nJ9cHhhi8KLxJ6xAFGUk541h1imHa5gKu2MJDcMUfBbnUksJ9O2yKW88E1gMpNxwTN6PFAKza0lyzrJ3AaWBrOEMuTL9Dhe/eyEW4rw5uGI8EJvOcBnyfmopm0fvL2Ot672GDEOJBHqUuRgXWyYMuVCQMkQvzB+na5ikp2RzUTIR08lQgIsG89NR+IIMIgXc4jw5Mp8IsakCEYzSZQ9Go34u787HY1w8ukhOQIZJJqUWM0QpTZKB4Jc3Z6Znp/1w7wARTDIKurJcKohvM/95Fhu2Z7lAHiaBc5NtluQWiLSGuDAZNU7EWnYZtimVEJBSIr84E+S6CT/+Agwx9o1Z21Dr7/qmLZOntXr3KX/eI15Zi/6wnAKLLz8AxvHFGGOMMcYYY4zxP4f/B7+UH/TDxAY2AAAAAElFTkSuQmCC" alt="Pies & Thighs" loading="lazy">
+                            </div>
+                            <div class="company-details">
+                                <h2>Pies & Thighs</h2>
+                                <p>Shop 60C, Lower Ground Floor,<br>Ranchi, Jharkhand, 834001<br>Email: support@prajnabyparth.com<br>Phone: +91 9304766907</p>
+                            </div>
+                        </div>
+                    
+                        <div class="invoice-details">
+                            <h3>Invoice</h3>
+                            <p>Invoice #: 12345<br>Date: 26-April-2025<br>Order ID: ORD987654</p>
+                        </div>
+                    
+                        <div class="customer-details">
+                            <h4>Billing To:</h4>
+                            <p>Customer Name<br>5678 Customer Street<br>City, State, Zip<br>Phone: +91-9123456789</p>
+                        </div>
+                    
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price (₹)</th>
+                                    <th>Total (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Chocolate Truffle Cake</td>
+                                    <td>2</td>
+                                    <td>549</td>
+                                    <td>1098</td>
+                                </tr>
+                                <tr>
+                                    <td>Blueberry Muffin</td>
+                                    <td>4</td>
+                                    <td>120</td>
+                                    <td>480</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                        <div class="total-section">
+                            <p><strong>Subtotal:</strong> ₹1578</p>
+                            <p><strong>Tax (5% GST):</strong> ₹78.90</p>
+                            <p><strong>Shipping Charges:</strong> ₹50</p>
+                            <hr>
+                            <h2><strong>Total Payable:</strong> ₹1706.90</h2>
+                        </div>
+                    
+                        <div class="notes">
+                            <p><strong>Note:</strong> Thank you for your purchase! Please contact us if you have any questions about your order.</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="invoice-actions" style="text-align: right; margin: 10px;">
+                        <button id="printInvoiceBtn" class="btn btn-sm">🖨️ Print Invoice</button>
+                        <button id="downloadInvoiceBtn" class="btn btn-sm">⬇️ Download Invoice</button>
+                    </div>
+            </div>
+        </div>
+        
     <!-- Complete Orders Section -->
     <div class="order-section">
         <h2>COMPLETE ORDERS</h2>
@@ -51,24 +204,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>65820</td>
-                        <td>free</td>
-                        <td>3</td>
-                        <td>23/01/2025</td>
-                        <td>₹820.00</td>
-                        <td class="completed">Completed</td>
-                        <td><button class="view-btn">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>31264</td>
-                        <td>free</td>
-                        <td>3</td>
-                        <td>23/01/2025</td>
-                        <td>₹965.00</td>
-                        <td class="completed">Completed</td>
-                        <td><button class="view-btn">View</button></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -82,3 +217,178 @@
         }
     });
 </script>
+<script>
+    function encodeUserId(userId) {
+        userId = btoa(userId.toString());
+        return userId;
+    }
+    
+    function fetchUserOrders() {
+        const userId = sessionStorage.getItem('user_id');
+        const token = sessionStorage.getItem('auth_token');
+    
+        if (!userId || !token) {
+            showToast("Please login first.", "danger");
+            return;
+        }
+    
+        const encodedUserId = encodeUserId(userId);
+    
+        fetch(`/api/orders/my-orders/${encodedUserId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch orders.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched Orders:', data);
+            populateOrders(data);
+        })
+        .catch(error => {
+            console.error('Error fetching orders:', error);
+        });
+    }
+
+    function populateOrders(orders) {
+        const orderSections = document.querySelectorAll(".order-section");
+        const pendingTbody = orderSections[0].querySelector("tbody");
+        const completedTbody = orderSections[1].querySelector("tbody");
+
+        pendingTbody.innerHTML = '';
+        completedTbody.innerHTML = '';
+
+        orders.results.forEach(order => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${order.id}</td>
+                <td>Free</td>
+                <td>${order.order_items.reduce((acc, item) => acc + item.quantity, 0)}</td>
+                <td>${formatDate(order.created_at)}</td>
+                <td>₹${order.total_amount}</td>
+                <td class="${order.payment_status}">
+                    ${capitalizeFirstLetter(order.payment_status)}
+                </td>
+                <td><button class="view-btn" data-order='${JSON.stringify(order)}'>View</button></td>
+            `;
+
+            if (order.payment_status === 'completed') {
+                completedTbody.appendChild(tr);
+            } else {
+                pendingTbody.appendChild(tr);
+            }
+        });
+
+        document.querySelectorAll(".view-btn").forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const order = JSON.parse(e.target.getAttribute('data-order'));
+                openOrderModal(order);
+            });
+        });
+
+
+    }
+    
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2,'0');
+        const month = (date.getMonth() + 1).toString().padStart(2,'0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+    
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    
+    // Auto call when page loads
+    window.addEventListener('load', () => {
+        fetchUserOrders();
+    });
+
+function openOrderModal(order) {
+    const modal = document.getElementById("orderModal");
+    user_name = sessionStorage.getItem("user_name")
+
+    // Invoice Details
+    const invoiceDetailsP = document.querySelector(".invoice-details p");
+    invoiceDetailsP.innerHTML = `
+        ${user_name}<br>
+        Invoice #: INV-${order.id}<br>
+        Date: ${formatDate(order.created_at)}<br>
+        Order ID: ORD-${order.id}
+    `;
+
+    // Customer Billing Details
+    const customerDetailsP = document.querySelector(".customer-details p");
+    customerDetailsP.innerHTML = `
+        ${user_name}<br>
+        ${order.delivery_address}<br>
+        ${order.city}, ${order.state}, ${order.pincode}<br>
+        Phone: +91-${order.phone_number}
+    `;
+
+    // Product Table
+    const tbody = document.querySelector(".invoice-box table tbody");
+    tbody.innerHTML = ''; // Clear previous table rows
+
+    let subtotal = 0;
+    order.order_items.forEach(item => {
+        const itemTotal = parseFloat(item.item_price) * item.quantity;
+        subtotal += itemTotal;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${item.product_name}</td>
+            <td>${item.quantity}</td>
+            <td>₹${parseFloat(item.item_price).toFixed(2)}</td>
+            <td>₹${itemTotal.toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Total Calculation
+    const taxPercent = 5;
+    const taxAmount = (subtotal * taxPercent) / 100;
+    const shippingCharges = 150; // Static shipping
+    const discountAmount = parseFloat(order.discount_amount || 0);
+
+    const finalTotal = subtotal + taxAmount + shippingCharges - discountAmount;
+
+    // Set Total Section
+    const totalSection = document.querySelector(".total-section");
+    totalSection.innerHTML = `
+        <p><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
+        <p><strong>Tax (${taxPercent}% GST):</strong> ₹${taxAmount.toFixed(2)}</p>
+        <p><strong>Shipping Charges:</strong> ₹${shippingCharges.toFixed(2)}</p>
+        <p><strong>Discount:</strong> ₹${discountAmount.toFixed(2)}</p>
+        <hr>
+        <h2><strong>Total Payable:</strong> ₹${finalTotal.toFixed(2)}</h2>
+    `;
+
+    modal.style.display = "flex"; // Finally, open modal
+}
+
+
+
+document.getElementById("invoiceCloseBtn").addEventListener('click', (e) => {
+    const modal = document.getElementById("orderModal");
+    modal.style.display = "none";   // Directly close
+});
+
+
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById("orderModal");
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+    </script>
+    

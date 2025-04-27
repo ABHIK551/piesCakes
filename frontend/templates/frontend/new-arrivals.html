@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 productElement.classList.add("product-card");
                 productElement.innerHTML = `<div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
-                        <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loadin="lazy"/></a>
+                        <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loading="lazy"/></a>
                         <div class="product-info">
                             <span class="category mb-1" style="text-align: left !important;">${product.category.name}</span>
                             
@@ -168,6 +168,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 productsContainer.appendChild(productElement);
             });
+            initMobileSwiper();
         }
 
         // Function to filter products by category
@@ -204,5 +205,67 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
         </script>
+        <script>
+
+            function forceStyle(element, property, value) {
+                element.style.setProperty(property, value, "important");
+            }
+            
+            let mobileSwiper = null;
+            
+            function initMobileSwiper() {
+                const container = document.getElementById('products-container');
+                const cards = Array.from(container.querySelectorAll('.product-card'));
+            
+                if (window.innerWidth <= 468 && cards.length > 0) {
+                    container.classList.add('swiper');
+            
+                    // Only create wrapper if not exists
+                    if (!container.querySelector('.swiper-wrapper')) {
+                        const wrapper = document.createElement('div');
+                        wrapper.classList.add('swiper-wrapper');
+            
+                        // Move cards into wrapper
+                        cards.forEach(card => {
+                            card.classList.add('swiper-slide');
+                            wrapper.appendChild(card);
+                        });
+            
+                        // Clear container and append wrapper
+                        container.innerHTML = '';
+                        container.appendChild(wrapper);
+            
+                        // (optional) add pagination div if you want dots
+                        const pagination = document.createElement('div');
+                        pagination.classList.add('swiper-pagination');
+                        container.appendChild(pagination);
+                    }
+            
+                    // Initialize Swiper
+                    if (!mobileSwiper) {
+                        mobileSwiper = new Swiper("#products-container", {
+                            slidesPerView: 1,
+                            centeredSlides: true,        // center the slide nicely
+                            spaceBetween: 0,    
+                            loop: true,
+                            autoplay: {
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: ".swiper-button-next",
+                                prevEl: ".swiper-button-prev",
+                            },
+                        });
+                    }
+                }
+            }
+            
+            </script>
+            
     </div>
 </section>
