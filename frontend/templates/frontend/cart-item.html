@@ -466,7 +466,7 @@
             }
     
             if (code === "SAVE50") {
-                couponDiscount = 1500;
+                couponDiscount = 50;
             } else if (code === "FREESHIP") {
                 deliveryCharge = 0;
             } else {
@@ -783,7 +783,7 @@ function closeModal() {
         const token = sessionStorage.getItem('auth_token'); // if needed
     
         if (!userId) {
-            alert('Please login first.');
+            showToast('Please login first.', "danger");
             return;
         }
     
@@ -811,7 +811,7 @@ function closeModal() {
         });
     
         if (products.length === 0) {
-            alert('No products in cart!');
+            showToast('No products in cart!', "danger");
             return;
         }
     
@@ -830,7 +830,7 @@ function closeModal() {
         const phone = document.getElementById('phone').value;
     
         if (!city || !location || !deliveryAddress || !zip) {
-            alert('Please fill all delivery details.');
+            showToast('Please fill all delivery details.', "danger");
             return;
         }
     
@@ -870,13 +870,13 @@ function closeModal() {
         })
         .then(data => {
             console.log('Order Created:', data);
-            alert('Order placed successfully! 🎉');
+            showToast('Order placed successfully! 🎉', "danger");
             // Optionally, redirect
-            // window.location.href = "/thank-you";
+            window.location.href = "/admin/orders";
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to place the order. Please try again.');
+            showToast('Failed to place the order. Please try again.', "danger");
         });
     });
     </script>
