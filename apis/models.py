@@ -2,6 +2,76 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils import timezone
 
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+
+
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, phone, first_name, last_name, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field is required')
+        if not phone:
+            raise ValueError('The Phone field is required')
+        email = self.normalize_email(email)
+        user = self.model(
+            email=email,
+            phone=phone,
+            first_name=first_name,
+            last_name=last_name,
+            **extra_fields
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, phone, first_name, last_name, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, phone, first_name, last_name, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    # Personal Info
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15, unique=True)
+
+    # Session Tracking
+    first_login = models.DateTimeField(null=True, blank=True)
+    session_started_at = models.DateTimeField(null=True, blank=True)
+    session_ended_at = models.DateTimeField(null=True, blank=True)
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # Permissions
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['phone', 'first_name', 'last_name']
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def start_session(self):
+        now = timezone.now()
+        self.session_started_at = now
+        if not self.first_login:
+            self.first_login = now
+        self.save()
+
+    def end_session(self):
+        self.session_ended_at = timezone.now()
+        self.save()
+
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -58,73 +128,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.utils import timezone
-
-
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, phone, first_name, last_name, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field is required')
-        if not phone:
-            raise ValueError('The Phone field is required')
-        email = self.normalize_email(email)
-        user = self.model(
-            email=email,
-            phone=phone,
-            first_name=first_name,
-            last_name=last_name,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, phone, first_name, last_name, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, phone, first_name, last_name, password, **extra_fields)
-
-
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    # Personal Info
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15, unique=True)
-
-    # Session Tracking
-    first_login = models.DateTimeField(null=True, blank=True)
-    session_started_at = models.DateTimeField(null=True, blank=True)
-    session_ended_at = models.DateTimeField(null=True, blank=True)
-
-    # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    # Permissions
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    objects = CustomUserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone', 'first_name', 'last_name']
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-    def start_session(self):
-        now = timezone.now()
-        self.session_started_at = now
-        if not self.first_login:
-            self.first_login = now
-        self.save()
-
-    def end_session(self):
-        self.session_ended_at = timezone.now()
-        self.save()
 
 
 import uuid
