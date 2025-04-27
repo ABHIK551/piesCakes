@@ -48,5 +48,8 @@ urlpatterns = [
     ),
     path('cart/<int:user_id>/item/<int:product_id>/delete/', delete_cart_item, name='delete_cart_item'),
     path('orders/create/', OrderCreateView.as_view(), name='order-create'),
-    path('orders/my-orders/<encoded_user_id>', UserOrderListView.as_view(), name='user-orders')
+    path('orders/my-orders/<encoded_user_id>', UserOrderListView.as_view(), name='user-orders'),
+    path('orders/', OrderListView.as_view(), name='order-list'),
+    path('orders/<int:order_id>/delete/', OrderDeleteView.as_view(), name='order-delete'),
+
 ]

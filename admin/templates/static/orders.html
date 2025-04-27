@@ -1,0 +1,188 @@
+{% extends "static/base.html" %}
+{% load static %}
+{% block content %}
+<main class="content">
+<div class="container d-flex flex-column">
+    <div class="row vh-100">
+
+        <!-- Header Card -->
+        <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
+            <h3 class="m-0">Orders List</h3>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card mt-0">
+            <div class="table-wrapper">
+                <table class="table table-hover my-0 table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer Name</th>
+                            <th>Delivery Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Pincode</th>
+                            <th>Phone Number</th>
+                            <th>Payment Method</th>
+                            <th>Payment Status</th>
+                            <th>Transaction ID</th>
+                            <th>Coupon Code</th>
+                            <th>Discount Amount</th>
+                            <th>Total Amount</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Order Items</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="ordersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <ul id="pagination" class="pagination"></ul>
+    </div>
+</div>
+</main>
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/orders/')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('ordersTableBody');
+                tableBody.innerHTML = '';
+    
+                data.results.forEach(order => {
+                    const row = document.createElement('tr');
+    
+                    row.innerHTML = `
+                        <td>${order.id}</td>
+                        <td>${order.user}</td> 
+                        <td>Not Available</td>
+                        <td>${order.phone_number || '-'}</td>
+                        <td>${order.created_at ? new Date(order.created_at).toLocaleString() : '-'}</td>
+                        <td>${order.created_at ? new Date(order.created_at).toLocaleString() : '-'}</td>
+                        <td>${order.updated_at ? new Date(order.updated_at).toLocaleString() : '-'}</td>
+                        <td>${order.payment_status || '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editOrders()">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="editOrders()">Delete</button>
+                        </td>
+                    `;
+    
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading orders:', error);
+            });
+    });
+    </script>
+     -->
+    
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrders(1); // Load page 1 by default
+        });
+        
+        function loadOrders(page) {
+            fetch(`/api/orders/?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderOrdersTable(data.data);
+                        renderPagination(data.page, data.totalPages);
+                    } else {
+                        console.error('Failed to load orders');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                });
+        }
+        
+        function renderOrdersTable(orders) {
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = '';
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+
+                // Join order items nicely
+                const orderItems = order.order_items.map(item => 
+                    `${item.product_name} (Qty: ${item.quantity})`
+                ).join('<br>');
+
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.user || 'N/A'}</td>
+                    <td>${order.delivery_address || 'N/A'}</td>
+                    <td>${order.city || 'N/A'}</td>
+                    <td>${order.state || 'N/A'}</td>
+                    <td>${order.pincode || 'N/A'}</td>
+                    <td>${order.phone_number || 'N/A'}</td>
+                    <td>${order.payment_method ? order.payment_method.toUpperCase() : 'N/A'}</td>
+                    <td>${order.payment_status ? order.payment_status.toUpperCase() : 'N/A'}</td>
+                    <td>${order.transaction_id || 'N/A'}</td>
+                    <td>${order.coupon_code || 'N/A'}</td>
+                    <td>${order.discount_amount || '0.00'}</td>
+                    <td>${order.total_amount || '0.00'}</td>
+                    <td>${order.created_at ? formatDate(order.created_at) : 'N/A'}</td>
+                    <td>${order.updated_at ? formatDate(order.updated_at) : 'N/A'}</td>
+                    <td>${orderItems || 'No Items'}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function renderPagination(currentPage, totalPages) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+        
+            for (let page = 1; page <= totalPages; page++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                if (page === currentPage) li.classList.add('active');
+                li.innerHTML = `
+                    <a class="page-link" href="javascript:void(0);" onclick="loadOrders(${page})">${page}</a>
+                `;
+                pagination.appendChild(li);
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString();
+        }
+        
+        function deleteOrder(orderId) {
+            if (confirm("Are you sure you want to delete this order?")) {
+                fetch(`/api/orders/${orderId}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        loadOrders(1); // Reload first page after delete
+                    } else {
+                        alert(data.message || 'Failed to delete order');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting order:', error);
+                });
+            }
+        }
+        </script>
+        
+        
+{% endblock %}

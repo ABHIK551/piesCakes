@@ -322,6 +322,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['product_id', 'product_name', 'quantity', 'item_price', 'discount', 'total']
 
 class OrderSerializers(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()  # <-- Change user to SerializerMethodField
     order_items = OrderItemSerializer(many=True)
 
     class Meta:
@@ -332,6 +333,10 @@ class OrderSerializers(serializers.ModelSerializer):
             'coupon_code', 'discount_amount', 'total_amount', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def get_user(self, obj):
+        # obj.user is the related CustomUser instance
+        return f"{obj.user.first_name} {obj.user.last_name}" if obj.user else None
 
     def create(self, validated_data):
         order_items_data = validated_data.pop('order_items')

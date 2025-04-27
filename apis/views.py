@@ -1208,3 +1208,29 @@ class UserOrderListView(generics.ListAPIView):
         except Exception as e:
             logger.error(f"Error decoding user ID: {str(e)}", exc_info=True)
             return Order.objects.none()
+        
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all().order_by('-created_at')
+    serializer_class = OrderSerializers
+    pagination_class = CustomPaginationMain  # <-- set your custom pagination here
+
+
+class OrderDeleteView(APIView):
+    def post(self, request, order_id, *args, **kwargs):
+        if not order_id:
+            logger.error("Order deletion failed: No order ID provided in URL.")
+            return Response({"success": False, "message": "Order ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            order = Order.objects.get(id=order_id)
+            order.delete()
+            logger.info(f"Order {order_id} deleted successfully.")
+            return Response({"success": True, "message": "Order deleted successfully."}, status=status.HTTP_200_OK)
+        
+        except Order.DoesNotExist:
+            logger.error(f"Order deletion failed: Order with ID {order_id} does not exist.")
+            return Response({"success": False, "message": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            logger.exception(f"Unexpected error occurred while deleting order {order_id}: {str(e)}")
+            return Response({"success": False, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

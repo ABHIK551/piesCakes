@@ -38,3 +38,6 @@ def baked_delights(request):
 
 def customer_user(request):
     return render(request,'static/customer-users.html')
+
+def orders(request):
+    return render(request,'static/orders.html')
