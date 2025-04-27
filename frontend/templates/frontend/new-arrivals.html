@@ -215,57 +215,59 @@ document.addEventListener("DOMContentLoaded", async function () {
             let mobileSwiper = null;
             
             function initMobileSwiper() {
-                const container = document.getElementById('products-container');
-                const cards = Array.from(container.querySelectorAll('.product-card'));
-            
-                if (window.innerWidth <= 468 && cards.length > 0) {
-                    container.classList.add('swiper');
-            
-                    // Only create wrapper if not exists
-                    if (!container.querySelector('.swiper-wrapper')) {
-                        const wrapper = document.createElement('div');
-                        wrapper.classList.add('swiper-wrapper');
-            
-                        // Move cards into wrapper
-                        cards.forEach(card => {
-                            card.classList.add('swiper-slide');
-                            wrapper.appendChild(card);
-                        });
-            
-                        // Clear container and append wrapper
-                        container.innerHTML = '';
-                        container.appendChild(wrapper);
-            
-                        // (optional) add pagination div if you want dots
-                        const pagination = document.createElement('div');
-                        pagination.classList.add('swiper-pagination');
-                        container.appendChild(pagination);
-                    }
-            
-                    // Initialize Swiper
-                    if (!mobileSwiper) {
-                        mobileSwiper = new Swiper("#products-container", {
-                            slidesPerView: 1,
-                            centeredSlides: true,        // center the slide nicely
-                            spaceBetween: 0,    
-                            loop: true,
-                            autoplay: {
-                                delay: 3000,
-                                disableOnInteraction: false,
-                            },
-                            pagination: {
-                                el: ".swiper-pagination",
-                                clickable: true,
-                            },
-                            navigation: {
-                                nextEl: ".swiper-button-next",
-                                prevEl: ".swiper-button-prev",
-                            },
-                        });
-                    }
-                }
-            }
-            
+    const container = document.getElementById('products-container');
+    const cards = Array.from(container.querySelectorAll('.product-card'));
+
+    // Destroy existing swiper instance if any
+    if (mobileSwiper !== null) {
+        mobileSwiper.destroy(true, true);
+        mobileSwiper = null;
+    }
+
+    if (window.innerWidth <= 468 && cards.length > 0) {
+        container.classList.add('swiper');
+
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('swiper-wrapper');
+
+        // Move cards inside wrapper
+        cards.forEach(card => {
+            card.classList.add('swiper-slide');
+            wrapper.appendChild(card);
+        });
+
+        // Clear container and add wrapper
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+
+        // (optional) create pagination
+        const pagination = document.createElement('div');
+        pagination.classList.add('swiper-pagination');
+        container.appendChild(pagination);
+
+        // Reinitialize Swiper
+        mobileSwiper = new Swiper("#products-container", {
+            slidesPerView: 1,
+            centeredSlides: true,
+            spaceBetween: 0,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    }
+}
+
             </script>
             
     </div>
