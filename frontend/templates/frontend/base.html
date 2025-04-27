@@ -65,14 +65,16 @@
     }
 
     .offers-link {
-    display: flex;  /* Use flexbox to align the items */
-    align-items: center;  /* Vertically center the items */
-    gap: 10px;  /* Add space between the text and the icon */
+    display: flex;
+    align-items: center; /* Ensures both text and icon are vertically centered */
+    gap: 5px; /* Space between the text and the icon */
 }
 
 .offers-link svg {
-    vertical-align: middle;  /* Ensure the icon is vertically aligned with the text */
-    top: 10px;
+    vertical-align: middle; /* This is already applied, but the flexbox ensures proper centering */
+    top: 0; /* Remove any unwanted offset */
+    height: 22px; /* Optional: Set a specific height for the SVG */
+    width: 22px;  /* Optional: Set a specific width for the SVG */
 }
 
 .offers-link span {
