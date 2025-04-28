@@ -172,10 +172,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(data.message);
+                        showToast(data.message, "success");
                         loadOrders(1); // Reload first page after delete
                     } else {
-                        alert(data.message || 'Failed to delete order');
+                        showToast(data.message || 'Failed to delete order', "danger");
                     }
                 })
                 .catch(error => {
