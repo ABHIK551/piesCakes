@@ -3107,6 +3107,11 @@ body {
 
 
 @media (max-width: 480px) {
+    .categories-product .product-section {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important; /* ✅ 2 per row */
+        gap: 20px;
+    }
     .summary{
         padding: 0px;
     }
