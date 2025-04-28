@@ -246,8 +246,9 @@
     <div class="cost">
         <p>Sub-Total: <span id="subTotalMain">₹0.00</span></p>
         <p>Delivery Charges: <span id="deliveryChargeMain">₹0.00</span></p>
+        <p>Coupon: <span id="couponCodeApplied"></span></p>
         <p>Coupon Discount: <span id="couponDiscountMain">₹0.00</span></p>
-        <p>Coupon Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
+        <p>Apply Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
         <hr>
         <h3>Total Amount: ₹<span id="grandTotalMainTest">0.00</span></h3>
     </div>
@@ -488,8 +489,10 @@
     
             if (code === "SAVE50") {
                 couponDiscount = 50;
+                document.getElementById("couponCodeApplied").textContent = code; // Set the applied coupon code
             } else if (code === "FREESHIP") {
                 deliveryCharge = 0;
+                document.getElementById("couponCodeApplied").textContent = code; // Set the applied coupon code
             } else {
                 showToast("Invalid coupon code.", "danger");
                 return;
@@ -840,7 +843,8 @@ function closeModal() {
         const couponDiscountText = document.getElementById('couponDiscountMain').textContent;
         const couponDiscount = couponDiscountText.includes('₹') ? parseFloat(couponDiscountText.replace("₹", "")) : 0;
         const grandTotal = parseFloat(document.getElementById('grandTotalMainTest').textContent);
-    
+        const appliedCoupon = document.getElementById("couponCodeApplied").textContent;
+
         // 3. Get shipping address details
         const city = document.getElementById('city').value;
         const location = document.getElementById('location').value;
@@ -859,6 +863,7 @@ function closeModal() {
             order_items: products,    // pass products array
             phone_number:phone,
             delivery_address: deliveryAddress,
+            coupon_code:appliedCoupon,
             city: city,
             state: "Jharkhand", // or make it dynamic if needed
             pincode: zip,
