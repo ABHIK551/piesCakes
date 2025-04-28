@@ -50,7 +50,7 @@
 <!-- Payment Modal -->
 <div id="paymentModal">
     <div id="paymentModalContent">
-      <span class="close" id="close-payment-modal">&times;</span>
+      <span class="close" id="close-payment-modal" hidden>&times;</span>
       <h2>Choose Payment Method</h2>
   
       <form id="payment-options">
@@ -75,6 +75,14 @@
   <!-- CSS -->
   <style>
   /* Modal base */
+  .checkout{
+    background-color: #D17829;
+    color: white;
+  }
+  .checkout:hover{
+    background-color: #b96118;
+    color: white;
+  }
   #paymentModal {
     position: fixed;
     top: 0;
@@ -249,7 +257,7 @@
   <!-- Coupon Modal -->
   <div class="modal" id="couponModal" style="display: none;">
     <div class="modal-content">
-      <span class="close" id="close-coupon-modal">&times;</span>
+      <span class="close" id="close-coupon-modal" hidden>&times;</span>
       <h2>Apply Coupon</h2>
       <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
       <button id="apply-coupon-btn">Apply</button>
@@ -264,6 +272,19 @@
   
   <!-- Basic CSS for modal (you can improve) -->
   <style>
+     #coupon-code{
+        border: 1px solid gray;
+        padding: 4px;
+        border-radius: 3px;
+    }
+    #apply-coupon-btn{
+        background-color: #D17829;
+        border: 0px;
+        color: white;
+        padding: 3px 7px;
+        font-size: 15px;
+        border-radius: 3px;
+    }
   .modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -456,12 +477,12 @@
             subTotal = getSubTotalValue();
     
             if (!code) {
-                alert("Please enter a coupon code.");
+                showToast("Please enter a coupon code.", "success");
                 return;
             }
     
             if (subTotal < 500) {
-                alert("Subtotal must be at least ₹500 to apply a coupon.");
+                showToast("Total amount must be at least ₹500 to apply a coupon.", "success");
                 return;
             }
     
@@ -470,13 +491,13 @@
             } else if (code === "FREESHIP") {
                 deliveryCharge = 0;
             } else {
-                alert("Invalid coupon code.");
+                showToast("Invalid coupon code.", "danger");
                 return;
             }
     
             updateTotals();
             couponModal.style.display = 'none';
-            alert('Coupon Applied: ' + code);
+            showToast('Coupon Applied: ' + code, "success");
         });
     });
     </script>
@@ -506,7 +527,6 @@
     
             if (!cartItems.length) {
                 cartTableBody.innerHTML = `<tr><td colspan="6">Your cart is empty.</td></tr>`;
-                sessionStorage.setItem("cart_count", "0");
                 return;
             }
     
@@ -527,7 +547,6 @@
                 const total = subtotal - totalDiscount;
 
                 totalAmount += total;
-
                 const imageSrc = product.product_images_base64_output
                     ? `data:image/jpeg;base64,${product.product_images_base64_output}`
                     : 'default.jpg';
@@ -871,7 +890,13 @@ function closeModal() {
         .then(data => {
             console.log('Order Created:', data);
             showToast('Order placed successfully! 🎉', "success");
-            // Optionally, redirect
+
+            showSuccessAnimation();
+
+
+            setTimeout(() => {
+                window.location.href = "/orders";  // Redirect after 2 seconds
+            }, 2000);
            
         })
         .catch(error => {
@@ -880,4 +905,34 @@ function closeModal() {
         });
     });
     </script>
+
+<script>
+function showSuccessAnimation() {
+    const modalContent = document.getElementById('paymentModalContent');
+
+    modalContent.innerHTML = `
+      <div style="text-align: center; padding: 30px;">
+        <img 
+          src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+          alt="Success" 
+          style="width: 100px; height: 100px; margin: auto; display: block;"
+        />
+
+        <h2 style="margin-top: 20px; font-weight: 600;">Thank you for ordering!</h2>
+        <p style="color: #666; margin-bottom: 30px;">We have received your order successfully.</p>
+
+        <div style="display: flex; justify-content: center; gap: 15px;">
+          <button onclick="window.location.href='/orders'" class="primary-btn">View Orders</button>
+          <button onclick="window.location.href='/'" class="cancel-btn">Continue Shopping</button>
+        </div>
+      </div>
+    `;
+
+    // Hide the close button
+    const closeBtn = document.getElementById('close-payment-modal');
+    if (closeBtn) closeBtn.style.display = 'none';
+}
+
+</script>
+    
     

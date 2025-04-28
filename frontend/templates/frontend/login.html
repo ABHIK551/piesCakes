@@ -234,41 +234,66 @@ function showToast(message, type = "success") {
     window.location.href = "/";
   }
 
-    document.querySelector("form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-  
-      const email = document.querySelector("input[placeholder='Username']").value;
-      const password = document.querySelector("input[placeholder='Password']").value;
-  
-      try {
-        const response = await fetch("/api/login/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-  
-        const data = await response.json();
-        console.log(data)
-        if (data.success) {
-          // Store details in sessionStorage
-          sessionStorage.setItem("auth_token", data.token);
-          sessionStorage.setItem("user_id", data.user.id);
-          sessionStorage.setItem("user_email", data.user.email);
-          sessionStorage.setItem("user_name", data.user.name);
-  
-          showToast("Login Successful! Redirecting", "success");
-  
-          // Redirect after login
-          window.location.href = "/";
-        } else {
-          showToast(data.message || "Login failed!", "danger");
-        }
-  
-      } catch (error) {
-        console.error("Login error:", error);
-        showToast("Something went wrong!" + error, "danger");
-      }
+  document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const email = document.querySelector("input[placeholder='Username']").value;
+  const password = document.querySelector("input[placeholder='Password']").value;
+
+  try {
+    const response = await fetch("/api/login/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
     });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (data.success) {
+      // Store details in sessionStorage
+      sessionStorage.setItem("auth_token", data.token);
+      sessionStorage.setItem("user_id", data.user.id);
+      sessionStorage.setItem("user_email", data.user.email);
+      sessionStorage.setItem("user_name", data.user.name);
+
+      showToast("Login Successful! Redirecting...", "success");
+
+      // Call View Cart API after login success
+      const userId = data.user.id;
+      fetch(`/api/view-cart/${userId}/`, {
+        method: "GET",
+        headers: { 
+          "Authorization": `Bearer ${data.token}`  // If your API needs token, otherwise remove this line
+        }
+      })
+      .then(response => response.json())
+      .then(cartData => {
+        const cartItems = cartData.cart_items || [];
+
+        sessionStorage.setItem("cart_count", cartItems.length.toString());
+
+        console.log("Cart updated:", cartItems.length);
+
+        // Now redirect to home
+        window.location.href = "/";
+      })
+      .catch(err => {
+        console.error("Error fetching cart:", err);
+        sessionStorage.setItem("cart_count", "0");
+        window.location.href = "/";
+      });
+
+    } else {
+      showToast(data.message || "Login failed!", "danger");
+    }
+
+  } catch (error) {
+    console.error("Login error:", error);
+    showToast("Something went wrong!" + error, "danger");
+  }
+});
+
   </script>
   
 </body>

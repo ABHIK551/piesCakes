@@ -132,7 +132,7 @@
                     <td>${order.updated_at ? formatDate(order.updated_at) : 'N/A'}</td>
                     <td>${orderItems || 'No Items'}</td>
                     <td>
-                        <button class="btn btn-info btn-sm" onclick="editOrder(${order.id})">Delete</button>
+                        <button class="btn btn-info btn-sm" onclick="editOrder(${order.id})">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Delete</button>
                     </td>
                 `;

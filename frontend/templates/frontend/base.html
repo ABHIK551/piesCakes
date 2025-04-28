@@ -36,6 +36,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 </head>
 <style>
     /* section:not(#bannerSection) {
@@ -3355,12 +3358,12 @@ html, body {
             <div class="footer-section">
                 <h4>Category</h4>
                 <ul>
-                    <li><a href="#">Cakes & Pies</a></li>
-                    <li><a href="#">Tarts & Desserts</a></li>
-                    <li><a href="#">Snacks</a></li>
-                    <li><a href="#">Brownies</a></li>
-                    <li><a href="#">Croissants & Donuts</a></li>
-                    <li><a href="#">Beverages</a></li>
+                    <li><a href="/category">Cakes & Pies</a></li>
+                    <li><a href="/category">Tarts & Desserts</a></li>
+                    <li><a href="/category">Snacks</a></li>
+                    <li><a href="/category">Brownies</a></li>
+                    <li><a href="/category">Croissants & Donuts</a></li>
+                    <li><a href="/category">Beverages</a></li>
                 </ul>
             </div>
     
@@ -3618,7 +3621,7 @@ function toggleSidebar() {
         // Replace Login with Logout if logged in
         const loginBtn = document.getElementById("LoginBtnPublic");
         if (authToken && loginBtn) {
-            loginBtn.textContent = "🚪 Logout";
+            loginBtn.innerHTML = `<i class="bi bi-door-open-fill" style="color:black !important;font-size:18px !important;"></i> Logout`;
             loginBtn.style.cursor = "pointer";
             loginBtn.onclick = () => {
                 fetch("/api/admin/logout/", {

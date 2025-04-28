@@ -71,13 +71,15 @@ function renderItems(items, containerId) {
 
         const itemHTML = `
             <div class="item">
-                <img src="${imageSrc}" alt="${product.name}" loading="lazy" />
-                <div class="item-info">
-                    <h4>${product.name}</h4>
-                    <p>${product.category.name}</p>
-                    <span> ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
-                                    ${product.discount_price ? `<strike>₹${product.price.toFixed(2)}</strike>` : ''}</span>
-                </div>
+                <a style="text-decoration:none !important;color:inherit !important;">
+                    <img src="${imageSrc}" alt="${product.name}" loading="lazy" />
+                 </a>
+                    <div class="item-info">
+                        <h4>${product.name}</h4>
+                        <p>${product.category.name}</p>
+                        <span> ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
+                                        ${product.discount_price ? `<strike>₹${product.price.toFixed(2)}</strike>` : ''}</span>
+                    </div>
             </div>
         `;
         container.innerHTML += itemHTML;
