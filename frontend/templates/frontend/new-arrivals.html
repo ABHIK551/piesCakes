@@ -19,69 +19,7 @@
 
     </div>
 </section>
-        <!-- <script>
-        document.addEventListener("DOMContentLoaded", async function () {
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/products-list/");
-                const data = await response.json();
-                const products = data.products.products;
-        
-                const categoryContainer = document.getElementById("category-container");
-                const productsContainer = document.getElementById("products-container");
-        
-                // Function to display products
-                function displayProducts(productList) {
-                    productsContainer.innerHTML = "";
-                    if (productList.length === 0) {
-                        productsContainer.innerHTML = "<p>No products found</p>";
-                        return;
-                    }
-        
-                    productList.forEach(product => {
-                        const productElement = document.createElement("div");
-                        const discountedPrice = product.discount_price ? product.price - product.discount_price : product.price;
-        
-                        productElement.classList.add("product-card");
-                        productElement.innerHTML = `
-                            <img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" />
-                            <div class="product-info">
-                                <span class="category">${product.category.name}</span>
-                                <h3>${product.name}</h3>
-                                <div class="rating">⭐⭐⭐⭐⭐</div> 
-                                <p class="price">
-                                    ₹${discountedPrice}
-                                    ${product.discount_price ? `<strike>₹${product.price}</strike>` : ''}
-                                </p>
-                                <span class="badge new">NEW</span>
-                            </div>
-                        `;
-                        productsContainer.appendChild(productElement);
-                    });
-                }
-        
-                function filterProducts(category) {
-                    if (category === "All") {
-                        displayProducts(products);
-                    } else {
-                        const filteredProducts = products.filter(product => product.category.name === category);
-                        displayProducts(filteredProducts);
-                    }
-                }
-        
-                categoryContainer.addEventListener("click", function (event) {
-                    if (event.target.tagName === "LI") {
-                        const selectedCategory = event.target.innerText.trim();
-                        document.querySelectorAll("#category-container li").forEach(li => li.classList.remove("active"));
-                        event.target.classList.add("active");
-                        filterProducts(selectedCategory);
-                    }
-                });
-                displayProducts(products);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        });
-        </script> -->
+    
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
     try {
@@ -113,64 +51,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             return btoa(padded);
         }
 
-        // // Function to display products
-        // function displayProducts(productList) {
-        //     productsContainer.innerHTML = "";
-        //     if (productList.length === 0) {
-        //         productsContainer.innerHTML = "<p>No products found</p>";
-        //         return;
-        //     }
-
-        //     productList.forEach(product => {
-        //         const productElement = document.createElement("div");
-        //         const discountedPrice = product.discount_price ? product.price - product.discount_price : product.price;
-
-        //         // Convert product created_at date to JavaScript Date object
-        //         const createdAt = new Date(product.created_at);
-        //         const currentDate = new Date();
-
-        //         // Calculate the difference in days
-        //         const timeDifference = currentDate - createdAt;
-        //         const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-
-        //         // Check if the product is within the last 10 days
-        //         const isNew = daysDifference <= 10;
-
-        //         const encodedId = encodeProductId(product.id); // 🔐 encoded ID
-
-        //         productElement.classList.add("product-card");
-        //         productElement.innerHTML = `<div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
-        //                 <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loading="lazy"/></a>
-        //                 <div class="product-info">
-        //                     <span class="category mb-1" style="text-align: left !important;">${product.category.name}</span>
-                            
-        //                     <h4 class="mb-1 product-heading"><a href="product/${encodedId}" style="
-        //                         text-decoration:none;
-        //                         font-size: 14px !important;
-        //                         text-decoration: none !important;
-        //                         font-weight: bold;
-        //                         text-align: left !important;
-        //                         color: #5A3E36;
-        //                         margin: 0;
-        //                     ">${product.name}</a></h4>
-                            
-        //                     <div cls="rating mb-1">⭐⭐⭐⭐⭐</div>
-                            
-        //                     <p class="price mb-1">
-        //                         ₹${discountedPrice}
-        //                         ${product.discount_price ? `<strike>₹${product.price}</strike>` : ''}
-        //                     </p class="badge">
-
-        //                     ${isNew ? `<spans>NEW</span>` : ''}
-        //                 </div>
-        //             </div>
-        //         `;
-
-        //         productsContainer.appendChild(productElement);
-        //     });
-        //     initMobileSwiper();
-        // }
-
         function displayProducts(productList) {
             productsContainer.innerHTML = "";
             if (productList.length === 0) {
@@ -201,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 // Generate serving size buttons
                 let sizeButtons = servingSizes.map((s, i) => `
-                    <button style="color:white;background-color:#ffa600; border:0px;padding:3px 5px;border-radius:3px;" class="btn btn-sm size-btn ${i === 0 ? 'btn-primary' : 'btn-outline-primary'}"
+                    <button class="size-btn ${i === 0 ? 'active' : ''}"
                         data-product-index="${index}" 
                         data-price="${parseFloat(s.price)}" 
                         data-discount="${parseFloat(s.discount_price)}">
@@ -224,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                     ${product.name}
                                 </a>
                             </h3>
-                            <div class="rating mb-1">⭐⭐⭐⭐⭐</div>
+                            <div class="rating mb-1">★★★★★</div>
 
                             <div class="mb-2 size-buttons">
                                 ${sizeButtons}
@@ -257,27 +137,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const discountedPrice = price - discount;
 
                     const priceEl = document.getElementById(`price-${index}`);
-                    priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? `<strike>₹${price}</strike>` : ''}`;
+                    priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? ` <strike>₹${price}</strike>` : ''}`;
 
+                    // Remove 'active' from all buttons in this product group
                     const buttons = document.querySelectorAll(`.size-btn[data-product-index="${index}"]`);
+                    buttons.forEach(b => b.classList.remove('active'));
 
-                    buttons.forEach(btn => {
-                        btn.style.backgroundColor = '#ffa600';
-                        this.style.color = 'white';
-                        this.style.borderRadius = '3px';
-                        this.style.border = '0px';
-                        this.style.padding = '3px 5px';
-                    });
-
-                    // Apply style to the clicked button
-                    this.style.backgroundColor = 'green';
-                    this.style.color = 'white';
-                    this.style.borderRadius = '3px';
-                    this.style.border = '0px';
-                    this.style.padding = '3px 5px';
+                    // Add 'active' to clicked button
+                    this.classList.add('active');
                 });
             });
-            initMobileSwiper(); // Optional: your own swiper init
+
+            initMobileSwiper(); // optional
+
         }
 
         // Function to filter products by category

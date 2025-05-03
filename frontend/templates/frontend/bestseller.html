@@ -233,7 +233,7 @@ function loadBestsellers() {
         const sizeButtons = product.serving_sizes.map((s, i) => `
           <button class="size-btn${i === 0 ? ' active' : ''}" 
                   data-price="${s.price}" 
-                  data-discount="${s.discount_price}">${s.size}</button>
+                  data-discount="${s.discount_price || 0}">${s.size}</button>
         `).join("");
 
         const initialPrice = product.serving_sizes?.[0]?.price || "0.00";
@@ -252,7 +252,7 @@ function loadBestsellers() {
             <div class="product-info">
               <p class="category">${product.category.name}</p>
               <h3>${product.name}</h3>
-              <div class="rating">⭐⭐⭐⭐⭐</div>
+              <div class="rating">★★★★★</div>
               <div class="size-buttons">${sizeButtons}</div>
               <p class="price">
                 ₹<span class="actual-price">${parseFloat(initialPrice).toFixed(2)}</span>
@@ -299,7 +299,7 @@ function loadBestsellers() {
                 priceEl.parentElement.appendChild(newDel);
               }
             } else if (discountEl) {
-              discountEl.style.display = "none";
+              discountEl.style.display = "";
             }
           });
         });

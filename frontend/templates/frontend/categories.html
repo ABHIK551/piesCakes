@@ -614,6 +614,7 @@
 
 .product-filter-bar {
   width: 100%;
+  max-height: 45px;
   padding: 10px;
   border: 1px solid #eee;
   border-radius: 5px;
@@ -826,6 +827,9 @@
   background-color: #D17829;
   color: #bbb;
   cursor: not-allowed;
+}
+.size-btn .active{
+  background-color: #D17829 !important;
 }
 
 /* --- RESPONSIVE STYLES --- */
@@ -1248,7 +1252,7 @@
     // Get selected size details
     const activeSize = productCard.querySelector(".size-btn.active");
     if (!activeSize) {
-      alert("Please select a size before adding to cart.");
+      showToats("Please select a size before adding to cart.", "danger");
       return;
     }
 
