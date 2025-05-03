@@ -281,78 +281,77 @@
     }
   });
   
-//   // Submit form
-//   document.getElementById('createOrderForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
+  // Submit form
+  document.getElementById('createOrderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-//     const userId = document.getElementById('userSelect').value;
-//     if (!userId) {
-//       alert('Please select a user.');
-//       return;
-//     }
+    const userId = document.getElementById('userSelect').value;
+    if (!userId) {
+      alert('Please select a user.');
+      return;
+    }
   
-//     const orderItems = [];
-//     document.querySelectorAll('#orderItems .order-item').forEach(item => {
-//       const productSelect = item.querySelector('.product-select');
-//       const productId = productSelect.value;
-//       const quantity = item.querySelector('.quantity-input').value;
-//       const price = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-price') || 0);
-//       const discount = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-discount') || 0);
-//       const total = (price - discount) * quantity;
+    const orderItems = [];
+    document.querySelectorAll('#orderItems .order-item').forEach(item => {
+      const productSelect = item.querySelector('.product-select');
+      const productId = productSelect.value;
+      const quantity = item.querySelector('.quantity-input').value;
+      const price = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-price') || 0);
+      const discount = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-discount') || 0);
+      const total = (price - discount) * quantity;
   
-//       if (productId) {
-//         orderItems.push({
-//           product_id: parseInt(productId),
-//           quantity: parseInt(quantity),
-//           item_price: price,
-//           discount: discount,
-//           total: total
-//         });
-//       }
-//     });
+      if (productId) {
+        orderItems.push({
+          product_id: parseInt(productId),
+          quantity: parseInt(quantity),
+          item_price: price,
+          discount: discount,
+          total: total
+        });
+      }
+    });
   
-//     if (orderItems.length === 0) {
-//       alert('Please add at least one product.');
-//       return;
-//     }
+    if (orderItems.length === 0) {
+      alert('Please add at least one product.');
+      return;
+    }
   
-//     const orderPayload = {
-//       user: parseInt(userId),
-//       order_items: orderItems,
-//       delivery_address: document.getElementById('deliveryAddress').value,
-//       city: document.getElementById('city').value,
-//       state: document.getElementById('state').value,
-//       pincode: document.getElementById('pincode').value,
-//       phone_number: document.getElementById('phoneNumber').value,
-//       coupon_code: document.getElementById('couponCode').value || null,
-//       payment_method: "cod",
-//       payment_status: "pending",
-//       discount_amount: orderItems.reduce((acc, item) => acc + item.discount, 0),
-//       total_amount: orderItems.reduce((acc, item) => acc + item.total, 0),
-//     };
+    const orderPayload = {
+      user: parseInt(userId),
+      order_items: orderItems,
+      delivery_address: document.getElementById('deliveryAddress').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      pincode: document.getElementById('pincode').value,
+      phone_number: document.getElementById('phoneNumber').value,
+      coupon_code: document.getElementById('couponCode').value || null,
+      payment_method: "cod",
+      payment_status: "pending",
+      discount_amount: orderItems.reduce((acc, item) => acc + item.discount, 0),
+      total_amount: orderItems.reduce((acc, item) => acc + item.total, 0),
+    };
   
-//     console.log('Order Payload:', orderPayload);
+    console.log('Order Payload:', orderPayload);
   
-//     fetch('/api/orders/create/', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
-//       },
-//       body: JSON.stringify(orderPayload)
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log('Order Created:', data);
-//       alert('Order placed successfully!');
-//       location.reload();
-//     })
-//     .catch(err => {
-//       console.error('Error:', err);
-//       alert('Failed to create order.');
-//     });
-//   });
-  
+    fetch('/api/orders/create/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+      },
+      body: JSON.stringify(orderPayload)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Order Created:', data);
+      alert('Order placed successfully!');
+      location.reload();
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      alert('Failed to create order.');
+    });
+  });
   
   </script>
 <script>
