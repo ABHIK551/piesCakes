@@ -1,11 +1,83 @@
-<div class="container">
+<style>
+    .container{
+        width: 100% !important;
+        margin: 0px;
+    }
+    .cont-shop-btn{
+        text-decoration: none !important;
+        color: #ffff;
+        background-color: #5a2d1f;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+    .category-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: #ffff;
+  color: black;
+}
+
+.category-section-header .section-left {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5a2d1f;
+  white-space: nowrap;
+}
+
+.category-section-header .section-divider {
+  flex: 1;
+  /* border-bottom: 2px dotted #d4d4d4; */
+  margin: 0 10px;
+  height: 1px;
+}
+
+.category-section-header .section-right {
+  font-size: 0.95rem;
+  color: #f57c00;
+  white-space: nowrap;
+}
+
+.category-section-header .section-right a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .category-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-section-header .section-divider {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .category-section-header .section-right {
+    font-size: 0.9rem;
+  }
+}
+</style>
+<div>
     <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <span>Home ></span> <span class="active">Cart</span>
-    </nav>
+    <div class="category-section-header">
+        <div class="section-left">Categories</div>
+        <div class="section-divider"></div>
+        <div class="section-right">
+          <a href="/">Home</a> &gt; <span>Cake</span>
+        </div>
+    </div>
 
     <!-- Cart Section -->
     <section class="cart">
+        
         <style>
             .table-scroll-wrapper {
                 overflow-x: auto !important;
@@ -41,7 +113,7 @@
             </div>
             
             <div class="shop-more">
-                <a href="/" style="float: left;margin: auto 0%;">Continue Shopping</a>
+                <a href="/" style="float: left;margin: auto 0%;" class="cont-shop-btn">Continue Shopping</a>
                 <button class="checkout" onclick="openPaymentModal()" style="width: 200px;float: right;">Check Out</button>
             </div>
         </div>
@@ -324,94 +396,6 @@
   }
 
   </style>
-  
-  <!-- JavaScript to open/close coupon modal -->
-   <!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const applyDiscountLink = document.getElementById('apply-discount-link');
-    const couponModal = document.getElementById('couponModal');
-    const closeCouponModal = document.getElementById('close-coupon-modal');
-    const couponOptions = document.querySelectorAll('.coupon-option');
-    const applyCouponBtn = document.getElementById('apply-coupon-btn');
-
-    const subTotalSpan = document.getElementById('subTotalMain');
-    const deliveryChargeSpan = document.querySelector('.cost p:nth-child(2) span');
-    const couponDiscountSpan = document.getElementById('couponDiscountMain');
-    const grandTotalSpan = document.getElementById('grandTotalMainTest');
-
-    let deliveryCharge = 0;
-    let couponDiscount = 0;
-    let subTotal = 0;
-
-    function getSubTotalValue() {
-        const subTotalText = subTotalSpan.textContent.replace('₹', '').replace(',', '');
-        return parseFloat(subTotalText) || 0;
-    }
-
-    function updateTotals() {
-        subTotal = getSubTotalValue();
-        const grandTotal = subTotal + deliveryCharge - couponDiscount;
-        alert("grandTotal" + grandTotal);  // you can remove this later after testing
-        console.log(grandTotalSpan)
-        console.log(grandTotalSpan.textContent)
-        if (grandTotalSpan) {
-            grandTotalSpan.textContent = `${grandTotal.toFixed(2)}`; // Remove ₹ here
-            grandTotalSpan.style.display = "block";
-        }else{
-            alert("grandTotalSpan is not there")
-        }
-
-        // grandTotalSpan.textContent = `₹${grandTotal.toFixed(2)}`;
-        deliveryChargeSpan.textContent = `₹${deliveryCharge.toFixed(2)}`;
-        couponDiscountSpan.textContent = `₹${couponDiscount.toFixed(2)}`;
-    }
-
-    applyDiscountLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        couponModal.style.display = 'flex';
-    });
-
-    closeCouponModal.addEventListener('click', function() {
-        couponModal.style.display = 'none';
-    });
-
-    couponOptions.forEach(button => {
-        button.addEventListener('click', function() {
-            document.getElementById('coupon-code').value = button.getAttribute('data-code');
-        });
-    });
-
-    applyCouponBtn.addEventListener('click', function() {
-        const code = document.getElementById('coupon-code').value.trim().toUpperCase();
-        subTotal = getSubTotalValue();
-
-        if (!code) {
-            alert("Please enter a coupon code.");
-            return;
-        }
-
-        if (subTotal < 500) {
-            alert("Subtotal must be at least ₹500 to apply a coupon.");
-            return;
-        }
-
-        if (code === "SAVE50") {
-            couponDiscount = 50;
-        } else if (code === "FREESHIP") {
-            deliveryCharge = 0;
-        } else {
-            alert("Invalid coupon code.");
-            return;
-        }
-
-        updateTotals();
-        couponModal.style.display = 'none';
-        alert('Coupon Applied: ' + code);
-    });
-});
-
-   </script> -->
-  
    <script>
     document.addEventListener('DOMContentLoaded', function() {
         const applyDiscountLink = document.getElementById('apply-discount-link');
@@ -527,33 +511,32 @@
         .then(response => response.json())
         .then(data => {
             const cartItems = data.cart_items || [];
-    
+
             if (!cartItems.length) {
                 cartTableBody.innerHTML = `<tr><td colspan="6">Your cart is empty.</td></tr>`;
                 return;
             }
-    
+
             let totalAmount = 0;
             cartTableBody.innerHTML = "";
-            let cartItemTotal = 0;
 
-            console.log(cartItems)
-    
             cartItems.forEach(item => {
                 const product = item.product;
-                const price = parseFloat(product.price || 0);              // Original price per item
-                const discountPerItem = parseFloat(product.discount_price || 0); // Discount per item
+                const price = parseFloat(item.price || 0);
+                const discount = parseFloat(item.discount_price || 0);
                 const quantity = item.quantity || 1;
 
                 const subtotal = price * quantity;
-                const totalDiscount = discountPerItem * quantity;
+                const totalDiscount = discount * quantity;
                 const total = subtotal - totalDiscount;
 
                 totalAmount += total;
-                const imageSrc = product.product_images_base64_output
-                    ? `data:image/jpeg;base64,${product.product_images_base64_output}`
+
+                const base64Image = product.product_images_base64_output?.[0] || null;
+                const imageSrc = base64Image
+                    ? `data:image/jpeg;base64,${base64Image}`
                     : 'default.jpg';
-    
+
                 const rowHTML = `
                     <tr>
                         <td>
@@ -568,36 +551,29 @@
                             <button class="qty-btn addQtyBTN">+</button>
                         </td>
                         <td data-total="${total.toFixed(2)}">₹${total.toFixed(2)}</td>
-                        <td><button class="remove" onclick="deleteCartItem('${product.id}')"><i class="fas fa-trash"></i></button></td>
+                        <td><button class="remove" onclick="deleteCartItem(${product.id}, ${item.price})"><i class="bi bi-trash-fill"></i></button></td>
                         <td hidden>${product.id}</td>
                     </tr>
                 `;
-    
                 cartTableBody.insertAdjacentHTML("beforeend", rowHTML);
-                const scrollWrapper = document.querySelector(".table-scroll-wrapper");
-                scrollWrapper.style.display = 'none';
-                scrollWrapper.offsetHeight; // trigger reflow
-                scrollWrapper.style.display = '';
             });
 
-                
             attachQuantityHandlers();
             updateTotalAmount();
-    
+
             sessionStorage.setItem("cart_count", cartItems.length.toString());
+
             const subTotalSpan = document.getElementById("subTotalMain");
             const deliveryChargeSpan = document.querySelector(".cost p:nth-child(2) span");
-            // const couponDiscountSpan = document.querySelector(".cost p:nth-child(3) span"); // But "Apply Discount" is a link <a>!
 
-            // Set your values
             subTotalSpan.textContent = `₹${totalAmount.toFixed(2)}`;
-            deliveryChargeSpan.textContent = `₹0.00`; // You can dynamically set delivery charges later
-            // couponDiscountSpan.textContent = `₹50.00`; // If discount applied
+            deliveryChargeSpan.textContent = `₹0.00`; // You can modify this dynamically later
         })
         .catch(error => {
             console.error("Error loading cart:", error);
             cartTableBody.innerHTML = `<tr><td colspan="6">Failed to load cart items.</td></tr>`;
         });
+
     });
     </script>
     
@@ -765,10 +741,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 <script>
-function deleteCartItem(productId) {
-    const userId = sessionStorage.getItem("user_id");  // Replace with the logged-in user's id dynamically
+function deleteCartItem(productId, price) {
+    const userId = sessionStorage.getItem("user_id");
 
-    fetch(`/api/cart/${userId}/item/${productId}/delete/`, {
+    fetch(`/api/cart/${userId}/item/${productId}/${price}/delete/`, {
         method: 'DELETE',
     })
     .then(response => {
@@ -778,11 +754,19 @@ function deleteCartItem(productId) {
         return response.json();
     })
     .then(data => {
-        showToast("Cart Item Deteletd Sucessfully")
+        let cart_count = sessionStorage.getItem("cart_count");
+
+    if (cart_count !== null) {
+        cart_count = parseInt(cart_count);
+        if (!isNaN(cart_count) && cart_count > 0) {
+                sessionStorage.setItem("cart_count", cart_count - 1);
+            }
+        }
+        showToast("Cart Item Deleted Successfully");
         location.reload();
     })
     .catch(error => {
-        showToast("Failed to delete cart item")
+        showToast("Failed to delete cart item");
         console.error('Error:', error);
     });
 }

@@ -8,6 +8,9 @@
         <!-- Header Card -->
         <div style="height:80px;" class="card p-3 mb-0 d-flex flex-row justify-content-between align-items-center">
             <h3 class="m-0">Orders List</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrderModal">
+                Create Order
+            </button>
         </div>
 
         <!-- Table Card -->
@@ -184,6 +187,349 @@
             }
         }
         </script>
+
+<!-- Order Create Modal -->
+<div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="createOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
         
+        <div class="modal-header">
+          <h5 class="modal-title" id="createOrderModalLabel">Create New Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body">
+          <form id="createOrderForm">
+            
+            <!-- User Dropdown -->
+            <div class="mb-3">
+              <label for="userSelect" class="form-label">Select User</label>
+              <select class="form-select" id="userSelect" required>
+                <option value="">Choose User</option>
+                <!-- Dynamic: Fill this with API users -->
+              </select>
+            </div>
+  
+            <!-- Order Items -->
+            <div id="orderItems">
+              <div class="order-item mb-3 d-flex gap-2 align-items-center">
+                <select class="form-select product-select" required>
+                  <option value="">Select Product</option>
+                  <option value="101" data-price="500" data-discount="50">Cake 1</option>
+                  <option value="102" data-price="700" data-discount="100">Cake 2</option>
+                </select>
+                <input type="number" class="form-control quantity-input" placeholder="Quantity" value="1" min="1" required>
+                <button type="button" class="btn btn-danger remove-item">X</button>
+              </div>
+            </div>
+  
+            <button type="button" class="btn btn-secondary mb-3" id="addItem">Add Another Item</button>
+  
+            <!-- Other details -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <input type="text" id="deliveryAddress" class="form-control" placeholder="Delivery Address" required>
+              </div>
+              <div class="col-md-3">
+                <input type="text" id="city" class="form-control" placeholder="City" required>
+              </div>
+              <div class="col-md-3">
+                <input type="text" id="state" class="form-control" placeholder="State" value="Jharkhand" required>
+              </div>
+              <div class="col-md-4">
+                <input type="text" id="pincode" class="form-control" placeholder="Pincode" required>
+              </div>
+              <div class="col-md-4">
+                <input type="text" id="phoneNumber" class="form-control" placeholder="Phone Number" required>
+              </div>
+              <div class="col-md-4">
+                <input type="text" id="couponCode" class="form-control" placeholder="Coupon Code (optional)">
+              </div>
+            </div>
+  
+          </form>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" form="createOrderForm">Save Order</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <script>
+  // Add new order item
+  document.getElementById('addItem').addEventListener('click', function() {
+    const itemHtml = `
+      <div class="order-item mb-3 d-flex gap-2 align-items-center">
+        <select class="form-select product-select" required>
+          <option value="">Select Product</option>
+          <option value="101" data-price="500" data-discount="50">Cake 1</option>
+          <option value="102" data-price="700" data-discount="100">Cake 2</option>
+        </select>
+        <input type="number" class="form-control quantity-input" placeholder="Quantity" value="1" min="1" required>
+        <button type="button" class="btn btn-danger remove-item">X</button>
+      </div>`;
+    document.getElementById('orderItems').insertAdjacentHTML('beforeend', itemHtml);
+  });
+  
+  // Remove item
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('remove-item')) {
+      e.target.parentElement.remove();
+    }
+  });
+  
+//   // Submit form
+//   document.getElementById('createOrderForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
+    
+//     const userId = document.getElementById('userSelect').value;
+//     if (!userId) {
+//       alert('Please select a user.');
+//       return;
+//     }
+  
+//     const orderItems = [];
+//     document.querySelectorAll('#orderItems .order-item').forEach(item => {
+//       const productSelect = item.querySelector('.product-select');
+//       const productId = productSelect.value;
+//       const quantity = item.querySelector('.quantity-input').value;
+//       const price = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-price') || 0);
+//       const discount = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-discount') || 0);
+//       const total = (price - discount) * quantity;
+  
+//       if (productId) {
+//         orderItems.push({
+//           product_id: parseInt(productId),
+//           quantity: parseInt(quantity),
+//           item_price: price,
+//           discount: discount,
+//           total: total
+//         });
+//       }
+//     });
+  
+//     if (orderItems.length === 0) {
+//       alert('Please add at least one product.');
+//       return;
+//     }
+  
+//     const orderPayload = {
+//       user: parseInt(userId),
+//       order_items: orderItems,
+//       delivery_address: document.getElementById('deliveryAddress').value,
+//       city: document.getElementById('city').value,
+//       state: document.getElementById('state').value,
+//       pincode: document.getElementById('pincode').value,
+//       phone_number: document.getElementById('phoneNumber').value,
+//       coupon_code: document.getElementById('couponCode').value || null,
+//       payment_method: "cod",
+//       payment_status: "pending",
+//       discount_amount: orderItems.reduce((acc, item) => acc + item.discount, 0),
+//       total_amount: orderItems.reduce((acc, item) => acc + item.total, 0),
+//     };
+  
+//     console.log('Order Payload:', orderPayload);
+  
+//     fetch('/api/orders/create/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+//       },
+//       body: JSON.stringify(orderPayload)
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log('Order Created:', data);
+//       alert('Order placed successfully!');
+//       location.reload();
+//     })
+//     .catch(err => {
+//       console.error('Error:', err);
+//       alert('Failed to create order.');
+//     });
+//   });
+  
+  
+  </script>
+<script>
+    // 1. Fetch Users for User Dropdown
+    function loadUsers() {
+      fetch('/api/admin/customers/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && data.data.length > 0) {
+          const userSelect = document.getElementById('userSelect');
+          userSelect.innerHTML = `<option value="">Choose User</option>`;
+          data.data.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = `${user.first_name} ${user.last_name} (${user.phone})`;
+            userSelect.appendChild(option);
+          });
+        } else {
+          alert('No users found!');
+        }
+      })
+      .catch(error => {
+        console.error('Error loading users:', error);
+        alert('Failed to load users.');
+      });
+    }
+    
+    // 2. Fetch Products for Product Dropdown
+    function loadProductsForOrderSelect() {
+        const pageSize = 100; // or however many products you want to load
+        fetch(`/api/products-list/?page=1&pageSize=${pageSize}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.products && data.products.products) {
+                    const products = data.products.products;
+                    const selectElement = document.querySelector("#orderItems .product-select");
+
+                    // Clear old options except the first "Select Product"
+                    selectElement.innerHTML = '<option value="">Select Product</option>';
+
+                    products.forEach(product => {
+                        const option = document.createElement("option");
+                        option.value = product.id;
+                        option.textContent = product.name;
+                        option.setAttribute('data-price', product.price);
+                        option.setAttribute('data-discount', product.discount_price || 0);
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    alert('Failed to load products (API success false)');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                alert('Failed to load products (Network error)');
+            });
+    }
+
+// Call this when page loads
+
+
+    // 3. When Modal Opens, Load Users & Products
+    const createOrderModal = document.getElementById('createOrderModal');
+    createOrderModal.addEventListener('show.bs.modal', function () {
+      loadUsers();
+      loadProductsForOrderSelect();
+    });
+    </script>
+    <script>
+document.getElementById('createOrderForm').addEventListener('click', function(e) {
+    e.preventDefault(); // prevent form default submit
+
+    // 1. Get user input values
+    const userId = document.getElementById('userSelect').value; // Assuming dropdown
+    const phone = document.getElementById('phoneInput').value;
+    const deliveryAddress = document.getElementById('addressInput').value;
+    const city = document.getElementById('cityInput').value;
+    const zip = document.getElementById('zipInput').value;
+    const appliedCoupon = document.getElementById('couponInput').value || null; // optional
+
+    // subtotal, deliveryCharge, couponDiscount, grandTotal are assumed to be calculated already
+    const subTotal = parseFloat(document.getElementById('subtotalInput').value);
+    const deliveryCharge = parseFloat(document.getElementById('deliveryChargeInput').value);
+    const couponDiscount = parseFloat(document.getElementById('discountInput').value) || 0;
+    const grandTotal = parseFloat(document.getElementById('grandTotalInput').value);
+
+    // 2. Prepare products array
+    const products = [];
+    const orderItems = document.querySelectorAll('#orderItems .order-item');
+
+    orderItems.forEach(item => {
+        const select = item.querySelector('.product-select');
+        const quantityInput = item.querySelector('.quantity-input');
+
+        const productId = select.value;
+        const productName = select.options[select.selectedIndex].text;
+        const itemPrice = parseFloat(select.options[select.selectedIndex].getAttribute('data-price')) || 0;
+        const discount = parseFloat(select.options[select.selectedIndex].getAttribute('data-discount')) || 0;
+        const quantity = parseInt(quantityInput.value);
+        const productImg = ""; // If you want, you can fetch product image too later
+
+        const total = (itemPrice - discount) * quantity;
+
+        products.push({
+            product_id: productId,
+            product_name: productName,
+            product_image: productImg, // optional if you don't have it now
+            item_price: itemPrice,
+            discount: discount,
+            quantity: quantity,
+            total: total
+        });
+    });
+
+    if (products.length === 0) {
+        alert('Please add at least one product to the order.');
+        return;
+    }
+
+    if (!userId) {
+        alert('Please select a user.');
+        return;
+    }
+
+    // 3. Prepare final payload
+    const orderPayload = {
+        user: userId,
+        order_items: products,
+        phone_number: phone,
+        delivery_address: deliveryAddress,
+        coupon_code: appliedCoupon,
+        city: city,
+        state: "Jharkhand",  // static or dynamic
+        pincode: zip,
+        payment_method: "cod",   // or dynamic
+        payment_status: "pending",
+        subtotal: subTotal,
+        delivery_charge: deliveryCharge,
+        discount_amount: couponDiscount,
+        total_amount: grandTotal
+    };
+
+    console.log('Final Payload:', orderPayload);
+
+    // 4. POST API to create order
+    fetch('/api/orders/create/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+        },
+        body: JSON.stringify(orderPayload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Order Created:', data);
+        alert('Order placed successfully!');
+        location.reload();
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Failed to create order.');
+    });
+});
+
+    </script>
+    
         
 {% endblock %}

@@ -41,3 +41,6 @@ def customer_user(request):
 
 def orders(request):
     return render(request,'static/orders.html')
+
+def coupans(request):
+    return render(request,'static/coupans.html')

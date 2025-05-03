@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import orders, customer_user,home, baked_delights, profile, register, login, categories, products, banner, why_choose_us, top_picks, adds
+from .views import coupans, orders, customer_user,home, baked_delights, profile, register, login, categories, products, banner, why_choose_us, top_picks, adds
 
 urlpatterns = [
     path('', home, name='home'),
@@ -15,4 +15,5 @@ urlpatterns = [
     path('baked-delights', baked_delights, name='baked-delights'),
     path('customers', customer_user, name='customer_user'),
     path('orders', orders, name='orders'),
+    path('coupans', coupans, name='coupans'),
 ]

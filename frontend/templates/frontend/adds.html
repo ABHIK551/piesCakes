@@ -1,42 +1,72 @@
-<!-- Add Section -->
-<section class="add-section loading" id="addSection" style="background-size: cover; background-position: center;">
-    <div class="add-content text-white text-center">
-        <h2 id="addHeading">Delicious Cakes & <br>Baked Treats</h2>
-        <p id="addDescription">Indulge in freshly baked delights!</p>
-        <a href="#" id="addLink" class="shop-btn">Shop now</a>
-    </div>
+<!-- Ad Section with Swiper -->
+<section class="ad-swiper swiper" id="addSection">
+  <div class="swiper-wrapper" id="addSlides"></div>
+
+  <!-- Optional Swiper controls -->
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
 </section>
+
 <script>
-    async function loadHomepageAdd() {
-      try {
-        const response = await fetch("/api/ads-list/?page=1&pageSize=1");
-        const data = await response.json();
-  
-        if (data.success && data.data.length > 0) {
-          const ad = data.data[0]; // get the first (latest) ad
-  
-          // Set Heading & Description (fallback if missing)
-          document.getElementById("addHeading").innerHTML = ad.heading || "Delicious Cakes & <br>Baked Treats";
-          document.getElementById("addDescription").textContent = ad.description || "Indulge in freshly baked delights!";
-          document.getElementById("addLink").href = ad.link || "#";
-  
-          if (ad.image) {
-            const imageUrl = `data:image/jpeg;base64,${ad.image}`;
-            const img = new Image();
-            img.onload = () => {
-              const section = document.getElementById("addSection");
-              section.style.backgroundImage = `url(${imageUrl})`;
-              section.classList.remove("loading");
-              section.classList.add("loaded");
-            };
-            img.src = imageUrl;
-          }
-        }
-      } catch (error) {
-        console.error("Failed to load homepage add:", error);
-      }
+async function loadHomepageAdd() {
+  try {
+    const response = await fetch("/api/ads-list/?page=1&pageSize=10"); // Fetch more ads if needed
+    const data = await response.json();
+
+    if (data.success && data.data.length > 0) {
+      const wrapper = document.getElementById("addSlides");
+
+      data.data.forEach(ad => {
+        const imageUrl = ad.image ? `data:image/jpeg;base64,${ad.image}` : "";
+
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+
+        slide.innerHTML = `
+          <div class="add-slide" style="
+            background-image: url('${imageUrl}');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+          ">
+            <div class="add-content"hidden>
+              <h2 hidden>${ad.heading ||""}</h2>
+              <p>${ad.description || ""}</p>
+              <a href="${ad.link || "#"}" class="shop-btn" hidden>Shop now</a>
+            </div>
+          </div>
+        `;
+
+        wrapper.appendChild(slide);
+      });
+
+      new Swiper(".ad-swiper", {
+        loop: true,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
     }
-  
-    document.addEventListener("DOMContentLoaded", loadHomepageAdd);
-  </script>
-  
+  } catch (error) {
+    console.error("Failed to load homepage ads:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadHomepageAdd);
+</script>

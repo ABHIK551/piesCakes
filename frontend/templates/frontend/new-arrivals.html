@@ -1,9 +1,9 @@
 <section class="new-arrivals">
     <div class="new-arrivals-header">
-        <div class="header-left">
+        <!-- <div class="header-left">
             <h2 class="section-title"><span>New</span> Arrivals</h2>
             <p class="section-subtitle">Shop online for new arrivals and get free shipping!</p>
-        </div>
+        </div> -->
     
         <div class="header-right">
             <div class="category-filters" id="category-container">
@@ -113,7 +113,64 @@ document.addEventListener("DOMContentLoaded", async function () {
             return btoa(padded);
         }
 
-        // Function to display products
+        // // Function to display products
+        // function displayProducts(productList) {
+        //     productsContainer.innerHTML = "";
+        //     if (productList.length === 0) {
+        //         productsContainer.innerHTML = "<p>No products found</p>";
+        //         return;
+        //     }
+
+        //     productList.forEach(product => {
+        //         const productElement = document.createElement("div");
+        //         const discountedPrice = product.discount_price ? product.price - product.discount_price : product.price;
+
+        //         // Convert product created_at date to JavaScript Date object
+        //         const createdAt = new Date(product.created_at);
+        //         const currentDate = new Date();
+
+        //         // Calculate the difference in days
+        //         const timeDifference = currentDate - createdAt;
+        //         const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+        //         // Check if the product is within the last 10 days
+        //         const isNew = daysDifference <= 10;
+
+        //         const encodedId = encodeProductId(product.id); // 🔐 encoded ID
+
+        //         productElement.classList.add("product-card");
+        //         productElement.innerHTML = `<div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
+        //                 <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loading="lazy"/></a>
+        //                 <div class="product-info">
+        //                     <span class="category mb-1" style="text-align: left !important;">${product.category.name}</span>
+                            
+        //                     <h4 class="mb-1 product-heading"><a href="product/${encodedId}" style="
+        //                         text-decoration:none;
+        //                         font-size: 14px !important;
+        //                         text-decoration: none !important;
+        //                         font-weight: bold;
+        //                         text-align: left !important;
+        //                         color: #5A3E36;
+        //                         margin: 0;
+        //                     ">${product.name}</a></h4>
+                            
+        //                     <div cls="rating mb-1">⭐⭐⭐⭐⭐</div>
+                            
+        //                     <p class="price mb-1">
+        //                         ₹${discountedPrice}
+        //                         ${product.discount_price ? `<strike>₹${product.price}</strike>` : ''}
+        //                     </p class="badge">
+
+        //                     ${isNew ? `<spans>NEW</span>` : ''}
+        //                 </div>
+        //             </div>
+        //         `;
+
+        //         productsContainer.appendChild(productElement);
+        //     });
+        //     initMobileSwiper();
+        // }
+
         function displayProducts(productList) {
             productsContainer.innerHTML = "";
             if (productList.length === 0) {
@@ -121,54 +178,106 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            productList.forEach(product => {
-                const productElement = document.createElement("div");
-                const discountedPrice = product.discount_price ? product.price - product.discount_price : product.price;
-
-                // Convert product created_at date to JavaScript Date object
+            productList.forEach((product, index) => {
+                const encodedId = encodeProductId(product.id);
                 const createdAt = new Date(product.created_at);
                 const currentDate = new Date();
-
-                // Calculate the difference in days
-                const timeDifference = currentDate - createdAt;
-                const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-
-                // Check if the product is within the last 10 days
+                const daysDifference = (currentDate - createdAt) / (1000 * 60 * 60 * 24);
                 const isNew = daysDifference <= 10;
+                const images = product.product_images || [];
+                const swiperClass = `swiper-${index}`;
+                const servingSizes = product.serving_sizes || [];
 
-                const encodedId = encodeProductId(product.id); // 🔐 encoded ID
+                // Default to first size or fallback to main price
+                const initialSize = servingSizes[0] || { price: product.price, discount_price: product.discount_price };
+                const discountedPrice = initialSize.discount_price
+                    ? initialSize.price - initialSize.discount_price
+                    : initialSize.price;
 
+                // Generate swiper slides
+                let imagesHtml = images.length > 0
+                    ? images.map(img => `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${product.name}" loading="lazy"/></div>`).join("")
+                    : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
+
+                // Generate serving size buttons
+                let sizeButtons = servingSizes.map((s, i) => `
+                    <button style="color:white;background-color:#ffa600; border:0px;padding:3px 5px;border-radius:3px;" class="btn btn-sm size-btn ${i === 0 ? 'btn-primary' : 'btn-outline-primary'}"
+                        data-product-index="${index}" 
+                        data-price="${parseFloat(s.price)}" 
+                        data-discount="${parseFloat(s.discount_price)}">
+                        ${Number.isInteger(Number(s.size)) ? `${s.size} Person` : s.size}
+                    </button>`).join(" ");
+
+                const productElement = document.createElement("div");
                 productElement.classList.add("product-card");
-                productElement.innerHTML = `<div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
-                        <a href="product/${encodedId}"><img src="data:image/png;base64,${product.product_images || 'placeholder.jpg'}" alt="${product.name}" loading="lazy"/></a>
+                productElement.innerHTML = `
+                    <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
+                        <a href="product/${encodedId}">
+                            <div class="swiper ${swiperClass}">
+                                <div class="swiper-wrapper">${imagesHtml}</div>
+                            </div>
+                        </a>
                         <div class="product-info">
-                            <span class="category mb-1" style="text-align: left !important;">${product.category.name}</span>
-                            
-                            <h4 class="mb-1 product-heading"><a href="product/${encodedId}" style="
-                                text-decoration:none;
-                                font-size: 14px !important;
-                                text-decoration: none !important;
-                                font-weight: bold;
-                                text-align: left !important;
-                                color: #5A3E36;
-                                margin: 0;
-                            ">${product.name}</a></h4>
-                            
-                            <div cls="rating mb-1">⭐⭐⭐⭐⭐</div>
-                            
-                            <p class="price mb-1">
-                                ₹${discountedPrice}
-                                ${product.discount_price ? `<strike>₹${product.price}</strike>` : ''}
-                            </p class="badge">
+                            <span class="category mb-1">${product.category.name}</span>
+                            <h3 class="mb-1 product-heading">
+                                <a href="product/${encodedId}" style="text-decoration:none; font-size:16px; font-weight:bold; color:#5A3E36;">
+                                    ${product.name}
+                                </a>
+                            </h3>
+                            <div class="rating mb-1">⭐⭐⭐⭐⭐</div>
 
-                            ${isNew ? `<spans>NEW</span>` : ''}
+                            <div class="mb-2 size-buttons">
+                                ${sizeButtons}
+                            </div>
+
+                            <p class="price mb-1" id="price-${index}">
+                                ₹${discountedPrice}
+                                ${initialSize.discount_price > 0 ? `<strike>₹${initialSize.price}</strike>` : ''}
+                            </p>
+
+                            ${isNew ? `<span class="badge bg-success">NEW</span>` : ''}
                         </div>
                     </div>
                 `;
 
                 productsContainer.appendChild(productElement);
+
+                // Init Swiper for each product card
+                new Swiper(`.${swiperClass}`, {
+                    loop: true,
+                    autoplay: { delay: 3000 },
+                });
             });
-            initMobileSwiper();
+
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const index = this.getAttribute('data-product-index');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const discount = parseFloat(this.getAttribute('data-discount'));
+                    const discountedPrice = price - discount;
+
+                    const priceEl = document.getElementById(`price-${index}`);
+                    priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? `<strike>₹${price}</strike>` : ''}`;
+
+                    const buttons = document.querySelectorAll(`.size-btn[data-product-index="${index}"]`);
+
+                    buttons.forEach(btn => {
+                        btn.style.backgroundColor = '#ffa600';
+                        this.style.color = 'white';
+                        this.style.borderRadius = '3px';
+                        this.style.border = '0px';
+                        this.style.padding = '3px 5px';
+                    });
+
+                    // Apply style to the clicked button
+                    this.style.backgroundColor = 'green';
+                    this.style.color = 'white';
+                    this.style.borderRadius = '3px';
+                    this.style.border = '0px';
+                    this.style.padding = '3px 5px';
+                });
+            });
+            initMobileSwiper(); // Optional: your own swiper init
         }
 
         // Function to filter products by category

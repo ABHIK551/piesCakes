@@ -1,3 +1,4 @@
+{% include "frontend/popular-picke.html" %}
 <section class="popular-picks">
     <!-- Left Banner Section -->
     <div class="popular-left" id="popularItem">
@@ -40,7 +41,7 @@
 
         // Filter and sort as needed
         const trendingCakes = products
-            .filter(p => p.category.name === 'Cakes')
+            .filter(p => p.category.name === 'CAKES')
             .sort((a, b) => b.id - a.id) // You can use your own logic
             .slice(0, 2);
 
@@ -66,24 +67,31 @@ function renderItems(items, containerId) {
     container.innerHTML = '';
 
     items.forEach(product => {
+        // ✅ Ensure product_images is an array and pick the first one
+        const firstImage = Array.isArray(product.product_images) && product.product_images.length > 0 
+            ? product.product_images[0] 
+            : 'placeholder.jpg'; // Fallback
+
+        const imageSrc = `data:image/jpeg;base64,${firstImage}`;
         const price = product.discount_price || product.price;
-        const imageSrc = `data:image/jpeg;base64,${product.product_images}`;
 
         const itemHTML = `
             <div class="item">
                 <a style="text-decoration:none !important;color:inherit !important;">
                     <img src="${imageSrc}" alt="${product.name}" loading="lazy" />
-                 </a>
-                    <div class="item-info">
-                        <h4>${product.name}</h4>
-                        <p>${product.category.name}</p>
-                        <span> ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : product.price.toFixed(2)}
-                                        ${product.discount_price ? `<strike>₹${product.price.toFixed(2)}</strike>` : ''}</span>
-                    </div>
+                </a>
+                <div class="item-info">
+                    <h4>${product.name}</h4>
+                    <p>${product.category.name}</p>
+                    <span> ₹${product.discount_price ? (product.price - product.discount_price).toFixed(2) : (product.price || 0).toFixed(2)}
+                        ${product.discount_price ? `<strike>₹${(product.price || 0).toFixed(2)}</strike>` : ''}
+                    </span>
+                </div>
             </div>
         `;
         container.innerHTML += itemHTML;
     });
+
 }
 
 document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);

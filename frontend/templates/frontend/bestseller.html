@@ -1,6 +1,38 @@
 <section class="bestsellers">
+  <style>
+/* Optional Styling */
+.product-info {
+  padding: 1rem;
+}
+.size-buttons {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.size-btn {
+  background: #f1f1f1;
+  border: 1px solid lightgray;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  background-color: #FFFFFA;
+  color: black;
+}
+.size-btn.active {
+  background-color: #FF9800;
+  color: #fff;
+  border-color: ##FF9800;
+}
+.price del {
+  margin-left: 8px;
+  color: #888;
+  font-size: 0.9em;
+}
+</style>
     <div class="bestsellers-wrapper">
-      <h2><span>Our</span> Bestsellers</h2>
+      <h2><span><b>Bestsellers</b></span></h2>
       <div class="swiper bestsellers-slider">
         <div class="swiper-wrapper" id="bestsellerWrapper">
           <!-- JS will inject skeleton cards here -->
@@ -64,13 +96,104 @@
     
     // document.addEventListener('DOMContentLoaded', loadBestsellers);
     
+//     document.addEventListener("DOMContentLoaded", loadBestsellers);
+
+// function loadBestsellers() {
+//   const wrapper = document.getElementById("bestsellerWrapper");
+//   wrapper.innerHTML = "";
+
+//   // Insert skeletons
+//   for (let i = 0; i < 5; i++) {
+//     const skel = document.createElement("div");
+//     skel.className = "swiper-slide skeleton-card loading";
+//     skel.innerHTML = `
+//       <div class="skeleton-image"></div>
+//       <div class="skeleton-text"></div>
+//       <div class="skeleton-text" style="width:60%;"></div>
+//     `;
+//     wrapper.appendChild(skel);
+//   }
+
+//   fetch(`/api/products-list/?page=1&pageSize=10`)
+//     .then(res => res.json())
+//     .then(data => {
+//       if (!data.products) throw new Error("No products");
+//       wrapper.innerHTML = "";
+
+//       data.products.products.forEach((product, index) => {
+//         const slide = document.createElement("div");
+//         slide.className = "swiper-slide bestseller-product";
+
+//         const encodedId = `${product.id}-piescakes`;
+//         const encodedIdPrefilled = btoa(encodedId);
+
+//         // Prepare Swiper slides for images
+//         let imagesHTML = "";
+//         if (Array.isArray(product.product_images) && product.product_images.length > 0) {
+//           product.product_images.forEach(img =>
+//             imagesHTML += `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${product.name}" /></div>`
+//           );
+//         } else {
+//           imagesHTML = `<div class="swiper-slide"><img src="default.jpg" alt="No image" /></div>`;
+//         }
+
+//         const swiperClass = `bestseller-swiper-${index}`; // unique class per product
+
+//         const sizeButtons = product.serving_sizes.map((s, i) => `
+//         <button class="size-btn" data-price="${s.price}" data-discount="${s.discount_price}" ${i === 0 ? 'class="active size-btn"' : 'class="size-btn"'}>${s.size}</button>
+//       `).join("");
+
+//       const initialPrice = product.serving_sizes?.[0]?.price || "0.00";
+//       const initialDiscount = product.serving_sizes?.[0]?.discount_price || "0.00";
+
+//       slide.innerHTML = `
+//         <a href="/product/${encodedIdPrefilled}" style="text-decoration:none !important;color:inherit;">
+//           <div class="product-image">
+//             <div class="swiper ${swiperClass}">
+//               <div class="swiper-wrapper">
+//                 ${imagesHTML}
+//               </div>
+//             </div>
+//             <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
+//           </div>
+//           <div class="product-info">
+//             <p class="category">${product.category.name}</p>
+//             <h3>${product.name}</h3>
+//             <div class="rating">⭐⭐⭐⭐⭐</div>
+//             <div class="size-buttons">
+//               ${sizeButtons}
+//             </div>
+//             <p class="price">
+//               ₹<span class="actual-price">${parseFloat(initialPrice).toFixed(2)}</span>
+//               ${parseFloat(initialDiscount) > 0 ? `<del class="discount-price">₹${parseFloat(initialDiscount).toFixed(2)}</del>` : ""}
+//             </p>
+//           </div>
+//         </a>
+//       `;
+
+//         wrapper.appendChild(slide);
+
+//         // Initialize Swiper for this card
+//         setTimeout(() => {
+//           new Swiper(`.${swiperClass}`, {
+//             loop: true,
+//             autoplay: { delay: 3000 },
+//             pagination: false
+//           });
+//         }, 0);
+//       });
+//     })
+//     .catch(err => {
+//       console.error("Error loading bestsellers:", err);
+//     });
+// }
 document.addEventListener("DOMContentLoaded", loadBestsellers);
 
 function loadBestsellers() {
   const wrapper = document.getElementById("bestsellerWrapper");
-  wrapper.innerHTML = ""; 
+  wrapper.innerHTML = "";
 
-  // 1. Insert 5 skeleton cards
+  // Insert skeletons
   for (let i = 0; i < 5; i++) {
     const skel = document.createElement("div");
     skel.className = "swiper-slide skeleton-card loading";
@@ -82,53 +205,111 @@ function loadBestsellers() {
     wrapper.appendChild(skel);
   }
 
-  // 2. Fetch real products
   fetch(`/api/products-list/?page=1&pageSize=10`)
     .then(res => res.json())
     .then(data => {
       if (!data.products) throw new Error("No products");
-      wrapper.innerHTML = ""; // clear skeletons
+      wrapper.innerHTML = "";
 
-      data.products.products.forEach(product => {
+      data.products.products.forEach((product, index) => {
         const slide = document.createElement("div");
         slide.className = "swiper-slide bestseller-product";
 
-        // Preload image
-        const img = new Image();
-        img.onload = () => {
-          slide.querySelector("img").src = img.src;
-        };
-        img.onerror = () => {
-          slide.querySelector("img").src = "default.jpg";
-        };
-        img.src = `data:image/png;base64,${product.product_images}`;
-        const encodedId = `${product.id}-piescakes`
-        const encodedIdPrefilled = btoa(encodedId)
+        const encodedId = `${product.id}-piescakes`;
+        const encodedIdPrefilled = btoa(encodedId);
+
+        // Prepare image slides
+        let imagesHTML = "";
+        if (Array.isArray(product.product_images) && product.product_images.length > 0) {
+          product.product_images.forEach(img =>
+            imagesHTML += `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${product.name}" /></div>`
+          );
+        } else {
+          imagesHTML = `<div class="swiper-slide"><img src="default.jpg" alt="No image" /></div>`;
+        }
+
+        const swiperClass = `bestseller-swiper-${index}`;
+
+        const sizeButtons = product.serving_sizes.map((s, i) => `
+          <button class="size-btn${i === 0 ? ' active' : ''}" 
+                  data-price="${s.price}" 
+                  data-discount="${s.discount_price}">${s.size}</button>
+        `).join("");
+
+        const initialPrice = product.serving_sizes?.[0]?.price || "0.00";
+        const initialDiscount = product.serving_sizes?.[0]?.discount_price || "0.00";
 
         slide.innerHTML = `
-            <a href="/product/${encodedIdPrefilled}" style="text-decoration:none !important;color:inherit;">
-                <div class="product-image">
-                    <img src="" alt="${product.name}">
-                    <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
+          <a href="/product/${encodedIdPrefilled}" style="text-decoration:none !important;color:inherit;">
+            <div class="product-image">
+              <div class="swiper ${swiperClass}">
+                <div class="swiper-wrapper">
+                  ${imagesHTML}
                 </div>
-                <div class="product-info">
-                    <p class="category">${product.category.name}</p>
-                    <h3>${product.name}</h3>
-                    <div class="rating">
-                      ⭐⭐⭐⭐⭐
-
-                    </div>
-                    <p class="price">₹${product.price.toFixed(2)}</p>
-                </div>
-            </a>
+              </div>
+              <span class="badge">${product.reviews.length > 50 ? "HOT" : ""}</span>
+            </div>
+            <div class="product-info">
+              <p class="category">${product.category.name}</p>
+              <h3>${product.name}</h3>
+              <div class="rating">⭐⭐⭐⭐⭐</div>
+              <div class="size-buttons">${sizeButtons}</div>
+              <p class="price">
+                ₹<span class="actual-price">${parseFloat(initialPrice).toFixed(2)}</span>
+                ${parseFloat(initialDiscount) > 0 ? `<del class="discount-price">₹${parseFloat(initialDiscount).toFixed(2)}</del>` : ""}
+              </p>
+            </div>
+          </a>
         `;
+
         wrapper.appendChild(slide);
+
+        // Initialize Swiper for this card
+        setTimeout(() => {
+          new Swiper(`.${swiperClass}`, {
+            loop: true,
+            autoplay: { delay: 3000 },
+            pagination: false
+          });
+        }, 0);
+
+        // Add size button click behavior
+        const sizeBtns = slide.querySelectorAll(".size-btn");
+        const priceEl = slide.querySelector(".actual-price");
+        const discountEl = slide.querySelector(".discount-price");
+
+        sizeBtns.forEach(btn => {
+          btn.addEventListener("click", e => {
+            e.preventDefault();
+            sizeBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const price = parseFloat(btn.dataset.price).toFixed(2);
+            const discount = parseFloat(btn.dataset.discount).toFixed(2);
+
+            priceEl.textContent = price;
+            if (discount > 0) {
+              if (discountEl) {
+                discountEl.textContent = `₹${discount}`;
+                discountEl.style.display = "inline";
+              } else {
+                const newDel = document.createElement("del");
+                newDel.className = "discount-price";
+                newDel.textContent = `₹${discount}`;
+                priceEl.parentElement.appendChild(newDel);
+              }
+            } else if (discountEl) {
+              discountEl.style.display = "none";
+            }
+          });
+        });
       });
     })
     .catch(err => {
       console.error("Error loading bestsellers:", err);
     });
 }
+
     </script>
     <script>
         // Import or include Swiper JS and CSS in your page first

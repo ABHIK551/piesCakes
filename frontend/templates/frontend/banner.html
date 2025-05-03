@@ -1,9 +1,109 @@
 <!-- Banner Section -->
-<section class="banner" id="bannerSection">
-    <div class="banner-content">
-        <span class="price" id="bannerPrice">Starting at ₹149</span>
-        <h1 id="bannerTitles">Freshly Baked Goodness</h1>
-        <p id="bannerSubtitle">Just For You</p>
-        <a href="#" class="shop-btn" id="bannerBtn">Shop Now</a>
-    </div>
+<section class="banner banner-swiper swiper" id="bannerSection">
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+      try {
+        const response = await fetch("/api/banner-list/");
+        const data = await response.json();
+    
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const bannerSection = document.getElementById("bannerSection");
+    
+          // Create swiper-wrapper
+          const wrapper = document.createElement("div");
+          wrapper.className = "swiper-wrapper";
+          wrapper.id = "bannerSlides";
+    
+          for (const banner of data.data) {
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+    
+            const imageUrl = banner.image
+              ? `data:image/png;base64,${banner.image}`
+              : "";
+    
+            const contentHtml = banner.price !== null
+              ? `
+                  <div class="banner-content">
+                    <span class="price">Starting at ₹${banner.price}</span>
+                    <h1>${banner.heading || ""}</h1>
+                    <p>${banner.subheading || ""}</p>
+                    <a href="#" class="shop-btn">Shop Now</a>
+                  </div>
+                `
+              : `
+                  <div class="banner-content">
+                    <h1>${banner.heading || ""}</h1>
+                    <p>${banner.subheading || ""}</p>
+                  </div>
+                `;
+    
+            const wrapperTag = banner.link
+              ? `<a href="${banner.link}" class="banner-link" style="display:block; width:100%; height:100%;">`
+              : `<div>`;
+            const wrapperCloseTag = banner.link ? `</a>` : `</div>`;
+    
+            slide.innerHTML = `
+              ${wrapperTag}
+                <div class="banner-slide" style="
+                  background-image: url('${imageUrl}');
+                  background-size: cover;
+                  background-repeat:no-repeat;
+                  background-position: center;
+                  height: 400px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 2rem;
+                  position: relative;
+                ">
+                  ${contentHtml}
+                </div>
+              ${wrapperCloseTag}
+            `;
+    
+            wrapper.appendChild(slide);
+          }
+    
+          // Append wrapper to banner section
+          bannerSection.appendChild(wrapper);
+    
+          // Pagination & navigation buttons
+          const pagination = document.createElement("div");
+          pagination.className = "swiper-pagination";
+          bannerSection.appendChild(pagination);
+    
+          const nextBtn = document.createElement("div");
+          nextBtn.className = "swiper-button-next";
+          const prevBtn = document.createElement("div");
+          prevBtn.className = "swiper-button-prev";
+          bannerSection.appendChild(nextBtn);
+          bannerSection.appendChild(prevBtn);
+    
+          // Initialize Swiper for banner specifically
+          new Swiper(".banner-swiper", {
+            loop: true,
+            autoplay: {
+              delay: 5000,
+              disableOnInteraction: false,
+            },
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+        } else {
+          console.warn("No banners found.");
+        }
+      } catch (err) {
+        console.error("Error loading banners:", err);
+      }
+    });
+    </script>
+

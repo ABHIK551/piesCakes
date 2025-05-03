@@ -39,12 +39,12 @@
                         <th>Calories</th>
                         <th>Nutrition Facts</th>
                         <th>Prep Time</th>
-                        <th>Delivery Option</th>
-                        <th>Shelf Life</th>
+                        <!-- <th>Delivery Option</th> -->
+                        <!-- <th>Shelf Life</th> -->
                         <th>Tags</th>
                         <th>Reviews</th>
                         <th>Related Products</th>
-                        <th>Total Sales</th>
+                        <!-- <th>Total Sales</th> -->
                         <th>Status</th>
                         <th>Created At</th>
                         <th>Updated At</th>
@@ -64,183 +64,171 @@
 
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="productForm" enctype="multipart/form-data" class="container mt-4">
-                    <!-- Basic Details -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Basic Details</legend>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Product Name:</label>
-                                <input type="text" name="name" class="form-control" required>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Category:</label>
-                                <select name="category" class="form-select">
-                                    <option value="38">Cakes</option>
-                                    <option value="39">Cookies</option>
-                                    <option value="40">Bread</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editCategoryStatus" class="form-label">Status</label>
-                                <select class="form-select" id="productStatus" name="status">
-                                    <option value="1">Active</option>
-                                    <option value="2">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Description:</label>
-                                <textarea name="description" class="form-control"></textarea>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Ingredients:</label>
-                                <textarea name="ingredients" class="form-control"></textarea>
-                            </div>
-                        </div>
-                       
-                        <div class="mb-3">
-                            <label class="form-label">Allergen Information:</label>
-                            <input type="text" name="allergen_info" class="form-control">
-                        </div>
-                    </fieldset>
-                    
-                    <!-- Pricing & Availability -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Pricing & Availability</legend>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Price:</label>
-                                <input type="number" name="price" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Discount Price:</label>
-                                <input type="number" name="discount_price" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Stock Availability:</label>
-                                <select name="stock" class="form-select">
-                                    <option value="in_stock">In Stock</option>
-                                    <option value="out_of_stock">Out of Stock</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Serving Size:</label>
-                                <select name="serving_size" class="form-control">
-                                    <option value="">-- Select Serving Size --</option>
-                                    <option value="4">4 people</option>
-                                    <option value="6">6 people</option>
-                                    <option value="8">8 people</option>
-                                    <option value="10">10 people</option>
-                                    <option value="12">12 people</option>
-                                    <option value="15">15 people</option>
-                                    <option value="20">20 people</option>
-                                    <option value="0.5kg">0.5 kg</option>
-                                    <option value="1kg">1 kg</option>
-                                    <option value="1.5kg">1.5 kg</option>
-                                    <option value="2kg">2 kg</option>
-                                    <option value="custom">Custom</option>
-                                </select>
-                            </div>                            
-                        </div>
-                    </fieldset>
-
-                    <!-- Stock Details -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Stock Details</legend>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Total Stock Quantity:</label>
-                                <input type="number" name="total_stock" class="form-control">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Reorder Level:</label>
-                                <input type="number" name="reorder_level" class="form-control">
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <!-- Customization Options -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Customization Options</legend>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Cake Size:</label>
-                                <select name="cake_size" class="form-select">
-                                    <option value="small">Small</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="large">Large</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Flavor Variants:</label>
-                                <input type="text" name="flavor_variants" class="form-control">
-                            </div>
-                        </div>
-                    </fieldset>
-                    
-                    <!-- Images & Media -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Images & Media</legend>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Product Images:</label>
-                                <input type="file" name="product_images" id="productImage" class="form-control" multiple>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Video Demonstration:</label>
-                                <input type="file" name="video_demo" class="form-control">
-                            </div>
-                        </div>
-                    </fieldset>
-                    
-                    <!-- Nutritional Information -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Nutritional Information</legend>
-                        <div class="mb-3">
-                            <label class="form-label">Calories per Serving:</label>
-                            <input type="text" name="calories" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Fat, Sugar, Protein, etc.:</label>
-                            <textarea name="nutrition_facts" class="form-control"></textarea>
-                        </div>
-                    </fieldset>
-                    
-                    <!-- Additional Features -->
-                    <fieldset class="border p-3 mb-4 rounded">
-                        <legend class="w-auto px-2">Additional Features</legend>
-                        <div class="mb-3">
-                            <label class="form-label">Tags & Labels:</label>
-                            <input type="text" name="tags" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Customer Reviews & Ratings:</label>
-                            <textarea name="reviews" class="form-control"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Related Products:</label>
-                            <input type="text" name="related_products" class="form-control">
-                        </div>
-                    </fieldset>
-                    
-                    <button type="submit" class="btn btn-primary btn-sm">Save Product</button>
-                </form>
-                
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <form id="productForm" enctype="multipart/form-data" class="container mt-4">
+            <!-- Basic Details -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Basic Details</legend>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Product Name:</label>
+                  <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Category:</label>
+                  <select name="category" class="form-select">
+                    <option value="38">Cakes</option>
+                    <option value="39">Cookies</option>
+                    <option value="40">Bread</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="productStatus" class="form-label">Status</label>
+                  <select class="form-select" id="productStatus" name="status">
+                    <option value="1">Active</option>
+                    <option value="2">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Description:</label>
+                  <textarea name="description" class="form-control"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Ingredients:</label>
+                  <textarea name="ingredients" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Allergen Information:</label>
+                <input type="text" name="allergen_info" class="form-control">
+              </div>
+            </fieldset>
+  
+            <!-- Serving Sizes -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Serving Sizes & Prices</legend>
+              <div id="servingSizesContainer">
+                <div class="serving-size-row mb-3 d-flex gap-2">
+                    <select name="serving_size_temp" class="form-control serving-size">
+                        <option value="">-- Select Serving Size --</option>
+                        <option value="4">4 people</option>
+                        <option value="6">6 people</option>
+                        <option value="8">8 people</option>
+                        <option value="10">10 people</option>
+                        <option value="12">12 people</option>
+                        <option value="15">15 people</option>
+                        <option value="20">20 people</option>
+                        <option value="0.5kg">0.5 kg</option>
+                        <option value="1kg">1 kg</option>
+                        <option value="1.5kg">1.5 kg</option>
+                        <option value="2kg">2 kg</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                  <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
+                  <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
+                  <button type="button" class="btn btn-danger remove-serving-size">X</button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="addServingSizeBtn">Add Another Serving Size</button>
+            </fieldset>
+  
+            <!-- Stock Details -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Stock Details</legend>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Total Stock Quantity:</label>
+                  <input type="number" name="total_stock" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Reorder Level:</label>
+                  <input type="number" name="reorder_level" class="form-control">
+                </div>
+              </div>
+            </fieldset>
+  
+            <!-- Customization Options -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Customization Options</legend>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Cake Size:</label>
+                  <select name="cake_size" class="form-select">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Flavor Variants:</label>
+                  <input type="text" name="flavor_variants" class="form-control">
+                </div>
+              </div>
+            </fieldset>
+  
+            <!-- Images & Media -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Images & Media</legend>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Product Images:</label>
+                  <input type="file" name="product_images" id="productImage" class="form-control" multiple>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Video Demonstration:</label>
+                  <input type="file" name="video_demo" class="form-control">
+                </div>
+              </div>
+            </fieldset>
+  
+            <!-- Nutritional Info -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Nutritional Information</legend>
+              <div class="mb-3">
+                <label class="form-label">Calories per Serving:</label>
+                <input type="text" name="calories" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Fat, Sugar, Protein, etc.:</label>
+                <textarea name="nutrition_facts" class="form-control"></textarea>
+              </div>
+            </fieldset>
+  
+            <!-- Additional Features -->
+            <fieldset class="border p-3 mb-4 rounded">
+              <legend class="w-auto px-2">Additional Features</legend>
+              <div class="mb-3">
+                <label class="form-label">Tags & Labels:</label>
+                <input type="text" name="tags" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Customer Reviews & Ratings:</label>
+                <textarea name="reviews" class="form-control"></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Related Products:</label>
+                <input type="text" name="related_products" class="form-control">
+              </div>
+            </fieldset>
+  
+            <button type="submit" class="btn btn-primary btn-sm">Save Product</button>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  
+
+
+
+
 <!-- Edit Category Modal -->
 <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -296,24 +284,33 @@
                     <fieldset class="border p-3 mb-4 rounded">
                         <legend class="w-auto px-2">Pricing & Availability</legend>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label>Serving Sizes:</label>
+                            <div class="row font-weight-bold mb-2">
+                              <div class="col-md-4">Weight</div>
+                              <div class="col-md-4">Price</div>
+                              <div class="col-md-4">Discount Price</div>
+                            </div>
+                            <div id="editServingSizesContainer"></div>
+                          </div>
+                            <div class="col-md-6 mb-3" hidden>
                                 <label class="form-label">Price:</label>
                                 <input type="number" id="editProductPrice" name="price" class="form-control" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3"hidden>
                                 <label class="form-label">Discount Price:</label>
                                 <input type="number" id="editProductDiscountPrice" name="discount_price" class="form-control">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label class="form-label">Stock Availability:</label>
                                 <select id="editProductStock" name="stock" class="form-select">
                                     <option value="in_stock">In Stock</option>
                                     <option value="out_of_stock">Out of Stock</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-3">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3" hidden>
                                 <label class="form-label">Serving Size:</label>
                                 <select id="editProductServingSize" name="serving_size" class="form-control">
                                     <option value="">-- Select Serving Size --</option>
@@ -375,6 +372,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Product Images:</label>
                                 <input type="file" id="editProductImages" name="product_images" class="form-control" multiple>
+                                <div id="editProductPreviewImagesContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
                                 <img id="editProductPreviewImages" src="" class="mt-2" style="max-width: 100px; display: none;">
                             </div>
                             <div class="col-md-6 mb-3">
@@ -534,111 +532,111 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const productForm = document.getElementById("productForm");
-    const imageInput = document.getElementById("productImage"); // Make sure you have this input field
+// document.addEventListener("DOMContentLoaded", function () {
+//     const productForm = document.getElementById("productForm");
+//     const imageInput = document.getElementById("productImage"); // Make sure you have this input field
 
-    productForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent default form submission
+//     productForm.addEventListener("submit", function (event) {
+//         event.preventDefault(); // Prevent default form submission
 
-        // ✅ Check if an image is selected
-        if (imageInput.files.length > 0) {
-            const imageSize = imageInput.files[0].size; // File size in bytes (B)
-            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+//         // ✅ Check if an image is selected
+//         if (imageInput.files.length > 0) {
+//             const imageSize = imageInput.files[0].size; // File size in bytes (B)
+//             const maxSize = 2 * 1024 * 1024; // 2MB in bytes
 
-            if (imageSize > maxSize) {
-                let addProductModal = bootstrap.Modal.getInstance(document.getElementById("addProductModal"));
-                addProductModal.hide(); // Close modal after success
-                showToast("❌ Unable to upload. Image size must be under 2MB!", "danger");
-                return; // Stop form submission
-            }
-        }
+//             if (imageSize > maxSize) {
+//                 let addProductModal = bootstrap.Modal.getInstance(document.getElementById("addProductModal"));
+//                 addProductModal.hide(); // Close modal after success
+//                 showToast("❌ Unable to upload. Image size must be under 2MB!", "danger");
+//                 return; // Stop form submission
+//             }
+//         }
 
-        const formData = new FormData(productForm); // Create FormData object
+//         const formData = new FormData(productForm); // Create FormData object
 
-        fetch("/api/products/create/", {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Hide the modal properly
-                let addCategoryModal = document.getElementById("addProductModal");
-                let modalInstance = bootstrap.Modal.getInstance(addCategoryModal);
-                modalInstance.hide();
+//         fetch("/api/products/create/", {
+//             method: "POST",
+//             body: formData,
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 // Hide the modal properly
+//                 let addCategoryModal = document.getElementById("addProductModal");
+//                 let modalInstance = bootstrap.Modal.getInstance(addCategoryModal);
+//                 modalInstance.hide();
 
-                // Remove modal backdrop manually (if still present)
-                document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
+//                 // Remove modal backdrop manually (if still present)
+//                 document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
 
-                // Show success toast message
-                showToast("✅ Product Created Successfully!", "success");
-                productForm.reset();
-            } else {
-                showToast("❌ Failed to add product!", "danger");
-                console.error("Error:", data);
-            }
-        })
-        .catch(error => {
-            showToast("❌ Server error. Please try again!", "danger");
-            console.error("Fetch error:", error);
-        });
-    });
-});
+//                 // Show success toast message
+//                 showToast("✅ Product Created Successfully!", "success");
+//                 productForm.reset();
+//             } else {
+//                 showToast("❌ Failed to add product!", "danger");
+//                 console.error("Error:", data);
+//             }
+//         })
+//         .catch(error => {
+//             showToast("❌ Server error. Please try again!", "danger");
+//             console.error("Fetch error:", error);
+//         });
+//     });
+// });
 
 
 </script>
 <script>
-async function editProduct(encoded) {
-    try {
-        const response = await fetch(`/api/products/${encoded}/`);
-        const data = await response.json();
+// async function editProduct(encoded) {
+//     try {
+//         const response = await fetch(`/api/products/${encoded}/`);
+//         const data = await response.json();
 
-        if (!data.success || !data.products || data.products.length === 0) {
-            console.error("Product not found or API error.");
-            return;
-        }
+//         if (!data.success || !data.products || data.products.length === 0) {
+//             console.error("Product not found or API error.");
+//             return;
+//         }
 
-        const product = data.products[0];
+//         const product = data.products[0];
 
-        // Populate form fields with product data
-        document.getElementById("editProductName").value = product.name || "";
-        document.getElementById("editProductCategory").value = product.category?.id || "";
-        document.getElementById("editProductStatus").value = product.status === "Active" ? "Active" : "Inactive";
-        document.getElementById("editProductDescription").value = product.description || "";
-        document.getElementById("editProductIngredients").value = product.ingredients || "";
-        document.getElementById("editProductAllergen").value = product.allergen_info || "";
-        document.getElementById("editProductPrice").value = product.price || 0;
-        document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
-        document.getElementById("editProductStock").value = product.stock_status || "";
-        document.getElementById("editProductServingSize").value = product.serving_size || "";
-        document.getElementById("editProductTotalStock").value = product.total_stock || 0;
-        document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
-        document.getElementById("editProductCakeSize").value = product.cake_size || "";
-        document.getElementById("editProductFlavorVariants").value = product.flavor_variants || "";
-        document.getElementById("editProductCalories").value = product.calories || "";
-        document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
-        document.getElementById("editProductTags").value = product.tags || "";
-        document.getElementById("editProductReviews").value = product.reviews || "";
-        document.getElementById("editProductRelatedProducts").value = product.related_products || "";
-        document.getElementById("editProductId").value = product.id;
+//         // Populate form fields with product data
+//         document.getElementById("editProductName").value = product.name || "";
+//         document.getElementById("editProductCategory").value = product.category?.id || "";
+//         document.getElementById("editProductStatus").value = product.status === "Active" ? "Active" : "Inactive";
+//         document.getElementById("editProductDescription").value = product.description || "";
+//         document.getElementById("editProductIngredients").value = product.ingredients || "";
+//         document.getElementById("editProductAllergen").value = product.allergen_info || "";
+//         document.getElementById("editProductPrice").value = product.price || 0;
+//         document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
+//         document.getElementById("editProductStock").value = product.stock_status || "";
+//         document.getElementById("editProductServingSize").value = product.serving_size || "";
+//         document.getElementById("editProductTotalStock").value = product.total_stock || 0;
+//         document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
+//         document.getElementById("editProductCakeSize").value = product.cake_size || "";
+//         document.getElementById("editProductFlavorVariants").value = product.flavor_variants || "";
+//         document.getElementById("editProductCalories").value = product.calories || "";
+//         document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
+//         document.getElementById("editProductTags").value = product.tags || "";
+//         document.getElementById("editProductReviews").value = product.reviews || "";
+//         document.getElementById("editProductRelatedProducts").value = product.related_products || "";
+//         document.getElementById("editProductId").value = product.id;
 
-        // Display image preview if available
-        const imagePreview = document.getElementById("editProductPreviewImages");
-        if (product.product_images) {
-            imagePreview.src = `data:image/png;base64,${product.product_images}`;
-            imagePreview.style.display = "block";
-        } else {
-            imagePreview.style.display = "none";
-        }
+//         // Display image preview if available
+//         const imagePreview = document.getElementById("editProductPreviewImages");
+//         if (product.product_images) {
+//             imagePreview.src = `data:image/png;base64,${product.product_images}`;
+//             imagePreview.style.display = "block";
+//         } else {
+//             imagePreview.style.display = "none";
+//         }
 
-        // Show the edit modal
-        const editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
-        editModal.show();
-    } catch (error) {
-        console.error("Error fetching product data:", error);
-    }
-}
+//         // Show the edit modal
+//         const editModal = new bootstrap.Modal(document.getElementById("editProductModal"));
+//         editModal.show();
+//     } catch (error) {
+//         console.error("Error fetching product data:", error);
+//     }
+// }
 
 
 
@@ -653,36 +651,38 @@ let currentPage = 1;  // ✅ Move this to the global scope
         fetch(`/api/products-list/?page=${page}&pageSize=${pageSize}`)
             .then(response => response.json())
             .then(data => {
-                console.log("API Response:", data); // Debugging log
+                console.log("API Response:", data);
                 const products = data.products.products;
-                // Convert category object to a JSON string & escape single quotes
-			    let productData = encodeURIComponent(JSON.stringify(products));
                 const tableBody = document.getElementById('productTableBody');
                 tableBody.innerHTML = '';
 
-              
-
-               products.forEach(product => {
+                products.forEach(product => {
                     const encodedProductId = btoa(`${product.id}-piescakes`);
                     const row = document.createElement('tr');
 
-                    // Insert product details into table cells
+                    // Safely get image array
+                    const productImages = Array.isArray(product.product_images) ? product.product_images : [];
+
+                    // Format serving sizes
+                    const servingSizes = Array.isArray(product.serving_sizes)
+                        ? product.serving_sizes.map(ss => `${ss.size}: ₹${ss.price} (${ss.discount_price} off)`).join('<br>')
+                        : 'N/A';
+
                     row.innerHTML = `
                         <td>${product.id}</td>
-                        <td>${product.name}</td>
+                        <td>${product.name || 'N/A'}</td>
                         <td>
-                            <img src="data:image/png;base64,${product.product_images}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover;">
+                            ${productImages.map(base64 =>
+                                `<img src="data:image/png;base64,${base64}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 5px;">`
+                            ).join('')}
                         </td>
-                        <td>${product.category ? product.category.name : 'N/A'}</td>
+                        <td>${product.category?.name || 'N/A'}</td>
                         <td>${product.description || 'N/A'}</td>
                         <td>${product.ingredients || 'N/A'}</td>
                         <td>${product.allergen_info || 'N/A'}</td>
-                        <td>${product.price}</td>
-                        <td>${product.discount_price || 'N/A'}</td>
-                        <td>${product.stock_status}</td>
-                        <td>${product.serving_size || 'N/A'}</td>
-                        <td>${product.total_stock}</td>
-                        <td>${product.reorder_level}</td>
+                        <td>${servingSizes}</td>
+                        <td>${product.total_stock || 0}</td>
+                        <td>${product.reorder_level || 0}</td>
                         <td>${product.weight || 'N/A'}</td>
                         <td>${product.cake_size || 'N/A'}</td>
                         <td>${product.flavor_variants || 'N/A'}</td>
@@ -695,9 +695,9 @@ let currentPage = 1;  // ✅ Move this to the global scope
                         <td>${product.tags || 'N/A'}</td>
                         <td>${product.reviews || 'N/A'}</td>
                         <td>${product.related_products || 'N/A'}</td>
-                        <td>${product.total_sales}</td>
-                        <td class="${product.status === 'Active' ? 'bg-success text-white' : 'bg-danger text-white'}">
-                            ${product.status}
+                        <td>${product.total_sales || 0}</td>
+                        <td class="${product.status === true || product.status === 'Active' ? 'bg-success text-white' : 'bg-danger text-white'}">
+                            ${product.status === true || product.status === 'Active' ? 'Active' : 'Inactive'}
                         </td>
                         <td class="d-none d-md-table-cell">${new Date(product.created_at).toLocaleString()}</td>
                         <td class="d-none d-md-table-cell">${product.updated_at ? new Date(product.updated_at).toLocaleString() : ""}</td>
@@ -705,14 +705,15 @@ let currentPage = 1;  // ✅ Move this to the global scope
                             <button class="btn btn-sm btn-primary" onclick="editProduct('${encodedProductId}')">Edit</button>
                             <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
                         </td>
-                        
-                    `; 
+                    `;
+
                     tableBody.appendChild(row);
                 });
 
                 document.getElementById("loader-container").style.display = "none";
                 updatePagination(data.page, data.totalPages);
             })
+
             .catch(error => {
                 console.error('Error fetching products:', error);
             });
@@ -775,53 +776,125 @@ let currentPage = 1;  // ✅ Move this to the global scope
 				})
 		}
 	};
+// document.getElementById("editProductForm").addEventListener("submit", updateProduct);
+// async function updateProduct(event) {
+//     event.preventDefault(); // ✅ Prevent form submission & page reload
 
-    document.getElementById("editProductForm").addEventListener("submit", updateProduct);
+//     let form = document.getElementById("editProductForm");
+//     let formData = new FormData(form);
+
+//     let productId = document.getElementById("editProductId").value;
+//     let imageInputProduct = document.getElementById("editProductImages");
+
+//     // ✅ Check if an image is selected
+//     if (imageInputProduct.files.length > 0) {
+//         const imageSize = imageInputProduct.files[0].size; // File size in bytes (B)
+//         const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+
+//         if (imageSize > maxSize) {
+//             let editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
+//             editModal.hide(); // Close modal after success
+//             showToast("❌ Unable to upload. Image size must be under 2MB!", "danger");
+//             return; // Stop form submission
+//         }
+
+//         formData.append("image", imageInputProduct.files[0]);
+//     }
+
+//     try {
+//         let response = await fetch(`/api/product/${productId}/`, {
+//             method: "POST", 
+//             body: formData
+//         });
+
+//         let result = await response.json();
+
+//         if (result.success) { // ✅ Correct success check
+//             let editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
+//             editModal.hide(); // Close modal after success
+
+//             showToast("✅ Product updated successfully!", "success");
+//             setTimeout(() => {
+//                 location.reload(); // ✅ Refresh page after 5 sec
+//             }, 5000);
+//         } else {
+//             showToast("❌ Product update failed!", "danger");
+//             setTimeout(() => {
+//                 location.reload(); // ✅ Refresh page after 5 sec
+//             }, 5000);
+//         }
+//     } catch (error) {
+//         console.error("Error updating product:", error);
+//         showToast("❌ An error occurred!", "danger");
+//     }
+// }
+
+document.getElementById("editProductForm").addEventListener("submit", updateProduct);
+
 async function updateProduct(event) {
-    event.preventDefault(); // ✅ Prevent form submission & page reload
+    event.preventDefault(); // Stop default form submission
 
-    let form = document.getElementById("editProductForm");
-    let formData = new FormData(form);
+    const form = document.getElementById("editProductForm");
+    const formData = new FormData(form);
 
-    let productId = document.getElementById("editProductId").value;
-    let imageInputProduct = document.getElementById("editProductImages");
+    const productId = document.getElementById("editProductId").value;
+    const imageInputProduct = document.getElementById("editProductImages");
 
-    // ✅ Check if an image is selected
+    // ✅ Image validation
     if (imageInputProduct.files.length > 0) {
-        const imageSize = imageInputProduct.files[0].size; // File size in bytes (B)
-        const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+        const imageSize = imageInputProduct.files[0].size;
+        const maxSize = 2 * 1024 * 1024; // 2MB
 
         if (imageSize > maxSize) {
-            let editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
-            editModal.hide(); // Close modal after success
-            showToast("❌ Unable to upload. Image size must be under 2MB!", "danger");
-            return; // Stop form submission
+            const editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
+            editModal.hide();
+            showToast("❌ Image must be under 2MB!", "danger");
+            return;
         }
 
         formData.append("image", imageInputProduct.files[0]);
     }
 
+    // ✅ Collect and attach serving sizes
+    const servingSizes = [];
+    document.querySelectorAll('#editServingSizesContainer .row').forEach(row => {
+        const size = row.querySelector('select')?.value.trim();
+        const price = parseFloat(row.querySelector('input[name$="[price]"]')?.value);
+        const discount = row.querySelector('input[name$="[discount_price]"]')?.value;
+        const discount_price = discount ? parseFloat(discount) : null;
+
+        if (size && !isNaN(price)) {
+            servingSizes.push({ size, price, discount_price });
+        }
+    });
+
+    formData.set("serving_sizes_input", JSON.stringify(servingSizes));
+
+    const kept = window.getKeptImages?.();
+    if (kept && kept.length > 0) {
+        formData.set("product_images_base64", kept.join(","));
+    }
+
+    // ✅ You can also set a single selected serving size here if needed
+    const selectedServingSize = document.getElementById("editProductServingSize").value;
+    formData.set("serving_size", selectedServingSize);
+
     try {
-        let response = await fetch(`/api/product/${productId}/`, {
-            method: "POST", 
-            body: formData
+        const response = await fetch(`/api/product/${productId}/`, {
+            method: "POST", // or PUT if your backend expects it
+            body: formData,
         });
 
-        let result = await response.json();
+        const result = await response.json();
 
-        if (result.success) { // ✅ Correct success check
-            let editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
-            editModal.hide(); // Close modal after success
-
+        if (result.success) {
+            const editModal = bootstrap.Modal.getInstance(document.getElementById("editProductModal"));
+            editModal.hide();
             showToast("✅ Product updated successfully!", "success");
-            setTimeout(() => {
-                location.reload(); // ✅ Refresh page after 5 sec
-            }, 5000);
+            setTimeout(() => location.reload(), 3000);
         } else {
             showToast("❌ Product update failed!", "danger");
-            setTimeout(() => {
-                location.reload(); // ✅ Refresh page after 5 sec
-            }, 5000);
+            setTimeout(() => location.reload(), 3000);
         }
     } catch (error) {
         console.error("Error updating product:", error);
@@ -829,7 +902,431 @@ async function updateProduct(event) {
     }
 }
 
-
     </script>
+<script>
+document.getElementById('addServingSizeBtn').addEventListener('click', function () {
+  const newRow = `
+    <div class="serving-size-row mb-3 d-flex gap-2">
+    <select name="serving_size_temp" class="form-control serving-size">
+        <option value="">-- Select Serving Size --</option>
+        <option value="4 people">4 people</option>
+        <option value="6 people">6 people</option>
+        <option value="8 people">8 people</option>
+        <option value="10 people">10 people</option>
+        <option value="12 people">12 people</option>
+        <option value="15 people">15 people</option>
+        <option value="20 people">20 people</option>
+        <option value="0.5kg">0.5 kg</option>
+        <option value="1kg">1 kg</option>
+        <option value="1.5kg">1.5 kg</option>
+        <option value="2kg">2 kg</option>
+        <option value="custom">Custom</option>
+    </select>
+      <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
+      <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
+      <button type="button" class="btn btn-danger remove-serving-size">X</button>
+    </div>`;
+  document.getElementById('servingSizesContainer').insertAdjacentHTML('beforeend', newRow);
+});
+
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('remove-serving-size')) {
+    e.target.closest('.serving-size-row').remove();
+  }
+});
+
+document.getElementById('productForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Collect serving sizes
+const servingSizes = [];
+    document.querySelectorAll('.serving-size-row').forEach(row => {
+    const size = row.querySelector('.serving-size')?.value.trim();
+    const price = parseFloat(row.querySelector('.price-input')?.value);
+    const discount = row.querySelector('.discount-input')?.value;
+    const discount_price = discount ? parseFloat(discount) : null;
+
+    if (size && !isNaN(price)) {
+        servingSizes.push({ size, price, discount_price });
+    }
+});
+
+formData.set('serving_sizes_input', JSON.stringify(servingSizes));
+
+  formData.set('serving_sizes_input', JSON.stringify(servingSizes));
+  formData.append('serving_size', "1");
+
+  fetch('/api/products/create/', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok) {
+        const modalElement = document.getElementById('addProductModal'); // ✅ Modal, not the form
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Fix leftover backdrop issue
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            }, 300); // slight delay to ensure modal hides first
+
+            showToast("Item Update successfully!", "success");
+            form.reset();
+      showToast('✅ Product Created successfully!", "success"');
+    } else {
+    showToast('✅ Product Createtion Failed!", "danger"');
+      console.log(data.errors);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    showToast('An error occurred while submitting.', "danger");
+  });
+});
+</script>
+
+</script>
+<script>
+// async function editProduct(encoded) {
+//     try {
+//         const response = await fetch(`/api/products/${encoded}/`);
+//         const result = await response.json();
+
+//         const kept = window.getKeptImages?.();
+//             if (kept && kept.length > 0) {
+//                 formData.set("product_images_base64", kept.join(","));
+//             }
+
+//         if (!result.success) {
+//             showToast("Failed to load product.", "danger");
+//             return;
+//         }
+
+//         const product = result.product;
+
+//         // Basic Fields
+//         document.getElementById("editProductId").value = product.id;
+//         document.getElementById("editProductName").value = product.name;
+//         document.getElementById("editProductCategory").value = product.category;
+//         document.getElementById("editProductStatus").value = product.status ? "Active" : "Inactive";
+//         document.getElementById("editProductDescription").value = product.description || "";
+//         document.getElementById("editProductIngredients").value = product.ingredients || "";
+//         document.getElementById("editProductAllergen").value = product.allergen_info || "";
+
+//         // Pricing & Availability
+//         document.getElementById("editProductPrice").value = product.price || 0;
+//         document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
+//         document.getElementById("editProductStock").value = product.stock_status || "in_stock";
+
+//         // Stock
+//         document.getElementById("editProductTotalStock").value = product.total_stock || 0;
+//         document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
+
+//         // Customization
+//         document.getElementById("editProductCakeSize").value = product.cake_size || "";
+//         document.getElementById("editProductFlavorVariants").value = product.flavor_variants || "";
+
+//         // Nutrition
+//         document.getElementById("editProductCalories").value = product.calories || "";
+//         document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
+
+//         // Additional
+//         document.getElementById("editProductTags").value = product.tags || "";
+//         document.getElementById("editProductReviews").value = product.reviews || "";
+//         document.getElementById("editProductRelatedProducts").value =
+//             Array.isArray(product.related_products)
+//                 ? product.related_products.join(", ")
+//                 : product.related_products || "";
+
+//         // Multiple Image Preview
+//         const previewContainer = document.getElementById("editProductPreviewImagesContainer");
+//         previewContainer.innerHTML = "";
+
+//         // Track images to keep
+//         let keptImages = [...product.product_images]; // clone base64 array
+
+//         product.product_images.forEach((base64, index) => {
+//             const wrapper = document.createElement("div");
+//             wrapper.style.position = "relative";
+//             wrapper.style.display = "inline-block";
+//             wrapper.style.marginRight = "10px";
+
+//             const img = document.createElement("img");
+//             img.src = `data:image/png;base64,${base64.trim()}`;
+//             img.style.maxWidth = "100px";
+//             img.classList.add("img-thumbnail");
+
+//             const removeBtn = document.createElement("span");
+//             removeBtn.textContent = "✖";
+//             removeBtn.style.position = "absolute";
+//             removeBtn.style.top = "0";
+//             removeBtn.style.right = "5px";
+//             removeBtn.style.cursor = "pointer";
+//             removeBtn.style.color = "red";
+//             removeBtn.style.fontWeight = "bold";
+
+//             removeBtn.onclick = () => {
+//                 wrapper.remove(); // remove from UI
+//                 keptImages[index] = null; // mark for exclusion
+//             };
+
+//             wrapper.appendChild(img);
+//             wrapper.appendChild(removeBtn);
+//             previewContainer.appendChild(wrapper);
+//         });
+
+//         // Store in global or form state
+//         window.getKeptImages = () => keptImages.filter(Boolean); // only non-null
+
+
+//         // Serving Size Dropdown
+//         const servingSizeSelect = document.getElementById("editProductServingSize");
+
+//         const servingSizeOptions = [
+//             { value: "", text: "-- Select Serving Size --" },
+//             { value: "4", text: "4 people" },
+//             { value: "6", text: "6 people" },
+//             { value: "8", text: "8 people" },
+//             { value: "10", text: "10 people" },
+//             { value: "12", text: "12 people" },
+//             { value: "15", text: "15 people" },
+//             { value: "20", text: "20 people" },
+//             { value: "0.5kg", text: "0.5 kg" },
+//             { value: "1kg", text: "1 kg" },
+//             { value: "1.5kg", text: "1.5 kg" },
+//             { value: "2kg", text: "2 kg" },
+//             { value: "custom", text: "Custom" }
+//         ];
+
+//         servingSizeSelect.innerHTML = "";
+
+//         servingSizeOptions.forEach(option => {
+//             const opt = document.createElement("option");
+//             opt.value = option.value;
+//             opt.textContent = option.text;
+
+//             if (
+//                 product.serving_size &&
+//                 product.serving_size.toString().trim().toLowerCase() === option.value.toLowerCase()
+//             ) {
+//                 opt.selected = true;
+//             }
+
+//             servingSizeSelect.appendChild(opt);
+//         });
+
+//         // Detailed Serving Sizes Table
+//         if (Array.isArray(product.serving_sizes)) {
+//             populateServingSizes(product.serving_sizes);
+//         }
+
+//         // Show Modal
+//         const modal = new bootstrap.Modal(document.getElementById("editProductModal"));
+//         modal.show();
+
+//     } catch (error) {
+//         console.error("Failed to load product details:", error);
+//         showToast("Something went wrong while loading the product.". "danger");
+//     }
+// }
+
+async function editProduct(encoded) {
+    try {
+        const response = await fetch(`/api/products/${encoded}/`);
+        const result = await response.json();
+
+        if (!result.success) {
+            showToast("Failed to load product.", "danger");
+            return;
+        }
+
+        const product = result.product;
+
+        // Basic Fields
+        document.getElementById("editProductId").value = product.id;
+        document.getElementById("editProductName").value = product.name;
+        document.getElementById("editProductCategory").value = product.category;
+        document.getElementById("editProductStatus").value = product.status ? "Active" : "Inactive";
+        document.getElementById("editProductDescription").value = product.description || "";
+        document.getElementById("editProductIngredients").value = product.ingredients || "";
+        document.getElementById("editProductAllergen").value = product.allergen_info || "";
+
+        // Pricing & Availability
+        document.getElementById("editProductPrice").value = product.price || 0;
+        document.getElementById("editProductDiscountPrice").value = product.discount_price || 0;
+        document.getElementById("editProductStock").value = product.stock_status || "in_stock";
+
+        // Stock
+        document.getElementById("editProductTotalStock").value = product.total_stock || 0;
+        document.getElementById("editProductReorderLevel").value = product.reorder_level || 0;
+
+        // Customization
+        document.getElementById("editProductCakeSize").value = product.cake_size || "";
+        document.getElementById("editProductFlavorVariants").value = product.flavor_variants || "";
+
+        // Nutrition
+        document.getElementById("editProductCalories").value = product.calories || "";
+        document.getElementById("editProductNutritionFacts").value = product.nutrition_facts || "";
+
+        // Additional
+        document.getElementById("editProductTags").value = product.tags || "";
+        document.getElementById("editProductReviews").value = product.reviews || "";
+        document.getElementById("editProductRelatedProducts").value =
+            Array.isArray(product.related_products)
+                ? product.related_products.join(", ")
+                : product.related_products || "";
+
+        // Multiple Image Preview with removal
+        const previewContainer = document.getElementById("editProductPreviewImagesContainer");
+        previewContainer.innerHTML = "";
+
+        let keptImages = [...product.product_images]; // clone base64 array
+
+        product.product_images.forEach((base64, index) => {
+            const wrapper = document.createElement("div");
+            wrapper.style.position = "relative";
+            wrapper.style.display = "inline-block";
+            wrapper.style.marginRight = "10px";
+
+            const img = document.createElement("img");
+            img.src = `data:image/png;base64,${base64.trim()}`;
+            img.style.maxWidth = "100px";
+            img.classList.add("img-thumbnail");
+
+            const removeBtn = document.createElement("span");
+            removeBtn.textContent = "✖";
+            removeBtn.style.position = "absolute";
+            removeBtn.style.top = "0";
+            removeBtn.style.right = "5px";
+            removeBtn.style.cursor = "pointer";
+            removeBtn.style.color = "red";
+            removeBtn.style.fontWeight = "bold";
+
+            removeBtn.onclick = () => {
+                wrapper.remove();              // Remove from UI
+                keptImages[index] = null;      // Remove from array
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            previewContainer.appendChild(wrapper);
+        });
+
+        // Store function globally for use during form submission
+        window.getKeptImages = () => keptImages.filter(Boolean);
+
+        // Serving Size Dropdown
+        const servingSizeSelect = document.getElementById("editProductServingSize");
+
+        const servingSizeOptions = [
+            { value: "", text: "-- Select Serving Size --" },
+            { value: "4 people", text: "4 people" },
+            { value: "6 people", text: "6 people" },
+            { value: "8 people", text: "8 people" },
+            { value: "10 people", text: "10 people" },
+            { value: "12 people", text: "12 people" },
+            { value: "15 people", text: "15 people" },
+            { value: "20 people", text: "20 people" },
+            { value: "0.5kg", text: "0.5 kg" },
+            { value: "1kg", text: "1 kg" },
+            { value: "1.5kg", text: "1.5 kg" },
+            { value: "2kg", text: "2 kg" },
+            { value: "custom", text: "Custom" }
+        ];
+
+        servingSizeSelect.innerHTML = "";
+        servingSizeOptions.forEach(option => {
+            const opt = document.createElement("option");
+            opt.value = option.value;
+            opt.textContent = option.text;
+
+            if (
+                product.serving_size &&
+                product.serving_size.toString().trim().toLowerCase() === option.value.toLowerCase()
+            ) {
+                opt.selected = true;
+            }
+
+            servingSizeSelect.appendChild(opt);
+        });
+
+        // Detailed Serving Sizes Table
+        if (Array.isArray(product.serving_sizes)) {
+            populateServingSizes(product.serving_sizes);
+        }
+
+        // Show Edit Modal
+        const modal = new bootstrap.Modal(document.getElementById("editProductModal"));
+        modal.show();
+
+    } catch (error) {
+        console.error("Failed to load product details:", error);
+        showToast("Something went wrong while loading the product.", "danger");
+    }
+}
+
+
+
+function populateServingSizes(servingSizes) {
+    const container = document.getElementById("editServingSizesContainer");
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const options = [
+    { value: "", text: "-- Select Serving Size --" },
+            { value: "4 people", text: "4 people" },
+            { value: "6 people", text: "6 people" },
+            { value: "8 people", text: "8 people" },
+            { value: "10 people", text: "10 people" },
+            { value: "12 people", text: "12 people" },
+            { value: "15 people", text: "15 people" },
+            { value: "20 people", text: "20 people" },
+            { value: "0.5kg", text: "0.5 kg" },
+            { value: "1kg", text: "1 kg" },
+            { value: "1.5kg", text: "1.5 kg" },
+            { value: "2kg", text: "2 kg" },
+            { value: "custom", text: "Custom" }
+    ];
+
+    servingSizes.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "row mb-2";
+
+        // Build select options
+        const selectOptions = options.map(opt => {
+            const selected = opt.value === item.size ? 'selected' : '';
+            return `<option value="${opt.value}" ${selected}>${opt.text}</option>`;
+        }).join("");
+
+        row.innerHTML = `
+            <div class="col-md-4">
+                <select name="serving_sizes_input[${index}][size]" class="form-control">
+                    ${selectOptions}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="number" name="serving_sizes_input[${index}][price]" class="form-control" placeholder="Price" value="${item.price || ''}">
+            </div>
+            <div class="col-md-4">
+                <input type="number" name="serving_sizes_input[${index}][discount_price]" class="form-control" placeholder="Discount Price" value="${item.discount_price || ''}">
+            </div>
+        `;
+        container.appendChild(row);
+    });
+}
+
+
+</script>
 
 {%endblock%}

@@ -1,0 +1,303 @@
+<script>
+    {
+      const apiUrl = "/api/products-list/?pageSize=10";
+      let allProducts = [];
+  
+      const productSection = document.querySelector(".product-section");
+      const categoryList = document.getElementById("category-list");
+      const subcategoryList = document.getElementById("subcategory-list");
+      const weightFilterList = document.getElementById("weight-filter-list");
+      const priceRange = document.querySelector("#price-range");
+      const tagSpans = document.querySelectorAll(".tags span");
+  
+      fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) return;
+          allProducts = data.products.products;
+  
+          const categoryMap = new Map();
+          const weightSet = new Set();
+  
+          allProducts.forEach(product => {
+            product.serving_sizes?.forEach(ss => {
+              if (ss.size) weightSet.add(ss.size.toLowerCase().trim());
+            });
+  
+            if (!product.category) return;
+            const parentName = product.category.parent ? product.category.parent.name : null;
+            const categoryName = parentName || product.category.name;
+            const subName = parentName ? product.category.name : null;
+  
+            if (!categoryMap.has(categoryName)) {
+              categoryMap.set(categoryName, new Set());
+            }
+            if (subName) categoryMap.get(categoryName).add(subName);
+          });
+  
+          populateCategories(categoryMap);
+          populateWeights(weightSet);
+          renderProducts(allProducts);
+        });
+  
+      function populateCategories(categoryMap) {
+        categoryList.innerHTML = "";
+        categoryMap.forEach((subs, name) => {
+          const li = document.createElement("li");
+          const lbl = document.createElement("label");
+          lbl.innerHTML = <input type='checkbox' class='category-filter' value='${name}'/> <span>${name}</span>;
+          li.appendChild(lbl);
+          categoryList.appendChild(li);
+        });
+        document.querySelectorAll(".category-filter").forEach(cb =>
+          cb.addEventListener("change", () => updateSubcategories(categoryMap))
+        );
+      }
+  
+      function populateWeights(weightSet) {
+        weightFilterList.innerHTML = "";
+        weightSet.forEach(size => {
+          let labelText = size;
+          const li = document.createElement("li");
+          const lbl = document.createElement("label");
+          lbl.style.display = "flex";
+          lbl.style.alignItems = "center";
+          if (Number.isInteger(Number(size))) {
+            labelText = ${size} Person;
+          }
+          lbl.style.gap = "6px";
+          lbl.innerHTML = <input type='checkbox' class='weight-filter' value='${size}'/> <span>${labelText}</span>;
+          li.appendChild(lbl);
+          weightFilterList.appendChild(li);
+        });
+        document.querySelectorAll(".weight-filter").forEach(cb =>
+          cb.addEventListener("change", applyFilters)
+        );
+      }
+  
+      function updateSubcategories(categoryMap) {
+        subcategoryList.innerHTML = "";
+        const selectedCats = [...document.querySelectorAll(".category-filter:checked")].map(cb => cb.value);
+        selectedCats.forEach(cat => {
+          const subs = categoryMap.get(cat) || new Set();
+          subs.forEach(sub => {
+            const li = document.createElement("li");
+            const lbl = document.createElement("label");
+            lbl.innerHTML = <input type='checkbox' class='subcategory-filter' value='${sub}' data-category='${cat}'/> <span>${sub}</span>;
+            li.appendChild(lbl);
+            subcategoryList.appendChild(li);
+          });
+        });
+        document.querySelectorAll(".subcategory-filter").forEach(cb =>
+          cb.addEventListener("change", applyFilters)
+        );
+        applyFilters();
+      }
+
+        function renderProducts(products) {
+  productSection.innerHTML = "";
+  if (!products.length) {
+    productSection.innerHTML = "<p>No products match the selected filters.</p>";
+    return;
+  }
+
+  products.forEach((product, index) => {
+    // Safely parse images
+    let images = [];
+    if (Array.isArray(product.product_images)) {
+      images = product.product_images;
+    } else if (typeof product.product_images === "string") {
+      images = product.product_images.split(',').map(img => img.trim()).filter(Boolean);
+    }
+
+    const swiperClass = product-swiper-${index};
+    const imageSlides = images.length > 0
+      ? images.map(img => 
+          <div class="swiper-slide bestseller-product">
+            <img src="data:image/jpeg;base64,${img}" alt="${product.name}" loading="lazy"/>
+          </div>
+        ).join('')
+      : <div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>;
+
+    const slider = images.length > 1
+      ? <div class="swiper-container ${swiperClass}">
+          <div class="swiper-wrapper">
+            ${imageSlides}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      : <div class='product-image'>
+          <img src='data:image/jpeg;base64,${images[0] || ''}' alt='${product.name}' loading='lazy'/>
+        </div>;
+
+    const servingSizes = product.serving_sizes || [];
+    const defaultServing = servingSizes[0];
+    const price = parseFloat(defaultServing?.price || "0");
+    const discount = parseFloat(defaultServing?.discount_price || "0");
+    const finalPrice = price - discount;
+
+    const weightsHtml = servingSizes.map((serving, i) => 
+      <button 
+        class="weight ${i === 0 ? 'active' : ''}" 
+        data-size="${serving.size}" 
+        data-price="${serving.price}" 
+        data-discount="${serving.discount_price || 0}"
+        style="margin: 4px 4px 0 0;"
+      >
+        ${serving.size}
+      </button>
+    ).join('');
+
+    const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify({ productIds: [product.id], userId: sessionStorage.getItem('user_id') }))));
+    const idEnc = btoa(${product.id}-piescakes);
+
+    const html = 
+      <div class='product-card' style="border-radius:5px;">
+        <a href='/product/${idEnc}'>
+          ${slider}
+        </a>
+        <div class='product-info'>
+          <h3 style="margin: 5px 0;">${product.name}</h3>
+          <div class='weights' style='margin-bottom:10px; display: flex; flex-wrap: wrap;'>${weightsHtml}</div>
+          <p class='price' style='margin:5px 0;'>
+            <span class='current-price' style='color:orange;font-weight:bold;'>₹${finalPrice.toFixed(2)}</span>
+            ${discount > 0 ? <span class='old-price' style='text-decoration:line-through;color:grey;margin-left:8px;'>₹${price.toFixed(2)}</span> : ""}
+          </p>
+          <div class='rating' style='color:#FFD700;font-size:1.2em;margin-bottom:10px;display:flex;'>★★★★★</div>
+          <div class='buttons' style='display:flex;gap:10px;'>
+            <button class='add-to-cart product-card-add-to-cart' data-product='${product.id}' data-encoded='${encodedData}'>ADD TO CART</button>
+            <button class='buy-now'>BUY NOW</button>
+          </div>
+        </div>
+      </div>
+    ;
+
+    productSection.insertAdjacentHTML('beforeend', html);
+
+    // Set up logic after DOM insert
+    setTimeout(() => {
+      const card = document.querySelectorAll('.product-card')[index];
+
+      // Quantity controls (optional if quantity input exists in future)
+      const minus = card.querySelector('.minus');
+      const plus = card.querySelector('.plus');
+      const qtyInput = card.querySelector('.quantity-input');
+
+      minus?.addEventListener('click', () => {
+        let qty = parseInt(qtyInput.value);
+        if (qty > 1) qtyInput.value = qty - 1;
+      });
+
+      plus?.addEventListener('click', () => {
+        let qty = parseInt(qtyInput.value);
+        qtyInput.value = qty + 1;
+      });
+
+      // ✅ Weight selection logic
+      const weightBtns = card.querySelectorAll('.weight');
+      weightBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          weightBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const price = parseFloat(btn.dataset.price || "0");
+          const discount = parseFloat(btn.dataset.discount || "0");
+          const finalPrice = price - discount;
+
+          const priceElem = card.querySelector('.current-price');
+          const oldPriceElem = card.querySelector('.old-price');
+
+          priceElem.textContent = ₹${finalPrice.toFixed(2)};
+
+          if (discount > 0) {
+            if (!oldPriceElem) {
+              const newOldPrice = document.createElement('span');
+              newOldPrice.className = 'old-price';
+              newOldPrice.style.cssText = 'text-decoration:line-through;color:grey;margin-left:8px;';
+              newOldPrice.textContent = ₹${price.toFixed(2)};
+              priceElem.parentNode.appendChild(newOldPrice);
+            } else {
+              oldPriceElem.textContent = ₹${price.toFixed(2)};
+            }
+          } else if (oldPriceElem) {
+            oldPriceElem.remove();
+          }
+        });
+      });
+
+      // Swiper init
+      if (images.length > 1 && typeof Swiper !== 'undefined') {
+        new Swiper(.${swiperClass}, {
+          loop: true,
+          autoplay: { delay: 3000 },
+          pagination: {
+            el: .${swiperClass} .swiper-pagination,
+            clickable: true,
+          },
+        });
+      }
+    }, 0);
+  });
+}
+
+
+      function applyFilters() {
+        const selectedCategories = [...document.querySelectorAll(".category-filter:checked")].map(cb => cb.value);
+        const selectedSubCategories = [...document.querySelectorAll(".subcategory-filter:checked")].map(cb => cb.value);
+        const selectedWeights = [...document.querySelectorAll(".weight-filter:checked")].map(cb => cb.value.toLowerCase());
+        const selectedTags = [...tagSpans].filter(span => span.classList.contains('active')).map(span => span.textContent.trim().toLowerCase());
+        const maxPrice = parseFloat(priceRange.value);
+  
+        const filtered = allProducts.filter(p => {
+          const parent = p.category.parent?.name;
+          const cat = parent || p.category.name;
+          const sub = parent ? p.category.name : null;
+  
+          const categoryMatch = !selectedCategories.length || selectedCategories.includes(cat) || selectedSubCategories.includes(sub);
+          const subCategoryMatch = !selectedSubCategories.length || selectedSubCategories.includes(sub);
+  
+          const weightMatch = !selectedWeights.length || p.serving_sizes?.some(ss => selectedWeights.includes(ss.size?.toLowerCase().trim()));
+          const priceMatch = p.serving_sizes?.some(ss => parseFloat(ss.price) - parseFloat(ss.discount_price || 0) <= maxPrice);
+          const tagsMatch = !selectedTags.length || selectedTags.some(t => (p.tags || "").toLowerCase().includes(t));
+  
+          return categoryMatch && subCategoryMatch && weightMatch && priceMatch && tagsMatch;
+        });
+  
+        renderProducts(filtered);
+      }
+  
+      priceRange.addEventListener('input', applyFilters);
+      tagSpans.forEach(span => {
+        span.style.cursor = 'pointer';
+        span.addEventListener('click', () => {
+          span.classList.toggle('active');
+          applyFilters();
+        });
+      });
+    });
+  
+    function addToCart(encoded) {
+      const { productIds, userId } = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+      if (!userId) { showToast('Please login to add items to the cart', 'danger'); return; }
+      const cartItems = productIds.map(id => ({ product: id, quantity: 1 }));
+      fetch('/api/add-to-cart/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, cartItems })
+      })
+        .then(res => res.json())
+        .then(d => {
+          showToast(
+            d.error ? 'Failed to add products to cart.' : 'Products added to cart successfully!',
+            d.error ? 'danger' : 'success'
+          );
+          if (!d.error) {
+            setTimeout(() => window.location.href = '/cart', 1500);
+          }
+        })
+        .catch(e => {
+          console.error(e);
+          showToast('An error occurred while adding to cart.', 'danger');
+        });
+    }
+</script>

@@ -32,46 +32,316 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .filters import ProductFilter
 from rest_framework.views import APIView
+import json
 
+
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data.copy()
+
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+
+#             for image_file in image_files:
+#                 try:
+#                     image_content = image_file.read()  # Read file content
+#                     encoded_image = base64.b64encode(image_content).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({
+#                         "success": False,
+#                         "message": f"Error processing image: {str(e)}"
+#                     }, status=status.HTTP_400_BAD_REQUEST)
+#                 finally:
+#                     image_file.close()  # Explicitly close the file
+
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!"
+#             }, status=status.HTTP_201_CREATED)
+        
+#         return Response({
+#             "success": False,
+#             "message": "Failed to add product!",
+#             "errors": serializer.errors
+#         }, status=status.HTTP_400_BAD_REQUEST)
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data.copy()
+
+#         print(f"Data comes to create product {data}")
+#         # Handle image files
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+#             for image_file in image_files:
+#                 try:
+#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#                 finally:
+#                     image_file.close()
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         # Parse serving_sizes_input correctly
+#         serving_sizes_raw = data.get("serving_sizes")
+#         if serving_sizes_raw:
+#             try:
+#                 data['serving_sizes'] = json.loads(serving_sizes_raw)
+#             except json.JSONDecodeError:
+#                 return Response({"success": False, "message": "Invalid serving_sizes_input JSON"}, status=400)
+
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             product = serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!",
+#                 "data": ProductSerializer(product).data  # include product data in response
+#             }, status=201)
+
+#         return Response({"success": False, "errors": serializer.errors}, status=400)
+
+
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data.copy()
+
+#         print(f"Data comes to create product {data}")
+
+#         # Handle image files and convert to base64
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+#             for image_file in image_files:
+#                 try:
+#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#                 finally:
+#                     image_file.close()
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         # Parse serving_sizes_input correctly
+#         serving_sizes_raw = data.getlist("serving_sizes_input")  # <-- This gives the actual list
+
+#         if serving_sizes_raw:
+#             try:
+#                 # The first element is the JSON string
+#                 data['serving_sizes_input'] = json.loads(serving_sizes_raw[0])
+#             except json.JSONDecodeError:
+#                 return Response({
+#                     "success": False,
+#                     "message": "Invalid serving_sizes_input JSON"
+#                 }, status=400)
+
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             product = serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!",
+#                 "data": ProductSerializer(product).data
+#             }, status=201)
+
+#         return Response({"success": False, "errors": serializer.errors}, status=400)
+
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data.copy()
+
+#         # ✅ DEBUG log
+#         print("Incoming Payload:", data)
+
+#         # ✅ Handle product images
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+#             for image_file in image_files:
+#                 try:
+#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#                 finally:
+#                     image_file.close()
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         # ✅ Fix: Parse serving_sizes_input properly
+#         raw_serving_sizes = request.data.get("serving_sizes_input")
+#         if raw_serving_sizes:
+#             try:
+#                 if isinstance(raw_serving_sizes, list):
+#                     raw_serving_sizes = raw_serving_sizes[0]  # first item from list
+#                 data['serving_sizes_input'] = json.loads(raw_serving_sizes)
+#             except json.JSONDecodeError:
+#                 return Response({
+#                     "success": False,
+#                     "message": "Invalid JSON for serving_sizes_input"
+#                 }, status=400)
+
+#         # ✅ Create product using serializer
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             product = serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!",
+#                 "data": ProductSerializer(product).data
+#             }, status=201)
+
+#         return Response({"success": False, "errors": serializer.errors}, status=400)
+
+
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data.copy()
+#         print("Incoming Payload:", data)
+
+#         # ✅ Handle images
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+#             for image_file in image_files:
+#                 try:
+#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#                 finally:
+#                     image_file.close()
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         # ✅ Correct handling of stringified JSON inside list
+#         serving_sizes_input_raw = data.get("serving_sizes_input")
+#         if serving_sizes_input_raw:
+#             try:
+#                 parsed_serving_sizes = json.loads(serving_sizes_input_raw)
+#                 data.setlist("serving_sizes_input", parsed_serving_sizes)
+#             except json.JSONDecodeError:
+#                 return Response({
+#                     "success": False,
+#                     "message": "Invalid JSON for serving_sizes_input"
+#                 }, status=400)
+
+#         # ✅ Continue with serializer
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             product = serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!",
+#                 "data": ProductSerializer(product).data
+#             }, status=201)
+
+#         return Response({"success": False, "errors": serializer.errors}, status=400)
+
+# class ProductCreateAPIView(APIView):
+#     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+#     def post(self, request, *args, **kwargs):
+#         print("Incoming Payload:", request.data)
+
+#         # Convert to mutable dict, NOT just QueryDict
+#         data = dict(request.data)
+        
+#         # Handle image files
+#         if 'product_images' in request.FILES:
+#             image_files = request.FILES.getlist('product_images')
+#             image_base64_list = []
+#             for image_file in image_files:
+#                 try:
+#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                     image_base64_list.append(encoded_image)
+#                 except Exception as e:
+#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#             data['product_images_base64'] = ",".join(image_base64_list)
+
+#         # Parse serving_sizes_input correctly
+#         serving_sizes_input_raw = request.data.get("serving_sizes_input")
+#         if serving_sizes_input_raw:
+#             try:
+#                 parsed_serving_sizes = json.loads(serving_sizes_input_raw)
+#                 data['serving_sizes_input'] = parsed_serving_sizes
+#                 print("Parsed serving_sizes_input:", parsed_serving_sizes)
+#             except json.JSONDecodeError:
+#                 return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
+
+#         serializer = ProductSerializer(data=data)
+#         if serializer.is_valid():
+#             product = serializer.save()
+#             return Response({
+#                 "success": True,
+#                 "message": "Product created successfully!",
+#                 "data": ProductSerializer(product).data
+#             }, status=201)
+
+#         return Response({"success": False, "errors": serializer.errors}, status=400)
 
 class ProductCreateAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def post(self, request, *args, **kwargs):
-        data = request.data.copy()
+        print("Incoming Payload:", request.data)
 
+        # ✅ Flatten single-value lists from QueryDict
+        data = {}
+        for key, value in request.data.items():
+            data[key] = value
+
+        # ✅ Handle image files
         if 'product_images' in request.FILES:
             image_files = request.FILES.getlist('product_images')
             image_base64_list = []
-
             for image_file in image_files:
                 try:
-                    image_content = image_file.read()  # Read file content
-                    encoded_image = base64.b64encode(image_content).decode("utf-8")
+                    encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
                     image_base64_list.append(encoded_image)
                 except Exception as e:
-                    return Response({
-                        "success": False,
-                        "message": f"Error processing image: {str(e)}"
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                finally:
-                    image_file.close()  # Explicitly close the file
-
+                    return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
             data['product_images_base64'] = ",".join(image_base64_list)
 
+        # ✅ Parse serving_sizes_input from JSON string
+        serving_sizes_input_raw = request.data.get("serving_sizes_input")
+        if serving_sizes_input_raw:
+            try:
+                parsed_serving_sizes = json.loads(serving_sizes_input_raw)
+                data['serving_sizes_input'] = parsed_serving_sizes
+                print("Parsed serving_sizes_input:", parsed_serving_sizes)
+            except json.JSONDecodeError:
+                return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
+
+        # ✅ Serialize and create product
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            product = serializer.save()
             return Response({
                 "success": True,
-                "message": "Product created successfully!"
-            }, status=status.HTTP_201_CREATED)
-        
-        return Response({
-            "success": False,
-            "message": "Failed to add product!",
-            "errors": serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+                "message": "Product created successfully!",
+                "data": ProductSerializer(product).data
+            }, status=201)
+
+        return Response({"success": False, "errors": serializer.errors}, status=400)
+
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CategoryCreateView(generics.CreateAPIView):
@@ -147,6 +417,151 @@ class CustomPaginationProduct(PageNumberPagination):
             "products": data
         })
 
+# class ProductListView(generics.ListAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     pagination_class = CustomPaginationProduct
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+#     filterset_fields = ['name', 'category', 'price']
+#     search_fields = ['name', 'description']
+#     ordering_fields = ['created_at', 'price']
+
+#     def list(self, request, *args, **kwargs):
+#         # Apply filtering
+#         queryset = self.filter_queryset(self.get_queryset())
+
+#         # Paginate the results
+#         page = self.paginate_queryset(queryset)
+#         if page is not None:
+#             data = self.format_product_data(page)
+#             return self.get_paginated_response(data)
+
+#         # If pagination is disabled, return the full dataset
+#         data = self.format_product_data(queryset)
+#         return Response({"success": True, "products": data}, status=status.HTTP_200_OK)
+
+#     def format_product_data(self, queryset):
+#         """ Format products and include related category data """
+#         products = []
+
+#         for product in queryset:
+#             product_data = {
+#                 "id": product.id,
+#                 "name": product.name,
+#                 "category": {
+#                     "id": product.category.id,
+#                     "name": product.category.name,
+#                     "parent": {
+#                         "id": product.category.parent.id,
+#                         "name": product.category.parent.name
+#                     } if product.category.parent else None
+#                 } if product.category else None,
+#                 "description": product.description,
+#                 "ingredients": product.ingredients,
+#                 "allergen_info": product.allergen_info,
+#                 "price": product.price,
+#                 "discount_price": product.discount_price,
+#                 "stock_status": product.stock_status,
+#                 "serving_size": product.serving_size,
+#                 "total_stock": product.total_stock,
+#                 "reorder_level": product.reorder_level,
+#                 "weight": product.weight,
+#                 "cake_size": product.cake_size,
+#                 "flavor_variants": product.flavor_variants,
+#                 "add_ons": product.add_ons,
+#                 "product_images": product.product_images_base64,
+#                 "calories": product.calories,
+#                 "nutrition_facts": product.nutrition_facts,
+#                 "prep_time": product.prep_time,
+#                 "delivery_option": product.delivery_option,
+#                 "shelf_life": product.shelf_life,
+#                 "tags": product.tags,
+#                 "reviews": product.reviews,
+#                 "related_products": product.related_products,
+#                 "total_sales": product.total_sales,
+#                 "status": 'Active' if product.status == 1 else 'Inactive',
+#                 "created_at": product.created_at,
+#                 "updated_at": product.updated_at
+#             }
+#             products.append(product_data)
+
+#         return {"products": products}
+
+
+# class ProductListView(generics.ListAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     pagination_class = CustomPaginationProduct
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+#     filterset_fields = ['name', 'category', 'price']
+#     search_fields = ['name', 'description']
+#     ordering_fields = ['created_at', 'price']
+
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.filter_queryset(self.get_queryset())
+#         page = self.paginate_queryset(queryset)
+#         serving_sizes = ProductServingSize.objects.all()
+#         if page is not None:
+#             data = self.format_product_data(page)
+#             return self.get_paginated_response(data)
+
+#         data = self.format_product_data(queryset)
+#         return Response({"success": True, "products": data}, status=status.HTTP_200_OK)
+
+#     def format_product_data(self, queryset):
+#         products = []
+
+#         for product in queryset:
+#             # Get serving sizes related to the product
+#             serving_sizes_qs = product.serving_sizes.all()
+#             serving_sizes = ProductServingSizeSerializer(serving_sizes_qs, many=True).data
+
+#             product_data = {
+#                 "id": product.id,
+#                 "name": product.name,
+#                 "category": {
+#                     "id": product.category.id,
+#                     "name": product.category.name,
+#                     "parent": {
+#                         "id": product.category.parent.id,
+#                         "name": product.category.parent.name
+#                     } if product.category.parent else None
+#                 } if product.category else None,
+#                 "description": product.description,
+#                 "ingredients": product.ingredients,
+#                 "allergen_info": product.allergen_info,
+#                 "price": product.price,
+#                 "discount_price": product.discount_price,
+#                 "stock_status": product.stock_status,
+#                 "serving_size": product.serving_size,
+#                 "serving_sizes": ProductServingSizeSerializer.get().all(),
+#                 "total_stock": product.total_stock,
+#                 "reorder_level": product.reorder_level,
+#                 "weight": product.weight,
+#                 "cake_size": product.cake_size,
+#                 "flavor_variants": product.flavor_variants,
+#                 "add_ons": product.add_ons,
+#                 # ✅ Updated line for multiple base64 images
+#                 "product_images": product.product_images_base64.split(',') if product.product_images_base64 else [],
+#                 "calories": product.calories,
+#                 "nutrition_facts": product.nutrition_facts,
+#                 "prep_time": product.prep_time,
+#                 "delivery_option": product.delivery_option,
+#                 "shelf_life": product.shelf_life,
+#                 "tags": product.tags,
+#                 "reviews": product.reviews,
+#                 "related_products": product.related_products,
+#                 "total_sales": product.total_sales,
+#                 "status": 'Active' if product.status == 1 else 'Inactive',
+#                 "created_at": product.created_at,
+#                 "updated_at": product.updated_at
+#             }
+
+#             products.append(product_data)
+
+#         return {"products": products}
+
+
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -157,24 +572,24 @@ class ProductListView(generics.ListAPIView):
     ordering_fields = ['created_at', 'price']
 
     def list(self, request, *args, **kwargs):
-        # Apply filtering
         queryset = self.filter_queryset(self.get_queryset())
-
-        # Paginate the results
         page = self.paginate_queryset(queryset)
+
         if page is not None:
             data = self.format_product_data(page)
             return self.get_paginated_response(data)
 
-        # If pagination is disabled, return the full dataset
         data = self.format_product_data(queryset)
         return Response({"success": True, "products": data}, status=status.HTTP_200_OK)
 
     def format_product_data(self, queryset):
-        """ Format products and include related category data """
         products = []
 
         for product in queryset:
+            # Get related serving sizes for this product
+            serving_sizes_qs = product.serving_sizes.all()
+            serving_sizes = ProductServingSizeSerializer(serving_sizes_qs, many=True).data
+
             product_data = {
                 "id": product.id,
                 "name": product.name,
@@ -193,13 +608,14 @@ class ProductListView(generics.ListAPIView):
                 "discount_price": product.discount_price,
                 "stock_status": product.stock_status,
                 "serving_size": product.serving_size,
+                "serving_sizes": serving_sizes,  # ✅ Fixed line
                 "total_stock": product.total_stock,
                 "reorder_level": product.reorder_level,
                 "weight": product.weight,
                 "cake_size": product.cake_size,
                 "flavor_variants": product.flavor_variants,
                 "add_ons": product.add_ons,
-                "product_images": product.product_images_base64,
+                "product_images": product.product_images_base64.split(',') if product.product_images_base64 else [],
                 "calories": product.calories,
                 "nutrition_facts": product.nutrition_facts,
                 "prep_time": product.prep_time,
@@ -213,10 +629,11 @@ class ProductListView(generics.ListAPIView):
                 "created_at": product.created_at,
                 "updated_at": product.updated_at
             }
+
             products.append(product_data)
 
         return {"products": products}
-  
+
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()  # Fetch all categories
@@ -329,24 +746,144 @@ def delete_product(request, product_id):
     return Response({"message": "Product deleted successfully!", "success": True}, status=status.HTTP_200_OK)
 
 
+# @api_view(["PUT", "PATCH", "POST"])
+# @parser_classes([MultiPartParser, FormParser])
+# def update_product(request, productId):
+#     product = get_object_or_404(Product, id=productId)
+#     data = request.data.copy()
+
+#     # Handle image upload (Convert to Base64)
+#     if "image" in request.FILES:
+#         image_file = request.FILES["image"]
+#         data["image_base64"] = base64.b64encode(image_file.read()).decode("utf-8")
+
+#     # Convert "Active" / "Inactive" to boolean
+#     if "status" in data:
+#         data["status"] = data["status"] == "Active"
+
+#     serializer = ProductSerializer(product, data=data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response({
+#             "success": True,
+#             "message": "Product updated successfully!",
+#             "product": serializer.data
+#         }, status=status.HTTP_200_OK)
+
+#     return Response({
+#         "success": False,
+#         "errors": serializer.errors
+#     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(["PUT", "PATCH", "POST"])
+# @parser_classes([MultiPartParser, FormParser, JSONParser])
+# def update_product(request, productId):
+#     product = get_object_or_404(Product, id=productId)
+#     data = request.data.copy()
+    
+#     print(f"Date come to update for the product is {data}")
+
+#     # ✅ Convert "Active" / "Inactive" to boolean
+#     if "status" in data:
+#         data["status"] = data["status"] == "Active"
+
+#     # ✅ Handle image upload (Convert to Base64)
+#     if "image" in request.FILES:
+#         image_file = request.FILES["image"]
+#         try:
+#             data["image_base64"] = base64.b64encode(image_file.read()).decode("utf-8")
+#         except Exception as e:
+#             return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+
+#     # ✅ Handle product_images (multiple images)
+#     if 'product_images' in request.FILES:
+#         image_files = request.FILES.getlist('product_images')
+#         image_base64_list = []
+#         for image_file in image_files:
+#             try:
+#                 encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+#                 image_base64_list.append(encoded_image)
+#             except Exception as e:
+#                 return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+#         data['product_images_base64'] = ",".join(image_base64_list)
+
+#     # ✅ Parse serving_sizes_input from JSON string
+#     serving_sizes_input_raw = request.data.get("serving_sizes_input")
+#     if serving_sizes_input_raw:
+#         try:
+#             parsed_serving_sizes = json.loads(serving_sizes_input_raw)
+#             data['serving_sizes_input'] = parsed_serving_sizes
+#         except json.JSONDecodeError:
+#             return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
+
+#     # ✅ Serialize and update product
+#     serializer = ProductSerializer(product, data=data, partial=True)
+#     if serializer.is_valid():
+#         updated_product = serializer.save()
+#         return Response({
+#             "success": True,
+#             "message": "Product updated successfully!",
+#             "product": ProductSerializer(updated_product).data
+#         }, status=status.HTTP_200_OK)
+
+#     return Response({
+#         "success": False,
+#         "errors": serializer.errors
+#     }, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(["PUT", "PATCH", "POST"])
-@parser_classes([MultiPartParser, FormParser])
+@parser_classes([MultiPartParser, FormParser, JSONParser])
 def update_product(request, productId):
     product = get_object_or_404(Product, id=productId)
-    data = request.data.copy()
 
-    # Handle image upload (Convert to Base64)
-    if "image" in request.FILES:
-        image_file = request.FILES["image"]
-        data["image_base64"] = base64.b64encode(image_file.read()).decode("utf-8")
+    # ✅ Flatten and collect all data
+    data = {}
+    for key, value in request.data.items():
+        data[key] = value
 
-    # Convert "Active" / "Inactive" to boolean
+
+    print(data)
+
+    # ✅ Handle image upload (Base64 encode single or multiple images)
+    if "product_images" in request.FILES:
+        image_files = request.FILES.getlist("product_images")
+        image_base64_list = []
+        for image in image_files:
+            try:
+                encoded = base64.b64encode(image.read()).decode("utf-8")
+                image_base64_list.append(encoded)
+            except Exception as e:
+                return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+        data["product_images_base64"] = ",".join(image_base64_list)
+
+    elif "image" in request.FILES:
+        # Fallback: single image case
+        image = request.FILES["image"]
+        try:
+            encoded = base64.b64encode(image.read()).decode("utf-8")
+            data["image_base64"] = encoded
+        except Exception as e:
+            return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
+
+    # ✅ Convert "Active"/"Inactive" to boolean
     if "status" in data:
         data["status"] = data["status"] == "Active"
 
+    # ✅ Parse serving_sizes_input JSON
+    serving_sizes_input_raw = request.data.get("serving_sizes_input")
+    if serving_sizes_input_raw:
+        try:
+            parsed_serving_sizes = json.loads(serving_sizes_input_raw)
+            print(f"parsed_serving_sizes {parsed_serving_sizes}")
+            data["serving_sizes_input"] = parsed_serving_sizes
+        except json.JSONDecodeError:
+            return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
+
+    # ✅ Partial update
     serializer = ProductSerializer(product, data=data, partial=True)
     if serializer.is_valid():
-        serializer.save()
+        product = serializer.save()
         return Response({
             "success": True,
             "message": "Product updated successfully!",
@@ -1005,6 +1542,44 @@ def update_baked_delights(request):
 #         serializer = CartSerializer(cart)
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# @api_view(['POST'])
+# def add_to_cart(request):
+#     user_id = request.data.get('userId')
+#     cart_items_data = request.data.get('cartItems', [])
+
+#     if not user_id or not cart_items_data:
+#         return Response({'error': 'userId and cartItems are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+#     try:
+#         user = CustomUser.objects.get(id=user_id)
+#     except CustomUser.DoesNotExist:
+#         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+#     # Get or create cart
+#     cart, created = Cart.objects.get_or_create(user=user)
+
+#     for item in cart_items_data:
+#         product_id = item.get('product')
+#         quantity = item.get('quantity', 1)
+
+#         try:
+#             product = Product.objects.get(id=product_id)
+#         except Product.DoesNotExist:
+#             continue  # Skip if product doesn't exist
+
+#         # Check if this product is already in the cart
+#         cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+#         if item_created:
+#             cart_item.quantity = quantity  # Set quantity if new item
+#         else:
+#             cart_item.quantity += quantity  # Increase quantity if item exists
+
+#         cart_item.save()
+
+#     serializer = CartSerializer(cart)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def add_to_cart(request):
     user_id = request.data.get('userId')
@@ -1024,25 +1599,33 @@ def add_to_cart(request):
     for item in cart_items_data:
         product_id = item.get('product')
         quantity = item.get('quantity', 1)
+        size = item.get('size', 'default')
+        price = item.get('price', 0.0)
+        discount_price = item.get('discount_price', 0.0)
 
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
             continue  # Skip if product doesn't exist
 
-        # Check if this product is already in the cart
-        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
+        # Check if this product with the same size exists in cart
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+            size=size  # Include size in uniqueness logic
+        )
 
         if item_created:
-            cart_item.quantity = quantity  # Set quantity if new item
+            cart_item.quantity = quantity
         else:
-            cart_item.quantity += quantity  # Increase quantity if item exists
+            cart_item.quantity += quantity
 
+        cart_item.price = price
+        cart_item.discount_price = discount_price
         cart_item.save()
 
     serializer = CartSerializer(cart)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 
@@ -1058,13 +1641,33 @@ def view_cart(request, user_id):
     except CustomUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+# @api_view(['DELETE'])
+# def delete_cart_item(request, user_id, product_id):
+#     try:
+#         user = CustomUser.objects.get(id=user_id)
+#         cart = Cart.objects.get(user=user)
+#         cart_item = CartItem.objects.get(cart=cart, product_id=product_id)
+        
+#         cart_item.delete()
+
+#         return Response({'message': 'Product removed from cart successfully.'}, status=status.HTTP_200_OK)
+    
+#     except CustomUser.DoesNotExist:
+#         return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     except Cart.DoesNotExist:
+#         return Response({'error': 'Cart not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     except CartItem.DoesNotExist:
+#         return Response({'error': 'Product not found in cart.'}, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['DELETE'])
-def delete_cart_item(request, user_id, product_id):
+def delete_cart_item(request, user_id, product_id, price):
     try:
         user = CustomUser.objects.get(id=user_id)
         cart = Cart.objects.get(user=user)
-        cart_item = CartItem.objects.get(cart=cart, product_id=product_id)
-        
+
+        cart_item = CartItem.objects.get(cart=cart, product_id=product_id, price=price)
         cart_item.delete()
 
         return Response({'message': 'Product removed from cart successfully.'}, status=status.HTTP_200_OK)
@@ -1076,7 +1679,10 @@ def delete_cart_item(request, user_id, product_id):
         return Response({'error': 'Cart not found.'}, status=status.HTTP_404_NOT_FOUND)
     
     except CartItem.DoesNotExist:
-        return Response({'error': 'Product not found in cart.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Matching product not found in cart.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    except CartItem.MultipleObjectsReturned:
+        return Response({'error': 'Multiple cart items found, refine query.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -1116,14 +1722,46 @@ class AdminLogoutView(APIView):
         return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
 
 
+# class ProductByEncodedView(APIView):
+#     """
+#     GET /api/products-encoded/<encoded>/
+#     where <encoded> == btoa(f"{id}-{slug}")
+#     """
+
+#     def get(self, request, encoded, *args, **kwargs):
+#         # 1) Decode Base64 back into "<id>-<slug>"
+#         try:
+#             decoded = base64.b64decode(encoded).decode('utf-8')
+#             id_str, _ = decoded.split('-', 1)
+#             product_id = int(id_str)
+#         except (ValueError, base64.binascii.Error, UnicodeDecodeError):
+#             return Response(
+#                 {"success": False, "error": "Invalid or malformed token."},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+
+#         # 2) Fetch or 404
+#         product = get_object_or_404(Product, pk=product_id)
+
+#         # 3) Format exactly like your list view does
+#         formatter = ProductListView()
+#         # bypass pagination by sending a one-item list
+#         formatted = formatter.format_product_data([product])
+#         # format_product_data returns {"products": [...]}
+#         return Response(
+#             {"success": True, **formatted},
+#             status=status.HTTP_200_OK
+#         )
+
+
+
 class ProductByEncodedView(APIView):
     """
-    GET /api/products-encoded/<encoded>/
+    GET /api/products/<encoded>/
     where <encoded> == btoa(f"{id}-{slug}")
     """
 
     def get(self, request, encoded, *args, **kwargs):
-        # 1) Decode Base64 back into "<id>-<slug>"
         try:
             decoded = base64.b64decode(encoded).decode('utf-8')
             id_str, _ = decoded.split('-', 1)
@@ -1134,19 +1772,45 @@ class ProductByEncodedView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # 2) Fetch or 404
         product = get_object_or_404(Product, pk=product_id)
 
-        # 3) Format exactly like your list view does
-        formatter = ProductListView()
-        # bypass pagination by sending a one-item list
-        formatted = formatter.format_product_data([product])
-        # format_product_data returns {"products": [...]}
-        return Response(
-            {"success": True, **formatted},
-            status=status.HTTP_200_OK
-        )
-    
+        # Get all serving sizes related to this product
+        serving_sizes = ProductServingSize.objects.filter(product=product)
+        serving_sizes_data = ProductServingSizeSerializer(serving_sizes, many=True).data
+
+        product_data = {
+            "id": product.id,
+            "name": product.name,
+            "category": product.category.id if product.category else None,
+            "status": product.status,
+            "description": product.description,
+            "ingredients": product.ingredients,
+            "allergen_info": product.allergen_info,
+            "price": product.price,
+            "discount_price": product.discount_price,
+            "stock_status": product.stock_status,
+            "serving_size": product.serving_size,
+            "serving_sizes": serving_sizes_data,
+            "total_stock": product.total_stock,
+            "reorder_level": product.reorder_level,
+            "cake_size": product.cake_size,
+            "flavor_variants": product.flavor_variants,
+            "product_images": product.product_images_base64.split(',') if product.product_images_base64 else [],
+            "calories": product.calories,
+            "nutrition_facts": product.nutrition_facts,
+            "tags": product.tags,
+            "reviews": product.reviews,
+            "related_products":product.related_products,
+            "created_at": product.created_at,
+            "updated_at": product.updated_at,
+        }
+
+        return Response({
+            "success": True,
+            "product": product_data
+        }, status=status.HTTP_200_OK)
+
+
 # class OrderCreateView(generics.CreateAPIView):
 #     queryset = Order.objects.all()
 #     serializer_class = OrderSerializers
@@ -1234,3 +1898,12 @@ class OrderDeleteView(APIView):
         except Exception as e:
             logger.exception(f"Unexpected error occurred while deleting order {order_id}: {str(e)}")
             return Response({"success": False, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class CouponViewSet(viewsets.ModelViewSet):
+    queryset = Coupon.objects.all()
+    serializer_class = CouponSerializer
+
+class CouponRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Coupon.objects.all()
+    serializer_class = CouponSerializer
