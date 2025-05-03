@@ -272,36 +272,38 @@ function loadBestsellers() {
             pagination: false
           });
         }, 0);
-
-        // Add size button click behavior
         const sizeBtns = slide.querySelectorAll(".size-btn");
-        const priceEl = slide.querySelector(".actual-price");
-        const discountEl = slide.querySelector(".discount-price");
+      const priceEl = slide.querySelector(".actual-price");
+      let discountEl = slide.querySelector(".discount-price"); // move outside so it's reused
 
-        sizeBtns.forEach(btn => {
-          btn.addEventListener("click", e => {
-            e.preventDefault();
-            sizeBtns.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
+      sizeBtns.forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
 
-            const price = parseFloat(btn.dataset.price).toFixed(2);
-            const discount = parseFloat(btn.dataset.discount).toFixed(2);
+          // Toggle active button style
+          sizeBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
 
-            priceEl.textContent = price;
-            if (discount > 0) {
-              if (discountEl) {
-                discountEl.textContent = `₹${discount}`;
-                discountEl.style.display = "inline";
-              } else {
-                const newDel = document.createElement("del");
-                newDel.className = "discount-price";
-                newDel.textContent = `₹${discount}`;
-                priceEl.parentElement.appendChild(newDel);
-              }
+          const price = parseFloat(btn.dataset.price).toFixed(2);
+          const discount = parseFloat(btn.dataset.discount).toFixed(2);
+
+          priceEl.textContent = `₹${(price - discount).toFixed(2)}`; // Show discounted price
+
+          // Handle discount display
+          if (discount > 0) {
+            if (!discountEl) {
+              discountEl = document.createElement("del");
+              discountEl.className = "discount-price";
+              priceEl.parentElement.appendChild(discountEl);
             }
-          });
+            discountEl.textContent = `₹${price}`;
+            discountEl.style.display = "inline";
+          } else {
+            if (discountEl) discountEl.style.display = "none";
+          }
         });
       });
+
     })
     .catch(err => {
       console.error("Error loading bestsellers:", err);
