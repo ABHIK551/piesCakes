@@ -57,7 +57,7 @@
       
         <div class="product-details">
           <h1 id="product-name"></h1>
-          <div class="rating">⭐ ⭐ ⭐ ⭐ ☆</div>
+          <div class="rating">★★★★☆</div>
           <p class="price" id="product-price"></p>
           <p id="product-description"></p>
       
@@ -613,12 +613,12 @@ async function loadRecommendations() {
           </a>
           <div class="product-info">
             <span class="category mb-1">${prod.category?.name || "Uncategorized"}</span>
-            <h4 class="mb-1 product-heading">
+            <h4 class="mb-1 product-heading" title="${prod.name}">
               <a href="/product/${encodedId}" style="text-decoration: none; font-size: 14px; font-weight: bold; color: #5A3E36;">
                 ${prod.name}
               </a>
             </h4>
-            <div class="rating mb-1">⭐⭐⭐⭐⭐</div>
+            <div class="rating mb-1">★★★★★</div>
 
             <div class="size-chips mb-1">
               ${sizesHtml}

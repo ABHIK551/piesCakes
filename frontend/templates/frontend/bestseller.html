@@ -230,15 +230,15 @@ function loadBestsellers() {
 
         const swiperClass = `bestseller-swiper-${index}`;
 
-        const sizeButtons = servingSizes.map((s, i) => `
+        const sizeButtons = product.serving_sizes.map((s, i) => `
           <button 
-            class="btn btn-sm size-btn ${i === 0 ? 'active' : ''}"
-            style="color:white; border:0px;padding:3px 5px;border-radius:3px;background-color:#D17829"
-            data-product-index="${index}" 
+            class="btn btn-sm size-btn${i === 0 ? ' active' : ''}" 
             data-price="${parseFloat(s.price) || 0}" 
-            data-discount="${!isNaN(parseFloat(s.discount_price)) ? parseFloat(s.discount_price) : 0}"
+            data-discount="${!isNaN(parseFloat(s.discount_price)) ? parseFloat(s.discount_price) : 0}">
             ${Number.isInteger(Number(s.size)) ? `${s.size} person` : s.size}
-          </button>`).join(" ");
+          </button>
+        `).join("");
+
 
         const initialPrice = product.serving_sizes?.[0]?.price || "0.00";
         const initialDiscount = product.serving_sizes?.[0]?.discount_price || "0.00";
@@ -255,11 +255,11 @@ function loadBestsellers() {
             </div>
             <div class="product-info">
               <p class="category">${product.category.name}</p>
-              <h3>${product.name}</h3>
+              <h3 class="product-heading" title="${product.name}">${product.name}</h3>
               <div class="rating">★★★★★</div>
               <div class="size-buttons">${sizeButtons}</div>
               <p class="price">
-                ₹<span class="actual-price">${parseFloat(initialPrice).toFixed(2)}</span>
+                <span class="actual-price">₹${parseFloat(initialPrice).toFixed(2)}</span>
                 ${parseFloat(initialDiscount) > 0 ? `<del class="discount-price">₹${parseFloat(initialDiscount).toFixed(2)}</del>` : ""}
               </p>
             </div>
@@ -300,7 +300,7 @@ function loadBestsellers() {
               discountEl.className = "discount-price";
               priceEl.parentElement.appendChild(discountEl);
             }
-            discountEl.textContent = `₹${price}`;
+            discountEl.textContent = `${price}`;
             discountEl.style.display = "inline";
           } else {
             if (discountEl) discountEl.style.display = "none";

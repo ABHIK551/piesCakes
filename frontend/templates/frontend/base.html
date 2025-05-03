@@ -147,6 +147,23 @@ main {
 	max-width: 500px;
 }
 
+.size-btn {
+  color: black;
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.size-btn .active {
+  background-color: #D17829;
+  color: white;
+  border: none;
+}
+
 .search-bar input {
 	width: 100%;
 	padding: 8px;
@@ -290,14 +307,15 @@ main {
 .banner-slide {
   min-width: 100%;
   /* height: 80vh !important; */
-  background-size: cover !important;         /* Ensures image covers entire area */
+  background-size: contain !important;         /* Ensures image covers entire area */
   background-repeat: no-repeat;   /* Prevents tiling */
   background-position: center;    /* Centers the image */
   display: flex;
+  height: 430px;
   align-items: center;
   justify-content: flex-start;
   color: white;
-  padding: 0 50px;                /* Optional: space around inner content */
+  padding: 0px !important;                /* Optional: space around inner content */
   box-sizing: border-box;
 }
 
@@ -362,7 +380,8 @@ main {
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 40px;
-	padding: 50px 0%;
+	/* padding: 10px 0%; */
+	padding-top: 10px !important;
 }
 
 .feature-box {
@@ -413,7 +432,8 @@ main {
 
 
 .categories {
-	padding: 0px 20px;
+	padding: 0px 10px;
+	padding-top: 0px !important;
 	display: flex;
 	justify-content: center;
 }
@@ -462,8 +482,11 @@ main {
 }
 
 .bestsellers-wrapper {
-	padding: 20px;
+	padding: 10px;
 	text-align: center;
+}
+.bestsellers-wrapper h2{
+	margin-top: 0px;
 }
 
 .bestseller-product {
@@ -471,6 +494,7 @@ main {
 	border: 1px solid lightgray;
 	border-radius: 5px;
 	overflow: hidden;
+	max-width: 260px;
 	/* transition: transform 0.3s ease-in-out; */
 	color: #333;
 }
@@ -537,7 +561,7 @@ main {
 }
 
 .bestseller-product .product-info .rating {
-	font-size: 14px;
+	font-size: 20px;
 	margin: 5px 0;
 }
 
@@ -706,6 +730,21 @@ main {
 	margin-top: 5px;
 }
 
+.product-heading {
+  white-space: nowrap;        /* Prevent text from wrapping */
+  overflow: hidden;           /* Hide overflow */
+  text-overflow: ellipsis;    /* Show ellipsis (…) for overflow */
+  max-width: 100%;            /* Ensure it doesn’t overflow its container */
+  display: inline-block;      /* Required for text-overflow to work */
+  cursor: default;     
+  margin-bottom: 0px;
+  padding-bottom: 0px;       /* Optional: indicates no interaction */
+}
+
+.rating{
+	font-size: 20px;
+}
+
 .header-right {
 	max-width: 50%;
 	display: flex;
@@ -791,17 +830,18 @@ main {
 	font-size: 0.9em;
 	color: #ff8800;
 	font-weight: bold;
+	width: 100% !important;
 }
 
 .product-info h3 {
 	font-size: 1.2em;
-	margin: 10px 0;
+	margin: 0px;
 	color: #333;
 }
 
 .rating {
 	color: #ffd700;
-	font-size: 1.2em;
+	font-size: 1.6em;
 	margin-bottom: 5px;
 }
 
@@ -1286,6 +1326,14 @@ main {
 	justify-content: center;
 }
 
+.product-image img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	/* height: 600px; */
+	/* max-height: 900px; */
+	object-fit: cover;
+}
+
 .recommendation-section .product-grid .product-card {
 	border: 1px solid #ddd;
     width: 250px;
@@ -1295,7 +1343,7 @@ main {
 	/* transition: transform 0.3s ease-in-out; */
 	position: relative;
 	text-align: center;
-	border-radius: 0px;
+	border-radius: 5px;
 }
 
 .recommendation-section  .product-grid .product-card img {
@@ -1312,6 +1360,12 @@ main {
 	color: #5a3e36;
 	margin: 0;
 }
+
+.inner-product-tag .product-info .product-heading{
+	min-width: 100% !important;
+}
+
+
 
 /* .product-section .product-card .product-info .buttons{
     margin: 0 auto !important;
