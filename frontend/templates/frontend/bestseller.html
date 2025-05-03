@@ -236,7 +236,7 @@ function loadBestsellers() {
             style="color:white; border:0px;padding:3px 5px;border-radius:3px;background-color:#D17829"
             data-product-index="${index}" 
             data-price="${parseFloat(s.price) || 0}" 
-            data-discount="${parseFloat(s.discount_price) || 0}">
+            data-discount="${!isNaN(parseFloat(s.discount_price)) ? parseFloat(s.discount_price) : 0}"
             ${Number.isInteger(Number(s.size)) ? `${s.size} person` : s.size}
           </button>`).join(" ");
 
@@ -312,6 +312,7 @@ function loadBestsellers() {
     .catch(err => {
       console.error("Error loading bestsellers:", err);
     });
+});
 }
 
     </script>
