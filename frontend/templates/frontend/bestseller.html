@@ -230,11 +230,15 @@ function loadBestsellers() {
 
         const swiperClass = `bestseller-swiper-${index}`;
 
-        const sizeButtons = product.serving_sizes.map((s, i) => `
-          <button class="size-btn${i === 0 ? ' active' : ''}" 
-                  data-price="${s.price}" 
-                  data-discount="${s.discount_price || 0}">${s.size}</button>
-        `).join("");
+        const sizeButtons = servingSizes.map((s, i) => `
+          <button 
+            class="btn btn-sm size-btn ${i === 0 ? 'active' : ''}"
+            style="color:white; border:0px;padding:3px 5px;border-radius:3px;background-color:#D17829"
+            data-product-index="${index}" 
+            data-price="${parseFloat(s.price) || 0}" 
+            data-discount="${parseFloat(s.discount_price) || 0}">
+            ${Number.isInteger(Number(s.size)) ? `${s.size} person` : s.size}
+          </button>`).join(" ");
 
         const initialPrice = product.serving_sizes?.[0]?.price || "0.00";
         const initialDiscount = product.serving_sizes?.[0]?.discount_price || "0.00";
