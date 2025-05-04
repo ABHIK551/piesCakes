@@ -1,4 +1,53 @@
 <!-- Ad Section with Swiper -->
+ <style>
+  .add-slide {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+/* Tablets (481px to 768px) */
+@media (max-width: 768px) {
+  .add-slide {
+    height: 250px;
+    padding: 1.5rem;
+    background-size: contain;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile devices (≤480px) */
+@media (max-width: 480px) {
+  .add-slide {
+    height: 200px;
+    padding: 1rem;
+    background-size: contain;
+    font-size: 0.9rem;
+  }
+  .swiper-button-next, .swiper-button-prev{
+    display: none !important;
+  }
+}
+
+/* Medium to large screens (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .add-slide {
+    height: 300px;
+    padding: 1.75rem;
+    background-size: contain;
+    font-size: 1.1rem;
+  }
+}
+
+ </style>
 <section class="ad-swiper swiper" id="addSection">
   <div class="swiper-wrapper" id="addSlides"></div>
 
@@ -22,27 +71,18 @@ async function loadHomepageAdd() {
 
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
-
         slide.innerHTML = `
-          <div class="add-slide" style="
-            background-image: url('${imageUrl}');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 2rem;
-          ">
-            <div class="add-content"hidden>
-              <h2 hidden>${ad.heading ||""}</h2>
-              <p>${ad.description || ""}</p>
-              <a href="${ad.link || "#"}" class="shop-btn" hidden>Shop now</a>
+          <a href="${ad.link || "#"}" target="_blank" style="text-decoration: none;">
+            <div class="add-slide" style="
+              background-image: url('${imageUrl}');
+            ">
+              <div class="add-content" hidden>
+                <h2 hidden>${ad.heading || ""}</h2>
+                <p>${ad.description || ""}</p>
+                <span class="shop-btn" hidden>Shop now</span>
+              </div>
             </div>
-          </div>
+          </a>
         `;
 
         wrapper.appendChild(slide);

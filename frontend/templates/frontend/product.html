@@ -1,7 +1,7 @@
 {% extends "frontend/base.html" %}
 {% block content %}
 {% include "frontend/nav.html" %}
-<style>
+<!-- <style>
 .thumbnail-container {
   display: flex;
   flex-direction: column;
@@ -44,16 +44,192 @@
 .thumbnail:hover {
   transform: scale(1.1);
 }
+
+@media (max-width: 480px) {
+  .product-image{
+    width: 100%;
+  }
+  .product-image-preview{
+    width: 100%;
+  }
+  .thumbnail-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 18px;
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; /* for Firefox */
+  }
+
+  .thumbnail-container::-webkit-scrollbar {
+    height: 4px; /* height for horizontal scrollbar */
+  }
+
+  .thumbnail-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 2px;
+  }
+
+  .thumbnail {
+    min-width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .thumbnail:hover {
+    transform: scale(1.1);
+  }
+}
+
+
+</style> -->
+<style>
+  /* Base styles */
+.product-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.image-wrapper-thupro {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.product-image-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.product-details {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  width: 100%;
+}
+
+/* Vertical scrolling thumbnails (for desktop) */
+.thumbnail-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 18px;
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.thumbnail-container::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbnail {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: transform 0.2s ease;
+  width: 100px;
+  height: auto;
+  cursor: pointer;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.size-chip {
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.size-chip.active {
+  background-color: orange;
+  color: white;
+  border: none;
+}
+
+/* Responsive styles for mobile */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .image-wrapper-thupro,
+  .product-image-preview,
+  .product-details {
+    width: 100%;
+  }
+
+  .product-details {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thumbnail-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .thumbnail-container::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .thumbnail-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 2px;
+  }
+
+  .thumbnail {
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+}
+
 </style>
 <section class="product-section">
     <div class="product-container">
-        <div class="product-image-preview">
-            <!-- <img id="product-image" src="" alt="Product" /> -->
-            <div id="product-thumbnails" class="thumbnail-container"></div>
-        </div>
+      <div class="image-wrapper-thupro">
         <div class="product-image">
           <img id="product-image" src="" alt="" loading="lazy">
         </div>
+      </div>
+      <div class="product-image-preview">
+        <div id="product-thumbnails" class="thumbnail-container"></div>
+      </div>
       
         <div class="product-details">
           <h1 id="product-name"></h1>

@@ -294,16 +294,6 @@ main {
 	background: #f4f4f4;
 }
 
-/* .banner {
-	position: relative;
-	width: 100%;
-	background: url('https://s3-alpha-sig.figma.com/img/5915/6a49/4baf5c6a1bc06092332c077ff6e7ea1b?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=uFIEOjgJgUmB84yWm9GuSBDzuWJFqi74VLV6Pp7ggzxwLMYDjeMw6Wduxv9TnAjeutNFTa~r3EIWEuNB5WEquGdQrK6i5GvsdGNplBiFfi-24HRxFgwFk~WPljwcR6vOzuQQjb0gwc7wY04Xp30NXTblQeuPIO67~oNhlqJcH8FfDmTsxIVG6jQ9tax-RfoeprUcJ8H2sq1OK6n658YgxkQRW2TZdQctBj~tIf5EeRQdUsSUd~O~1bR3UkhgxZyU9g3dF4CYQkzRsYmhcR7c26fQFnGlK0D1RpxqDARj8JWDbqYWM5BmYcr5BzIi~dOypcZN9glm5LbpfBYZANggNw__') no-repeat center center/contain;
-	display: flex;
-    object-fit: contain !important;
-	align-items: center;
-	justify-content: flex-start;
-	color: white;
-} */
 .banner-slide {
   min-width: 100%;
   /* height: 80vh !important; */
@@ -401,7 +391,7 @@ main {
 }
 
 .feature-icon {
-	width: 50px;
+	width: 80px;
 	height: 50px;
 	background: #f8efe6;
 	border-radius: 50%;
@@ -490,6 +480,7 @@ main {
 }
 
 .bestseller-product {
+	max-width: unset;
 	background: #fff;
 	border: 1px solid lightgray;
 	border-radius: 5px;
@@ -499,9 +490,7 @@ main {
 	color: #333;
 }
 
-/* .bestseller-product:hover {
-	transform: scale(1.05);
-} */
+
 
 .bestseller-product .product-image {
 	position: relative;
@@ -682,44 +671,6 @@ main {
 	margin-bottom: 20px;
 }
 
-.new-arrivals-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	/* padding: 20px 5%; */
-}
-
-.new-arrivals .product-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Make each card responsive within grid */
-.new-arrivals .product-grid .product-card {
-  width: 100%;
-  border-radius: 5px;
-  gap: 30px;
-  background-color: #fff;
-  /* padding: 16px; */
-}
-
-/* .product-section .product-card a img {
-    min-height: 300px !important;
-} */
-
-.new-arrivals .product-grid .product-card a img {
-    max-height: 300px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    background-color: #f8f8f8; /* Optional: gives a clean backdrop */
-}
 
 .header-left {
 	max-width: 50%;
@@ -869,72 +820,6 @@ main {
 
 .badge.new {
 	background: green;
-}
-
-.baked-delights {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 60px;
-	justify-content: center;
-	max-height: 330px;
-	align-items: center;
-	padding: 10px 0px;
-}
-
-.baked-item {
-	position: relative;
-	width: 45%;
-	margin-bottom: 10px;
-	overflow: hidden;
-	border-radius: 10px;
-}
-
-.baked-item img {
-	width: 100%;
-	max-height: 380px;
-	aspect-ratio: 4 / 3;
-	object-fit: contain;
-	border-radius: 10px;
-}
-
-.baked-item .content {
-	position: absolute;
-	top: 50%;
-	right: 8%;
-	left: auto;
-	transform: translateY(-50%);
-	color: #fff;
-	text-align: right;
-	max-width: 70%;
-	z-index: 2;
-}
-
-.baked-item h2 {
-	font-size: 2rem;
-	font-weight: bold;
-	margin: 0;
-	color: white;
-}
-
-.baked-item p {
-	font-size: 1.2rem;
-	margin: 8px 0;
-}
-
-.shop-btn {
-	display: inline-block;
-	padding: 10px 18px;
-	background-color: #ff7b00;
-	color: white;
-	font-weight: bold;
-	text-decoration: none;
-	border-radius: 5px;
-	font-size: 1rem;
-	transition: 0.3s;
-}
-
-.shop-btn:hover {
-	background-color: #e56a00;
 }
 
 .why-choose-us {
@@ -1193,10 +1078,9 @@ main {
 }
 
 .product-container {
-	display: flex;
-	gap: 40px;
-	align-items: center;
-	flex-wrap: wrap;
+  display: flex;
+  flex-direction: row; /* default for large screens */
+  gap: 20px; /* optional spacing */
 }
 
 .product-image {
@@ -1974,15 +1858,6 @@ nav {
 		font-size: 2.5rem;
 	}
 
-	.new-arrivals-header {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.new-arrivals .product-grid {
-		padding: 0px !important;
-	}
-
 	.header-left, .header-right {
 		max-width: 100%;
 	}
@@ -2521,43 +2396,10 @@ nav {
 		float: right;
 	}
 
-	.product-grid {
-		grid-template-columns: repeat(1,1fr);
-	}
-
-	.product-grid .product-card a img {
-		min-height: 300px !important;
-	}
-
 	.baked-item {
 		width: 45%;
 	}
 
-	.baked-delights {
-		padding-top: 10px;
-		padding-bottom: 6px;
-	}
-
-	.baked-item img {
-		aspect-ratio: 1 / 1;
-	}
-
-	.baked-item .content {
-		right: 5%;
-	}
-
-	.baked-delights .baked-item h2 {
-		font-size: 0.6rem !important;
-	}
-
-	.baked-delights .baked-item p {
-		font-size: 0.4rem !important;
-	}
-
-	.baked-delights .baked-item .shop-btn {
-		padding: 3px 5px !important;
-		font-size: 0.5rem !important;
-	}
 
 	.why-choose-us {
 		padding: 10px;
@@ -2907,11 +2749,6 @@ nav {
 		font-size: 1.8em;
 	}
 
-	.new-arrivals {
-		padding-top: 6px;
-		padding-bottom: 6px;
-	}
-
 	#products-container .swiper-wrapper {
 		width: 100% !important;
 		box-sizing: border-box;
@@ -2919,7 +2756,7 @@ nav {
 
 	#products-container {
 		display: flex !important;
-		grid-template-columns: 1fr !important;
+		grid-template-columns: 2fr !important;
 		justify-items: center !important;
 		gap: 20px;
 		padding: 0 10px;
@@ -3292,8 +3129,8 @@ nav {
                 1200: { slidesPerView: 4 }, // Large Screens
                 1000: { slidesPerView: 3 }, // Medium Screens
                 768: { slidesPerView: 2 },  // Tablets
-                480: { slidesPerView: 1 },  // Mobile
-                200: { slidesPerView: 1 },  // Mobile
+                480: { slidesPerView: 2 },  // Mobile
+                200: { slidesPerView: 2 },  // Mobile
             }
         });
     });
@@ -3316,89 +3153,8 @@ nav {
           e.preventDefault();  // Prevent URL update
           document.getElementById("categories").scrollIntoView({ behavior: "smooth" });
         });
-      </script>
-    <!-- <script>
-        document.addEventListener("DOMContentLoaded", async function () {
-        try {
-            const response = await fetch("http://127.0.0.1:8000/api/banner-list/");
-            const data = await response.json();
-    
-            console.log("Banner API Response:", data); // 👉 This will show the structure in the console
-    
-    
-            if (activeBanner) {
-                // Set banner content
-                document.getElementById("bannerPrice").textContent = activeBanner.price_text || "Starting at ₹149";
-                document.getElementById("bannerTitle").textContent = activeBanner.title || "Freshly Baked Goodness";
-                document.getElementById("bannerSubtitle").textContent = activeBanner.subtitle || "Just For You";
-    
-                const bannerBtn = document.getElementById("bannerBtn");
-                bannerBtn.textContent = activeBanner.button_text || "Shop Now";
-                if (activeBanner.button_link) {
-                    bannerBtn.setAttribute("href", activeBanner.button_link);
-                }
-    
-                // Set background image from base64
-                const bannerSection = document.getElementById("bannerSection");
-                if (activeBanner.image_base64) {
-                    bannerSection.style.backgroundImage = `url(data:image/png;base64,${activeBanner.image_base64})`;
-                    bannerSection.style.backgroundSize = "cover";
-                    bannerSection.style.backgroundPosition = "center";
-                }
-            }
-        } catch (err) {
-            console.error("Error fetching banner:", err);
-        }
-    });
-    
-    </script> -->
-    <!-- <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const authToken = sessionStorage.getItem("auth_token");
-        
-            // Handle Cart Display (same as your logic)
-            const cartCount = sessionStorage.getItem("cart_count") || 0;
-            const cartSpan = document.createElement("span");
-            const cartLink = document.createElement("a");
-            cartLink.href = "/cart";
-            cartLink.style.color = "inherit";
-            cartLink.style.textDecoration = "none";
-            cartLink.textContent = ` Cart (${cartCount})`;
-            cartSpan.appendChild(cartLink);
-            const userActions = document.querySelector(".user-actions");
-            if (userActions) userActions.appendChild(cartSpan);
-        
-            // Replace Login with Logout if logged in
-            const loginBtn = document.getElementById("LoginBtnPublic");
-            if (authToken && loginBtn) {
-                loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right" style="color:black !important;font-size:18px !important;"></i> Logout`;
-                loginBtn.style.cursor = "pointer";
-                loginBtn.onclick = () => {
-                    fetch("/api/admin/logout/", {
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(res => {
-                        if (res.ok) {
-                            sessionStorage.clear();
-                            showToast("Logged out successfully.", "success");
-                            window.location.href = "/"; 
-                        } else {
-                            showToast("Failed to logout.", "danger");
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Logout error:", err);
-                        showToast("Something wrong connect you support team", "danger");
-                    });
-                };
-            }
-        });
-        </script> -->
-        <script>
+      </script>   
+		<script>
             document.addEventListener("DOMContentLoaded", () => {
                 const authToken = sessionStorage.getItem("auth_token");
                 const cartCount = sessionStorage.getItem("cart_count") || 0;

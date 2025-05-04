@@ -1,3 +1,93 @@
+<style>
+    
+.new-arrivals-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	/* padding: 20px 5%; */
+}
+
+.new-arrivals .product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Make each card responsive within grid */
+.new-arrivals .product-grid .product-card {
+  width: 100%;
+  border-radius: 5px;
+  gap: 30px;
+  background-color: #fff;
+  /* padding: 16px; */
+}
+
+/* .product-section .product-card a img {
+    min-height: 300px !important;
+} */
+
+.new-arrivals .product-grid .product-card a img {
+    max-height: 300px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    background-color: #f8f8f8; /* Optional: gives a clean backdrop */
+}
+
+@media (max-width: 1024px) {
+    .new-arrivals-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .new-arrivals .product-grid {
+        padding: 0px !important;
+    }
+}
+
+@media (max-width: 468px) {
+
+	.new-arrivals {
+		padding-top: 6px;
+		padding-bottom: 6px;
+	}
+
+    .new-arrivals .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        width: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+/* Make each card responsive within grid */
+.new-arrivals .product-grid .product-card {
+  width: 50%;
+  border-radius: 5px;
+  gap: 30px;
+  background-color: #fff;
+  /* padding: 16px; */
+}
+.new-arrivals .product-grid .product-card a{
+    max-height: 100px;
+}
+
+.new-arrivals .product-grid .product-card a img {
+    width: 100%;
+    max-height: 150px;
+    /* height: 150px !important; */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background-color: #f8f8f8; /* Optional: gives a clean backdrop */
+}
+}
+</style>
 <section class="new-arrivals">
     <div class="new-arrivals-header">
         <!-- <div class="header-left">
@@ -229,9 +319,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Reinitialize Swiper
         mobileSwiper = new Swiper("#products-container", {
-            slidesPerView: 1,
+            slidesPerView: 2,
             centeredSlides: true,
-            spaceBetween: 0,
+            gap:20,
+            spaceBetween: 20,
             loop: true,
             autoplay: {
                 delay: 3000,

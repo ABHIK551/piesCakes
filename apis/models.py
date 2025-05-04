@@ -209,8 +209,8 @@ class BakedDelight(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = models.TextField()  # Base64 encoded image string
-    heading = models.CharField(max_length=255)
-    description = models.TextField()
+    heading = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     link = models.URLField(max_length=500)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     order = models.PositiveIntegerField(default=1)
