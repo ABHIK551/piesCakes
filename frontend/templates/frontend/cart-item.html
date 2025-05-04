@@ -10,6 +10,9 @@
         padding: 10px 20px;
         border-radius: 5px;
     }
+    .tankyoubtns button{
+      padding: 5px 10px;
+    }
     .category-section-header {
   display: flex;
   align-items: center;
@@ -114,7 +117,6 @@
             
             <div class="shop-more">
                 <a href="/" style="float: left;margin: auto 0%;" class="cont-shop-btn">Continue Shopping</a>
-                <button class="checkout" onclick="openPaymentModal()" style="width: 200px;float: right;">Check Out</button>
             </div>
         </div>
 
@@ -322,7 +324,12 @@
         <p>Coupon Discount: <span id="couponDiscountMain">₹0.00</span></p>
         <p>Apply Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
         <hr>
-        <h3>Total Amount: ₹<span id="grandTotalMainTest">0.00</span></h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+          <h3 style="margin: 0;width: 40%;">Total Amount: ₹<span id="grandTotalMainTest">0.00</span></h3>
+          <button class="checkout" onclick="openPaymentModal()" style="padding: 10px 20px;width: 50%; background-color: #d1792c; color: white; border: none; font-weight: bold;">
+            Check Out
+          </button>
+        </div>
     </div>
 
 
@@ -330,7 +337,7 @@
   <!-- Coupon Modal -->
   <div class="modal" id="couponModal" style="display: none;">
     <div class="modal-content">
-      <span class="close" id="close-coupon-modal" hidden>&times;</span>
+      <span class="close" id="close-coupon-modal" onclick="closeCoupanModal()">&times;</span>
       <h2>Apply Coupon</h2>
       <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
       <button id="apply-coupon-btn">Apply</button>
@@ -773,9 +780,14 @@ function deleteCartItem(productId, price) {
 
 </script>
 <script>
-    function openPaymentModal() {
+function openPaymentModal() {
     document.getElementById('paymentModal').style.display = 'Flex';
 }
+
+function closeCoupanModal() {
+    document.getElementById('coupanModal').style.display = 'none';
+}
+
 
 
 function closeModal() {
@@ -910,7 +922,7 @@ function showSuccessAnimation() {
         <h2 style="margin-top: 20px; font-weight: 600;">Thank you for ordering!</h2>
         <p style="color: #666; margin-bottom: 30px;">We have received your order successfully.</p>
 
-        <div style="display: flex; justify-content: center; gap: 15px;">
+        <div style="display: flex; justify-content: center; gap: 15px;" class="tankyoubtns">
           <button onclick="window.location.href='/orders'" class="primary-btn">View Orders</button>
           <button onclick="window.location.href='/'" class="cancel-btn">Continue Shopping</button>
         </div>

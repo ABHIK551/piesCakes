@@ -109,6 +109,12 @@
     border: 0px;
     margin-right: 10px;
 }
+
+#LoginBtnPublic2{
+    background-color: white !important;
+    border: 0px;
+    margin-right: 10px;
+}
 /* Always hide by default */
 #mobile-header-sticky {
   display: none !important;
@@ -130,7 +136,7 @@
   }
 
   .mobile-logo {
-    height: 40px;
+    height: 60px;
     object-fit: contain;
   }
 
@@ -142,6 +148,54 @@
   }
 }
 </style>
+<style>
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+  }
+
+  .sidebar-nav li {
+    margin: 10px 0;
+  }
+
+  .logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #634A3F;
+  }
+
+  .logout-icon {
+    margin-right: 10px;
+  }
+
+  .logout-text .logout-label {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .logout-text .logout-action {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  /* Optional: Adjust size further for smaller screens */
+  @media (max-width: 480px) {
+    .logout-text .logout-label {
+      font-size: 13px;
+    }
+
+    .logout-text .logout-action {
+      font-size: 15px;
+    }
+
+    .logout-icon i {
+      font-size: 18px !important;
+    }
+  }
+</style>
+
 <nav class="navbar">
     <div class="top-header" style="margin-top: 10px !important;margin-bottom: 10px !important;">
         <div class="top-bar">
@@ -217,7 +271,7 @@
     <input type="text" style="border: 1px solid black;padding: 2px;" placeholder="Search Products...">
     <button><i class="bi bi-search"></i></button>
 </div>
-  <button class="mobile-toggle" onclick="toggleSidebar()">
+  <button class="mobile-toggle" style="color: black !important;" onclick="toggleSidebar()">
     ☰
   </button>
 </div>
@@ -238,13 +292,10 @@
         <ul class="sidebar-nav">
             <li><a href="/" style="text-decoration: none !important;color: inherit;">Home</a></li>
             <li><a href="/about-us" style="text-decoration: none !important;color: inherit;"></a>About Us</li>
-            <li>Menu</li>
             <li>Gallery</li>
             <li>Contact Us</li>
-            <li>⚡ Offers</li>
-            <li>🛒 Cart (3)</li>
-            <li><a href="/login" style="text-decoration: none;color: inherit;">👤 Login</a></li>
-            <!-- <li>Contact Us</li> -->
+            <li class="user-cart-display" id="userCartDisplay2">🛒 Cart (0)</li>
+            <li id="LoginBtnPublic2"></li> <!-- This will be filled by JS -->
         </ul>
 
         <button class="location-btn"><i class="bi bi-geo-alt"></i> Ranchi ⬇</button>
