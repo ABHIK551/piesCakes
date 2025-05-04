@@ -90,7 +90,7 @@
 
 </style> -->
 <style>
-  /* Base styles */
+/* Base styles */
 .product-container {
   display: flex;
   flex-direction: row;
@@ -103,8 +103,9 @@
 .image-wrapper-thupro {
   flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
 .product-image {
@@ -113,10 +114,7 @@
 }
 
 .product-image-preview {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  width: 100%;
 }
 
 .product-details {
@@ -126,15 +124,14 @@
   width: 100%;
 }
 
-/* Vertical scrolling thumbnails (for desktop) */
 .thumbnail-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row !important;
   margin-top: 10px;
   gap: 18px;
-  max-height: 600px;
+  max-width: 600px;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .thumbnail-container::-webkit-scrollbar {
@@ -188,9 +185,8 @@
   .product-details {
     padding: 16px;
   }
-}
 
-@media (max-width: 480px) {
+  /* Make thumbnail container horizontal on small screens */
   .thumbnail-container {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -218,41 +214,40 @@
     flex-shrink: 0;
   }
 }
-
 </style>
 <section class="product-section">
-    <div class="product-container">
-      <div class="image-wrapper-thupro">
-        <div class="product-image">
-          <img id="product-image" src="" alt="" loading="lazy">
-        </div>
+  <div class="product-container">
+    <div class="image-wrapper-thupro">
+      <div class="product-image">
+        <img id="product-image" src="" alt="" loading="lazy">
       </div>
       <div class="product-image-preview">
         <div id="product-thumbnails" class="thumbnail-container"></div>
       </div>
-      
-        <div class="product-details">
-          <h1 id="product-name"></h1>
-          <div class="rating">★★★★☆</div>
-          <p class="price" id="product-price"></p>
-          <p id="product-description"></p>
-      
-          <div class="weight-selection">
-            <h3>WEIGHT</h3>
-            <button class="weight active" id="product-weight"></button>
-          </div>
-      
-          <div style="text-decoration: none;color: inherit;" class="action-row">
-            <div class="quantity" style="max-width: 100px;">
-                <button class="minus">-</button>
-                <input type="text" value="1" class="quantity-input" id="product-page-quantity">
-                <button class="plus">+</button>
-              </div>
-          
-            <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
-          </div>
-        </div>
+    </div>
+  
+    <div class="product-details">
+      <h1 id="product-name"></h1>
+      <div class="rating">★★★★☆</div>
+      <p class="price" id="product-price"></p>
+      <p id="product-description"></p>
+  
+      <div class="weight-selection">
+        <h3>WEIGHT</h3>
+        <button class="weight active" id="product-weight"></button>
       </div>
+  
+      <div class="action-row">
+        <div class="quantity" style="max-width: 100px;">
+          <button class="minus">-</button>
+          <input type="text" value="1" class="quantity-input" id="product-page-quantity">
+          <button class="plus">+</button>
+        </div>
+  
+        <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
+      </div>
+    </div>
+  </div>
 </section>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
