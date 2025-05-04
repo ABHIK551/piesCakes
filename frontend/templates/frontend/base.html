@@ -613,15 +613,17 @@ main {
 }
 
 .add-section {
-	position: relative;
-	width: 100%;
-	max-height: 600px;
-	background: url('https://s3-alpha-sig.figma.com/img/2a7d/ec98/432c2a5cb3077d7092a0b04c35875850?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=lrNzkUqBCGhybW5tf1XGH2D5LoX129~X-RzrIs383fVoPcDaTs6ZvhzCy7C3T3btR8Xe5fT8D0FR6tpXjEeNYpPqU-sq88EC0iDIn0jtvv~N2z8UVbln9H8r5eu2GHFP1S5KTvtV4a-q8u1hQ4ILgdxcVGgvOo07ua65xHEIrr2DpP0azd-XJiAKL-SGF~hMzU7vrtAOnqIW495QV5OR8D2JOwgujSOvTlps77LSkEj2WIV0IMrYulGJI0taiehrgST~M1fDNkCZJ0~u41-P7QVZMFVstfBE0I7eqQAMHoLXylpXfgfPsQeq2OuW7S~VKf8-vXATUIo0aZdS9JSvfg__') no-repeat center center/contain;
-    background-size: contain !important;
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	/* padding-right: 5%; */
+  width: 100%;
+  aspect-ratio: 16 / 6; /* Keeps responsive ratio */
+  background-size: contain; /* Fills area without leaving gaps */
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .add-content {
@@ -2208,6 +2210,19 @@ nav {
     padding: 0;
     box-sizing: border-box;
   }
+
+  .add-section {
+    width: 100%;
+    height: 130px;              /* Fixed height for small screens */
+    background-size: contain;     /* Ensure the image fills the area */
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    box-sizing: border-box;
+  }
 	.nav-bar {
 		padding: 10px;
 	}
@@ -2418,7 +2433,7 @@ nav {
 	}
 
 	.add-section {
-		height: 200px;
+		max-height: 200px;
 		background-size: cover;
 		background-position: center center;
 	}
