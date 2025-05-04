@@ -52,40 +52,43 @@
 
 @media (max-width: 468px) {
 
-	.new-arrivals {
-		padding-top: 6px;
-		padding-bottom: 6px;
+.new-arrivals .product-grid .swiper-wrapper {
+  padding-left: 10px; /* Optional: To add space on the left edge */
+  margin: 0 auto !important;
+}
+	.section-title {
+		font-size: 1.8em;
 	}
 
     .new-arrivals .product-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-        width: 100%;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+  padding: 10px;
+}
 
-/* Make each card responsive within grid */
-.new-arrivals .product-grid .product-card {
-  width: 50%;
+/* Each slide/card */
+.new-arrivals .product-grid .swiper-wrapper .product-card {
+  border: 1px solid #eee;
   border-radius: 5px;
-  gap: 30px;
-  background-color: #fff;
-  /* padding: 16px; */
-}
-.new-arrivals .product-grid .product-card a{
-    max-height: 100px;
+  padding: 0;
+  margin-right: 10px !important;
+  background: #fff;
+  max-width: 180px !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  height: 100%;
 }
 
-.new-arrivals .product-grid .product-card a img {
+.new-arrivals .product-grid .swiper-wrapper .product-card a{
     width: 100%;
-    max-height: 150px;
-    /* height: 150px !important; */
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
+}
+.new-arrivals .product-grid .swiper-wrapper .product-card a img {
+    /* max-height: 300px; */
+    width: 100%;
+    /* min-width: 200px !important; */
+    min-height: 180px;
+    aspect-ratio:  2 / 1;
+    object-fit: contain !important;
     background-color: #f8f8f8; /* Optional: gives a clean backdrop */
 }
+
 }
 </style>
 <section class="new-arrivals">
@@ -166,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 // Generate swiper slides
                 let imagesHtml = images.length > 0
-                    ? images.map(img => `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${product.name}" loading="lazy"/></div>`).join("")
+                    ? images.map(img => `<div class="swiper-slide"><img src="data:image/png;base64,${img}" style="repeat:no-repeat;" alt="${product.name}" loading="lazy"/></div>`).join("")
                     : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
 
                 // Generate serving size buttons
@@ -320,9 +323,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Reinitialize Swiper
         mobileSwiper = new Swiper("#products-container", {
             slidesPerView: 2,
-            centeredSlides: true,
-            gap:20,
-            spaceBetween: 20,
+            spaceBetween: 20, // ✅ this is the correct way
             loop: true,
             autoplay: {
                 delay: 3000,

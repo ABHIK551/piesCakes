@@ -165,6 +165,31 @@
   .product-info .category{
     margin: 0px;
   }
+  .size-buttons {
+  display: flex;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin-top: 6px;
+  padding-bottom: 4px;
+
+  scrollbar-width: none; /* For Firefox */
+}
+
+.size-buttons::-webkit-scrollbar {
+  display: none; /* For Chrome/Safari */
+}
+
+.size-buttons button {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+}
+
 }
 
 </style>
