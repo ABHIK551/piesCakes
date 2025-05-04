@@ -63,8 +63,8 @@ function renderCategories(categories) {
             const link = `/category`;
 
             categoryDiv.innerHTML = `
-                <a href="${link}">
-                    <img src="${imageSrc}" alt="${category.name}">
+                <a href="${link}" style="text-decoration:none;color:inherit;border-radius:10px !important;">
+                    <img style="border-radius:10px !important;" src="${imageSrc}" alt="${category.name}">
                     <p>${category.name}</p>
                 </a>
             `;
