@@ -854,7 +854,7 @@ main {
 }
 
 .feature-card h3 {
-	font-size: 1.4rem;
+	font-size: 1rem;
 	color: #5a3829;
 	font-weight: bold;
 }
@@ -3111,7 +3111,8 @@ nav {
         document.addEventListener("DOMContentLoaded", function () {
         var swiper = new Swiper(".bestsellers-slider", {
             slidesPerView: 4,
-            spaceBetween: 20,
+			gap:10,
+            spaceBetween: 10,
             loop: true,
             autoplay: {
                 delay: 3000, // 3 seconds per slide
