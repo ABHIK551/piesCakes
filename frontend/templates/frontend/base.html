@@ -295,18 +295,16 @@ main {
 }
 
 .banner-slide {
-  min-width: 100%;
-  /* height: 80vh !important; */
-  background-size: cover !important;         /* Ensures image covers entire area */
-  background-repeat: no-repeat;   /* Prevents tiling */
-  background-position: center;    /* Centers the image */
+  width: 100%;
+  aspect-ratio: 16 / 6; /* Keeps responsive ratio */
+  background-size: contain; /* Fills area without leaving gaps */
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
-  min-height: 440px;
-  max-height: 700px;
   align-items: center;
   justify-content: flex-start;
   color: white;
-  padding: 0px !important;                /* Optional: space around inner content */
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -314,12 +312,6 @@ main {
 	font-size: 12px !important;
 }
 
-@media (max-width: 768px) {
-  .banner-slide {
-    height: 180px;                /* Responsive height for smaller screens */
-    /* padding: 0 20px; */
-  }
-}
 
 .footer-section .bi {
 	color: #d17829;
@@ -2171,21 +2163,18 @@ nav {
 		padding: 5px;
 	}
 
-	.banner-slide {
-		min-width: 100%;
-		/* height: 80vh !important; */
-		background-size: contain !important;         /* Ensures image covers entire area */
-		background-repeat: no-repeat;   /* Prevents tiling */
-		background-position: center;    /* Centers the image */
-		display: flex;
-		max-height: 180px !important;
-		align-items: center;
-		justify-content: flex-start;
-		color: white;
-		padding: 0px !important;                /* Optional: space around inner content */
-		box-sizing: border-box;
-		}
-
+  .banner-slide {
+    width: 100%;
+    height: 130px;              /* Fixed height for small screens */
+    background-size: contain;     /* Ensure the image fills the area */
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    box-sizing: border-box;
+  }
 	.nav-bar {
 		padding: 10px;
 	}
@@ -2328,7 +2317,7 @@ nav {
 
 	.category-container {
 		display: grid;
-		grid-template-columns: repeat(2,1fr);
+		grid-template-columns: repeat(4, 1fr); /* 4 columns */
 		gap: 10px;
 		padding: 10px;
 	}
@@ -2354,11 +2343,16 @@ nav {
 		width: 100%;
 	}
 
+	.category a{
+		border-radius: 10px !important;
+	}
+
 	.category a img {
 		width: 100%;
 		aspect-ratio: 1 / 1;
-		object-fit: cover;
+		object-fit: contain;
 		flex-grow: 1;
+		border-radius: 10px !important;
 	}
 
 	.category p {
