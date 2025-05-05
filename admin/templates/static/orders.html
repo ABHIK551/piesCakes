@@ -28,6 +28,7 @@
                             <th>Phone Number</th>
                             <th>Payment Method</th>
                             <th>Payment Status</th>
+                            <th>Order Status</th>
                             <th>Transaction ID</th>
                             <th>Coupon Code</th>
                             <th>Discount Amount</th>
@@ -90,9 +91,12 @@
         });
         
         function loadOrders(page) {
+          document.getElementById("loader-container").style.display = "flex";
             fetch(`/api/orders/?page=${page}`)
+               
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById("loader-container").style.display = "none";
                     if (data.success) {
                         renderOrdersTable(data.data);
                         renderPagination(data.page, data.totalPages);
@@ -108,6 +112,7 @@
         function renderOrdersTable(orders) {
             const tableBody = document.getElementById('ordersTableBody');
             tableBody.innerHTML = '';
+            
 
             orders.forEach(order => {
                 const row = document.createElement('tr');
@@ -127,6 +132,7 @@
                     <td>${order.phone_number || 'N/A'}</td>
                     <td>${order.payment_method ? order.payment_method.toUpperCase() : 'N/A'}</td>
                     <td>${order.payment_status ? order.payment_status.toUpperCase() : 'N/A'}</td>
+                    <td>${order.order_status ? order.order_status.toUpperCase() : 'N/A'}</td>
                     <td>${order.transaction_id || 'N/A'}</td>
                     <td>${order.coupon_code || 'N/A'}</td>
                     <td>${order.discount_amount || '0.00'}</td>
@@ -257,6 +263,49 @@
       </div>
     </div>
   </div>
+
+  <!-- Order Status Modal -->
+<div class="modal fade" id="orderStatusModal" tabindex="-1" aria-labelledby="orderStatusModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderStatusModalLabel">Update Order Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="modal-order-id">
+        <label for="modal-order-status" class="form-label">Select Order Status</label>
+        <select id="modal-order-status" class="form-select">
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+
+        <label for="modal-payment-status" class="form-label">Select Payment Status</label>
+        <select id="modal-payment-status" class="form-select">
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="updateOrderStatus()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   
   <script>
   // Add new order item
@@ -387,6 +436,7 @@
     
     // 2. Fetch Products for Product Dropdown
     function loadProductsForOrderSelect() {
+        document.getElementById("loader-container").style.display = "flex";
         const pageSize = 100; // or however many products you want to load
         fetch(`/api/products-list/?page=1&pageSize=${pageSize}`)
             .then(response => {
@@ -396,6 +446,7 @@
                 return response.json();
             })
             .then(data => {
+                document.getElementById("loader-container").style.display = "none";
                 if (data.success && data.products && data.products.products) {
                     const products = data.products.products;
                     const selectElement = document.querySelector("#orderItems .product-select");
@@ -430,6 +481,52 @@
       loadUsers();
       loadProductsForOrderSelect();
     });
+
+function editOrder(orderId) {
+  document.getElementById('modal-order-id').value = orderId;
+
+  // Open Bootstrap modal
+  const modal = new bootstrap.Modal(document.getElementById('orderStatusModal'));
+  modal.show();
+}
+function updateOrderStatus() {
+  const orderId = document.getElementById('modal-order-id').value;
+  const selectedStatus = document.getElementById('modal-order-status').value;
+  const selectedPaymentStatus = document.getElementById('modal-payment-status').value;
+  const authToken = sessionStorage.getItem("auth_token");
+
+  fetch(`/api/orders/${orderId}/update-status/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}`
+    },
+    body: JSON.stringify({
+    order_status: selectedStatus,
+    payment_status: selectedPaymentStatus  // Add this line
+  })
+  })
+  .then(res => res.json())
+  .then(data => {
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('orderStatusModal'));
+    modal.hide();
+
+    // Show toast after closing
+    if (data.message) {
+      showToast("Order status updated.", "success");
+    } else {
+      showToast("Failed to update order.", "failed");
+    }
+  })
+  .catch(error => {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('orderStatusModal'));
+    modal.hide();
+    console.error("Error:", error);
+    showToast("Something went wrong.", "danger");
+  });
+}
+
     </script>
     <script>
 document.getElementById('createOrderForm').addEventListener('click', function(e) {

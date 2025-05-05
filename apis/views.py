@@ -1828,6 +1828,7 @@ from .serializers import OrderSerializers
 
 # Setup a logger
 logger = logging.getLogger(__name__)
+
 class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializers
@@ -1853,6 +1854,27 @@ class OrderCreateView(generics.CreateAPIView):
             return Response({'error': 'Something went wrong while creating the order.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class UpdateOrderStatusView(APIView):
+    def post(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+            order_status = request.data.get("order_status")
+            payment_status = request.data.get("payment_status")
+
+            if order_status:
+                order.order_status = order_status
+
+            if payment_status:
+                order.payment_status = payment_status
+
+            order.save()
+
+            return Response({"message": "Order updated successfully"}, status=status.HTTP_200_OK)
+
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class UserOrderListView(generics.ListAPIView):
     serializer_class = OrderSerializers
 
@@ -1907,3 +1929,31 @@ class CouponViewSet(viewsets.ModelViewSet):
 class CouponRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer
+
+from django.core.mail import send_mail
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+class SendEmailAPIView(APIView):
+    # permission_classes = [IsAuthenticated]  # Uncomment if needed
+
+    def post(self, request):
+        to_email = request.data.get("to_email")
+        subject = request.data.get("subject", "No Subject")
+        message = request.data.get("message", "")
+
+        if not to_email:
+            return Response({"error": "Recipient email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            send_mail(
+                subject,
+                message,
+                'your-email@gmail.com',  # From email (must match EMAIL_HOST_USER)
+                [to_email],
+                fail_silently=False,
+            )
+            return Response({"message": "Email sent successfully."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

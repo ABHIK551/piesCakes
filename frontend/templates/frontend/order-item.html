@@ -17,6 +17,7 @@
                             <th>Date</th>
                             <th>Total Amount</th>
                             <th>Payment Status</th>
+                            <th>Order Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -199,11 +200,12 @@
                         <th>Quantity</th>
                         <th>Date</th>
                         <th>Price</th>
-                        <th>Status</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="compOrdBody">
                 </tbody>
             </table>
         </div>
@@ -259,7 +261,7 @@
     function populateOrders(orders) {
         const orderSections = document.querySelectorAll(".order-section");
         const pendingTbody = orderSections[0].querySelector("tbody");
-        const completedTbody = orderSections[1].querySelector("tbody");
+        const completedTbody = document.getElementById("compOrdBody");
 
         pendingTbody.innerHTML = '';
         completedTbody.innerHTML = '';
@@ -275,10 +277,13 @@
                 <td class="${order.payment_status}">
                     ${capitalizeFirstLetter(order.payment_status)}
                 </td>
+                <td class="${order.order_status}">
+                    ${capitalizeFirstLetter(order.order_status)}
+                </td>
                 <td><button class="view-btn" data-order='${JSON.stringify(order)}'>View</button></td>
             `;
 
-            if (order.payment_status === 'completed') {
+            if (order.order_status === 'completed') {
                 completedTbody.appendChild(tr);
             } else {
                 pendingTbody.appendChild(tr);

@@ -53,5 +53,7 @@ urlpatterns = [
     path('orders/<int:order_id>/delete/', OrderDeleteView.as_view(), name='order-delete'),
     path('coupons/', CouponViewSet.as_view({'get': 'list', 'post': 'create'}), name='coupon-list-create'),
     path('coupons/<int:pk>/', CouponRetrieveUpdateDestroyAPIView.as_view(), name='coupon-detail'),
+    path('orders/<int:pk>/update-status/', UpdateOrderStatusView.as_view(), name='update-order-status'),
+    path('send-email/', SendEmailAPIView.as_view(), name='send_email'),
 
 ]

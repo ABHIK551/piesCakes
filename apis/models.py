@@ -317,6 +317,17 @@ class Order(models.Model):
         ('refunded', 'Refunded'),
     ]
 
+    ORDER_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),   # Order is being prepared
+        ('shipped', 'Shipped'),         # Order has been shipped
+        ('delivered', 'Delivered'),     # Order has been delivered to customer
+        ('completed', 'Completed'),     # Order cycle is fully completed
+        ('cancelled', 'Cancelled'),     # Order was cancelled before shipping
+        ('failed', 'Failed'),           # Payment or processing failed
+        ('refunded', 'Refunded'),       # Customer was refunded
+    ]
+
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
     delivery_address = models.TextField()
     city = models.CharField(max_length=100)
@@ -325,6 +336,7 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=15)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
+    order_status = models.CharField(max_length=20, blank=True, null=True, choices=ORDER_STATUS_CHOICES, default='pending')
     transaction_id = models.CharField(max_length=100, blank=True, null=True)
     coupon_code = models.CharField(max_length=50, blank=True, null=True)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

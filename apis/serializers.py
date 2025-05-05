@@ -552,6 +552,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 
+class OrderStatusUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['payment_status', 'order_status']
+
 class OrderSerializers(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()  # Add separate field for user full name
     order_items = OrderItemSerializer(many=True)
@@ -561,7 +566,7 @@ class OrderSerializers(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'user_name', 'order_items', 'delivery_address', 'city', 'state', 'pincode',
             'phone_number', 'payment_method', 'payment_status', 'transaction_id',
-            'coupon_code', 'discount_amount', 'total_amount', 'created_at', 'updated_at'
+            'coupon_code', 'discount_amount', 'total_amount', 'created_at', 'updated_at', 'order_status'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
 
