@@ -74,6 +74,6 @@ def reset_password(request, uid, token):
 
     # If token is valid, render the reset password page
     return render(request, 'frontend/reset_password.html', {
-        'uid': uidb64,  # use base64 version here for the frontend form
+        'uid': uid,  # use base64 version here for the frontend form
         'token': token
     })
