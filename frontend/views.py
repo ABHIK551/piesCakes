@@ -61,7 +61,7 @@ from apis.models import CustomUser  # Assuming your user model is called User
 
 def reset_password(request, uid, token):
     try:
-        user = get_object_or_404(CustomUser, uid=uid)  # Fetch user based on uid
+        user = get_object_or_404(CustomUser, id=uid)  # Fetch user based on uid
         # Validate the token here (you can use a custom method or Django's built-in token validation logic)
         if not user.validate_reset_token(token):  # Assuming you have a method to validate the token
             raise Http404("Invalid or expired token")
