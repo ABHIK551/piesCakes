@@ -33,268 +33,19 @@ from django.utils.decorators import method_decorator
 from .filters import ProductFilter
 from rest_framework.views import APIView
 import json
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.html import strip_tags
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import CustomUser  # Adjust import if needed
 
-
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data.copy()
-
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-
-#             for image_file in image_files:
-#                 try:
-#                     image_content = image_file.read()  # Read file content
-#                     encoded_image = base64.b64encode(image_content).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({
-#                         "success": False,
-#                         "message": f"Error processing image: {str(e)}"
-#                     }, status=status.HTTP_400_BAD_REQUEST)
-#                 finally:
-#                     image_file.close()  # Explicitly close the file
-
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!"
-#             }, status=status.HTTP_201_CREATED)
-        
-#         return Response({
-#             "success": False,
-#             "message": "Failed to add product!",
-#             "errors": serializer.errors
-#         }, status=status.HTTP_400_BAD_REQUEST)
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data.copy()
-
-#         print(f"Data comes to create product {data}")
-#         # Handle image files
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-#             for image_file in image_files:
-#                 try:
-#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
-#                 finally:
-#                     image_file.close()
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         # Parse serving_sizes_input correctly
-#         serving_sizes_raw = data.get("serving_sizes")
-#         if serving_sizes_raw:
-#             try:
-#                 data['serving_sizes'] = json.loads(serving_sizes_raw)
-#             except json.JSONDecodeError:
-#                 return Response({"success": False, "message": "Invalid serving_sizes_input JSON"}, status=400)
-
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             product = serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!",
-#                 "data": ProductSerializer(product).data  # include product data in response
-#             }, status=201)
-
-#         return Response({"success": False, "errors": serializer.errors}, status=400)
-
-
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data.copy()
-
-#         print(f"Data comes to create product {data}")
-
-#         # Handle image files and convert to base64
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-#             for image_file in image_files:
-#                 try:
-#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
-#                 finally:
-#                     image_file.close()
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         # Parse serving_sizes_input correctly
-#         serving_sizes_raw = data.getlist("serving_sizes_input")  # <-- This gives the actual list
-
-#         if serving_sizes_raw:
-#             try:
-#                 # The first element is the JSON string
-#                 data['serving_sizes_input'] = json.loads(serving_sizes_raw[0])
-#             except json.JSONDecodeError:
-#                 return Response({
-#                     "success": False,
-#                     "message": "Invalid serving_sizes_input JSON"
-#                 }, status=400)
-
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             product = serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!",
-#                 "data": ProductSerializer(product).data
-#             }, status=201)
-
-#         return Response({"success": False, "errors": serializer.errors}, status=400)
-
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data.copy()
-
-#         # ✅ DEBUG log
-#         print("Incoming Payload:", data)
-
-#         # ✅ Handle product images
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-#             for image_file in image_files:
-#                 try:
-#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
-#                 finally:
-#                     image_file.close()
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         # ✅ Fix: Parse serving_sizes_input properly
-#         raw_serving_sizes = request.data.get("serving_sizes_input")
-#         if raw_serving_sizes:
-#             try:
-#                 if isinstance(raw_serving_sizes, list):
-#                     raw_serving_sizes = raw_serving_sizes[0]  # first item from list
-#                 data['serving_sizes_input'] = json.loads(raw_serving_sizes)
-#             except json.JSONDecodeError:
-#                 return Response({
-#                     "success": False,
-#                     "message": "Invalid JSON for serving_sizes_input"
-#                 }, status=400)
-
-#         # ✅ Create product using serializer
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             product = serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!",
-#                 "data": ProductSerializer(product).data
-#             }, status=201)
-
-#         return Response({"success": False, "errors": serializer.errors}, status=400)
-
-
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         data = request.data.copy()
-#         print("Incoming Payload:", data)
-
-#         # ✅ Handle images
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-#             for image_file in image_files:
-#                 try:
-#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
-#                 finally:
-#                     image_file.close()
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         # ✅ Correct handling of stringified JSON inside list
-#         serving_sizes_input_raw = data.get("serving_sizes_input")
-#         if serving_sizes_input_raw:
-#             try:
-#                 parsed_serving_sizes = json.loads(serving_sizes_input_raw)
-#                 data.setlist("serving_sizes_input", parsed_serving_sizes)
-#             except json.JSONDecodeError:
-#                 return Response({
-#                     "success": False,
-#                     "message": "Invalid JSON for serving_sizes_input"
-#                 }, status=400)
-
-#         # ✅ Continue with serializer
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             product = serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!",
-#                 "data": ProductSerializer(product).data
-#             }, status=201)
-
-#         return Response({"success": False, "errors": serializer.errors}, status=400)
-
-# class ProductCreateAPIView(APIView):
-#     parser_classes = (MultiPartParser, FormParser, JSONParser)
-
-#     def post(self, request, *args, **kwargs):
-#         print("Incoming Payload:", request.data)
-
-#         # Convert to mutable dict, NOT just QueryDict
-#         data = dict(request.data)
-        
-#         # Handle image files
-#         if 'product_images' in request.FILES:
-#             image_files = request.FILES.getlist('product_images')
-#             image_base64_list = []
-#             for image_file in image_files:
-#                 try:
-#                     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
-#                     image_base64_list.append(encoded_image)
-#                 except Exception as e:
-#                     return Response({"success": False, "message": f"Image error: {str(e)}"}, status=400)
-#             data['product_images_base64'] = ",".join(image_base64_list)
-
-#         # Parse serving_sizes_input correctly
-#         serving_sizes_input_raw = request.data.get("serving_sizes_input")
-#         if serving_sizes_input_raw:
-#             try:
-#                 parsed_serving_sizes = json.loads(serving_sizes_input_raw)
-#                 data['serving_sizes_input'] = parsed_serving_sizes
-#                 print("Parsed serving_sizes_input:", parsed_serving_sizes)
-#             except json.JSONDecodeError:
-#                 return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
-
-#         serializer = ProductSerializer(data=data)
-#         if serializer.is_valid():
-#             product = serializer.save()
-#             return Response({
-#                 "success": True,
-#                 "message": "Product created successfully!",
-#                 "data": ProductSerializer(product).data
-#             }, status=201)
-
-#         return Response({"success": False, "errors": serializer.errors}, status=400)
 
 class ProductCreateAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
@@ -340,8 +91,6 @@ class ProductCreateAPIView(APIView):
             }, status=201)
 
         return Response({"success": False, "errors": serializer.errors}, status=400)
-
-
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CategoryCreateView(generics.CreateAPIView):
@@ -416,151 +165,6 @@ class CustomPaginationProduct(PageNumberPagination):
             "totalPages": self.page.paginator.num_pages,
             "products": data
         })
-
-# class ProductListView(generics.ListAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     pagination_class = CustomPaginationProduct
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-#     filterset_fields = ['name', 'category', 'price']
-#     search_fields = ['name', 'description']
-#     ordering_fields = ['created_at', 'price']
-
-#     def list(self, request, *args, **kwargs):
-#         # Apply filtering
-#         queryset = self.filter_queryset(self.get_queryset())
-
-#         # Paginate the results
-#         page = self.paginate_queryset(queryset)
-#         if page is not None:
-#             data = self.format_product_data(page)
-#             return self.get_paginated_response(data)
-
-#         # If pagination is disabled, return the full dataset
-#         data = self.format_product_data(queryset)
-#         return Response({"success": True, "products": data}, status=status.HTTP_200_OK)
-
-#     def format_product_data(self, queryset):
-#         """ Format products and include related category data """
-#         products = []
-
-#         for product in queryset:
-#             product_data = {
-#                 "id": product.id,
-#                 "name": product.name,
-#                 "category": {
-#                     "id": product.category.id,
-#                     "name": product.category.name,
-#                     "parent": {
-#                         "id": product.category.parent.id,
-#                         "name": product.category.parent.name
-#                     } if product.category.parent else None
-#                 } if product.category else None,
-#                 "description": product.description,
-#                 "ingredients": product.ingredients,
-#                 "allergen_info": product.allergen_info,
-#                 "price": product.price,
-#                 "discount_price": product.discount_price,
-#                 "stock_status": product.stock_status,
-#                 "serving_size": product.serving_size,
-#                 "total_stock": product.total_stock,
-#                 "reorder_level": product.reorder_level,
-#                 "weight": product.weight,
-#                 "cake_size": product.cake_size,
-#                 "flavor_variants": product.flavor_variants,
-#                 "add_ons": product.add_ons,
-#                 "product_images": product.product_images_base64,
-#                 "calories": product.calories,
-#                 "nutrition_facts": product.nutrition_facts,
-#                 "prep_time": product.prep_time,
-#                 "delivery_option": product.delivery_option,
-#                 "shelf_life": product.shelf_life,
-#                 "tags": product.tags,
-#                 "reviews": product.reviews,
-#                 "related_products": product.related_products,
-#                 "total_sales": product.total_sales,
-#                 "status": 'Active' if product.status == 1 else 'Inactive',
-#                 "created_at": product.created_at,
-#                 "updated_at": product.updated_at
-#             }
-#             products.append(product_data)
-
-#         return {"products": products}
-
-
-# class ProductListView(generics.ListAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     pagination_class = CustomPaginationProduct
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-#     filterset_fields = ['name', 'category', 'price']
-#     search_fields = ['name', 'description']
-#     ordering_fields = ['created_at', 'price']
-
-#     def list(self, request, *args, **kwargs):
-#         queryset = self.filter_queryset(self.get_queryset())
-#         page = self.paginate_queryset(queryset)
-#         serving_sizes = ProductServingSize.objects.all()
-#         if page is not None:
-#             data = self.format_product_data(page)
-#             return self.get_paginated_response(data)
-
-#         data = self.format_product_data(queryset)
-#         return Response({"success": True, "products": data}, status=status.HTTP_200_OK)
-
-#     def format_product_data(self, queryset):
-#         products = []
-
-#         for product in queryset:
-#             # Get serving sizes related to the product
-#             serving_sizes_qs = product.serving_sizes.all()
-#             serving_sizes = ProductServingSizeSerializer(serving_sizes_qs, many=True).data
-
-#             product_data = {
-#                 "id": product.id,
-#                 "name": product.name,
-#                 "category": {
-#                     "id": product.category.id,
-#                     "name": product.category.name,
-#                     "parent": {
-#                         "id": product.category.parent.id,
-#                         "name": product.category.parent.name
-#                     } if product.category.parent else None
-#                 } if product.category else None,
-#                 "description": product.description,
-#                 "ingredients": product.ingredients,
-#                 "allergen_info": product.allergen_info,
-#                 "price": product.price,
-#                 "discount_price": product.discount_price,
-#                 "stock_status": product.stock_status,
-#                 "serving_size": product.serving_size,
-#                 "serving_sizes": ProductServingSizeSerializer.get().all(),
-#                 "total_stock": product.total_stock,
-#                 "reorder_level": product.reorder_level,
-#                 "weight": product.weight,
-#                 "cake_size": product.cake_size,
-#                 "flavor_variants": product.flavor_variants,
-#                 "add_ons": product.add_ons,
-#                 # ✅ Updated line for multiple base64 images
-#                 "product_images": product.product_images_base64.split(',') if product.product_images_base64 else [],
-#                 "calories": product.calories,
-#                 "nutrition_facts": product.nutrition_facts,
-#                 "prep_time": product.prep_time,
-#                 "delivery_option": product.delivery_option,
-#                 "shelf_life": product.shelf_life,
-#                 "tags": product.tags,
-#                 "reviews": product.reviews,
-#                 "related_products": product.related_products,
-#                 "total_sales": product.total_sales,
-#                 "status": 'Active' if product.status == 1 else 'Inactive',
-#                 "created_at": product.created_at,
-#                 "updated_at": product.updated_at
-#             }
-
-#             products.append(product_data)
-
-#         return {"products": products}
-
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
@@ -906,9 +510,27 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            
+            # Prepare welcome email
+            html_body = f"""
+                <h2>Welcome to Pies & Thies!</h2>
+                <p>Hi {serializer.validated_data.get('first_name', 'there')},</p>
+                <p>Thank you for registering with <strong>Pies & Thies</strong>. We're thrilled to have you on board.</p>
+                <p>Start exploring our delicious selections, and if you ever need help, our team is just a message away.</p>
+                <br/>
+                <p>Happy shopping!<br/><strong>Pies & Thies Team</strong></p>
+            """
+            try:
+                send_email(
+                    subject="🎉 Welcome to Pies & Thies – Let’s Get Started!",
+                    html_message=html_body,
+                    to_email=serializer.validated_data["email"]
+                )
+            except Exception as e:
+                print("Email failed:", str(e))  # Optionally log this
+
             return Response({"message": "Registration successful.", "status": "success"}, status=status.HTTP_201_CREATED)
-        
-        # Flatten errors
+
         error = serializer.errors.get("message") or next(iter(serializer.errors.values()))[0]
         return Response({"message": error, "status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -919,6 +541,39 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime, timedelta
+
+# class LoginView(APIView):
+#     def post(self, request):
+#         email = request.data.get("email")
+#         password = request.data.get("password")
+
+#         if not email or not password:
+#             return Response({"success": False, "message": "Email and password required."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         user = authenticate(request, username=email, password=password)
+
+#         if user is not None:
+#             # ✅ Generate JWT token
+#             payload = {
+#                 "user_id": user.id,
+#                 "email": user.email,
+#                 "exp": datetime.utcnow() + timedelta(hours=2),  # Token expires in 2 hours
+#                 "iat": datetime.utcnow()
+#             }
+#             token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+
+#             return Response({
+#                 "success": True,
+#                 "message": "Login successful",
+#                 "token": token,
+#                 "user": {
+#                     "id": user.id,
+#                     "email": user.email,
+#                     "name": f"{user.first_name} {user.last_name}"
+#                 }
+#             })
+#         else:
+#             return Response({"success": False, "message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LoginView(APIView):
     def post(self, request):
@@ -935,10 +590,41 @@ class LoginView(APIView):
             payload = {
                 "user_id": user.id,
                 "email": user.email,
-                "exp": datetime.utcnow() + timedelta(hours=2),  # Token expires in 2 hours
+                "exp": datetime.utcnow() + timedelta(hours=2),
                 "iat": datetime.utcnow()
             }
             token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+
+            # ✅ Prepare email HTML body
+            html_body = f"""
+                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f5f2; color: #333;">
+                    <h2 style="color: #b05a3c;">Welcome back to Pies & Thies!</h2>
+                    <p>Hi {user.first_name},</p>
+                    <p>
+                        We noticed a successful login to your account just now:
+                    </p>
+                    <ul>
+                        <li><strong>Email:</strong> {user.email}</li>
+                        <li><strong>Time (UTC):</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}</li>
+                    </ul>
+                    <p>
+                        If this was you, no action is needed. If you didn’t authorize this login,
+                        please <a href="mailto:support@piesandthies.com" style="color: #b05a3c;">contact our support team</a> immediately.
+                    </p>
+                    <hr style="margin: 20px 0;" />
+                    <p style="font-size: 14px; color: #666;">
+                        Thanks for choosing <strong>Pies & Thies</strong> – where every bite feels like home.
+                    </p>
+                </div>
+            """
+
+
+            # ✅ Send email
+            try:
+                send_email("🔐 New Login to Your Pies & Thies Account – Was this you?n", html_body, user.email)
+            except Exception as e:
+                # Log this if needed, or ignore silently
+                print("Email failed:", str(e))
 
             return Response({
                 "success": True,
@@ -950,8 +636,10 @@ class LoginView(APIView):
                     "name": f"{user.first_name} {user.last_name}"
                 }
             })
+
         else:
             return Response({"success": False, "message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1829,26 +1517,78 @@ from .serializers import OrderSerializers
 # Setup a logger
 logger = logging.getLogger(__name__)
 
+# class OrderCreateView(generics.CreateAPIView):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializers
+
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             # NO need to mutate
+#             request_data = request.data.copy()  # Make a safe copy
+
+#             serializer = self.get_serializer(data=request_data)
+#             serializer.is_valid(raise_exception=True)
+#             self.perform_create(serializer)
+#             headers = self.get_success_headers(serializer.data)
+
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+#         except ValidationError as e:
+#             logger.warning(f"Validation error during order creation: {e.detail}")
+#             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         except Exception as e:
+#             logger.error(f"Unexpected error during order creation: {str(e)}", exc_info=True)
+#             return Response({'error': 'Something went wrong while creating the order.'},
+#                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializers
 
     def create(self, request, *args, **kwargs):
         try:
-            # NO need to mutate
-            request_data = request.data.copy()  # Make a safe copy
+            request_data = request.data.copy()
 
             serializer = self.get_serializer(data=request_data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
 
+            # ✅ Fetch user info
+            user_id = serializer.validated_data.get("user").id
+            user = CustomUser.objects.get(id=user_id)
+
+            # ✅ Build HTML email body
+            html_message = f"""
+                <h2>Order Confirmation</h2>
+                <p>Hi {user.first_name},</p>
+                <p>Your order has been placed successfully! We'll notify you once it's shipped.</p>
+                <p><strong>Order ID:</strong> {serializer.data['id']}</p>
+                <p><strong>Total Amount:</strong> ₹{serializer.data['total_amount']}</p>
+                <br/>
+                <p>Thanks for shopping with <strong>Pies & Thies</strong>!</p>
+            """
+
+            plain_message = strip_tags(html_message)
+
+            # ✅ Send Email
+            send_mail(
+                subject="🧾 Your Pies & Thies Order Confirmation",
+                message=plain_message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user.email],
+                html_message=html_message,
+                fail_silently=True  # Set to False if you want to debug errors
+            )
+
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         except ValidationError as e:
             logger.warning(f"Validation error during order creation: {e.detail}")
             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         except Exception as e:
             logger.error(f"Unexpected error during order creation: {str(e)}", exc_info=True)
             return Response({'error': 'Something went wrong while creating the order.'},
@@ -1931,29 +1671,105 @@ class CouponRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CouponSerializer
 
 from django.core.mail import send_mail
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+
+def send_email(subject, html_message, to_email):
+    """
+    Reusable function to send HTML email.
+    """
+    if not to_email:
+        raise ValueError("Recipient email is required.")
+
+    if not settings.EMAIL_HOST_USER:
+        raise ImproperlyConfigured("EMAIL_HOST_USER is not configured.")
+
+    email = EmailMessage(
+        subject=subject,
+        body=html_message,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[to_email]
+    )
+    email.content_subtype = "html"  # This is the key part
+    email.send()
+
+class ForgotPasswordAPIView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+
+            # Generate token and UID
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+            # Construct reset URL
+            reset_url = f"https://prajnabyparth.com/reset-password/{uid}/{token}/"
+
+            # Email content
+            subject = "🔒 Reset Your Pies & Thies Password"
+            html_message = f"""
+                <h2>Password Reset Requested</h2>
+                <p>Hi {user.first_name},</p>
+                <p>We received a request to reset your password. Click the link below to set a new one:</p>
+                <a href="{reset_url}">Reset My Password</a>
+                <p>If you didn't request this, you can safely ignore this email.</p>
+            """
+            plain_message = f"Reset link: {reset_url}"
+
+            send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [user.email], html_message=html_message)
+
+            return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
+
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import make_password
 
-class SendEmailAPIView(APIView):
-    # permission_classes = [IsAuthenticated]  # Uncomment if needed
-
+class ResetPasswordAPIView(APIView):
     def post(self, request):
-        to_email = request.data.get("to_email")
-        subject = request.data.get("subject", "No Subject")
-        message = request.data.get("message", "")
+        uidb64 = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("password")
 
-        if not to_email:
-            return Response({"error": "Recipient email is required."}, status=status.HTTP_400_BAD_REQUEST)
+        if not uidb64 or not token or not new_password:
+            return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            send_mail(
-                subject,
-                message,
-                'your-email@gmail.com',  # From email (must match EMAIL_HOST_USER)
-                [to_email],
-                fail_silently=False,
-            )
-            return Response({"message": "Email sent successfully."}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Decode the UID from base64
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = CustomUser.objects.get(pk=uid)
+
+            # Validate the token
+            if default_token_generator.check_token(user, token):
+                # Update the password and save the user
+                user.password = make_password(new_password)
+                user.save()
+
+                # Send a confirmation email
+                subject = "Your Password has been Reset"
+                html_message = f"""
+                    <p>Hello {user.username},</p>
+                    <p>Your password has been successfully reset.</p>
+                    <p>If you did not request this change, please contact support immediately.</p>
+                """
+                send_email(subject, html_message, user.email)
+
+                return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            return Response({"error": "Invalid UID."}, status=status.HTTP_400_BAD_REQUEST)

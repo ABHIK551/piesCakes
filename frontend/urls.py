@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import termCon, aboutUs, refundPolicy, privacyPolicy, register,login, home, product, category, cart, orders
+from .views import reset_password, termCon, aboutUs, refundPolicy, privacyPolicy, register,login, home, product, category, cart, orders
 
 urlpatterns = [
     path('', home, name='home'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('refund-policy', refundPolicy, name='refundPolicy'),
     path('about-us', aboutUs, name='aboutUs'),
     path('term-and-conditions', termCon, name='termCon'),
+    path('reset-password/<uid>/<token>/', reset_password, name='reset_password'),
 ]
