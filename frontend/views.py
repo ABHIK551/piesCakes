@@ -61,10 +61,10 @@ from apis.models import CustomUser  # Assuming your user model is called User
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 
-def reset_password(request, uidb64, token):
+def reset_password(request, uid, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = CustomUser.objects.get(pk=uid)
+        uid = urlsafe_base64_decode(uid).decode()
+        user = CustomUser.objects.get(id=uid)
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
         raise Http404("Invalid reset link")
 
