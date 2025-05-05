@@ -1744,13 +1744,15 @@ class ResetPasswordAPIView(APIView):
         token = request.data.get("token")
         new_password = request.data.get("password")
 
+        print(f" uidb64 {uidb64} token {token}")
+
         if not uidb64 or not token or not new_password:
             return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             # Decode the UID from base64
             uid = urlsafe_base64_decode(uidb64).decode()
-            user = CustomUser.objects.get(pk=uid)
+            user = CustomUser.objects.get(id=uid)
 
             # Validate the token
             if default_token_generator.check_token(user, token):
