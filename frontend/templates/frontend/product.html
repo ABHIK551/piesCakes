@@ -90,130 +90,134 @@
 
 </style> -->
 <style>
-/* Base styles */
-.product-container {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.image-wrapper-thupro {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.product-image {
-  max-width: 100%;
-  height: auto;
-}
-
-.product-image-preview {
-  width: 100%;
-}
-
-.product-details {
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
-  width: 100%;
-}
-
-.thumbnail-container {
-  display: flex;
-  flex-direction: row !important;
-  margin-top: 10px;
-  gap: 18px;
-  max-width: 600px;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
-.thumbnail-container::-webkit-scrollbar {
-  display: none;
-}
-
-.thumbnail {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  transition: transform 0.2s ease;
-  width: 100px;
-  height: auto;
-  cursor: pointer;
-}
-
-.thumbnail:hover {
-  transform: scale(1.1);
-}
-
-.size-chip {
-  padding: 6px 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  color: #333;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-right: 8px;
-}
-
-.size-chip.active {
-  background-color: orange;
-  color: white;
-  border: none;
-}
-
-/* Responsive styles for mobile */
-@media (max-width: 768px) {
+  /* Base styles */
   .product-container {
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  .image-wrapper-thupro,
-  .product-image-preview,
-  .product-details {
-    width: 100%;
-  }
-
-  .product-details {
-    padding: 16px;
-  }
-
-  /* Make thumbnail container horizontal on small screens */
-  .thumbnail-container {
+    display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 12px;
-    margin-top: 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .image-wrapper-thupro {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .image-wrapper-thupro .product-image {
     max-width: 100%;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    height: auto;
+  }
+
+  .image-wrapper-thupro .product-image .product-image {
+    max-width: 100%;
+    height: auto;
+  }
+  .product-image-preview {
+    width: 100%;
+  }
+
+  .product-details {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .thumbnail-container {
+    display: flex;
+    flex-direction: row !important;
+    margin-top: 10px;
+    gap: 18px;
+    max-width: 600px;
+    overflow-y: auto;
+    scrollbar-width: none;
   }
 
   .thumbnail-container::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .thumbnail-container::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 2px;
+    display: none;
   }
 
   .thumbnail {
-    min-width: 90px;
-    flex-shrink: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: transform 0.2s ease;
+    width: 100px;
+    height: auto;
+    cursor: pointer;
   }
-}
+
+  .thumbnail:hover {
+    transform: scale(1.1);
+  }
+
+  .size-chip {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 8px;
+  }
+
+  .size-chip.active {
+    background-color: orange;
+    color: white;
+    border: none;
+  }
+
+  /* Responsive styles for mobile */
+  @media (max-width: 768px) {
+    .product-container {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .image-wrapper-thupro,
+    .product-image-preview,
+    .product-details {
+      width: 100% !important;
+    }
+
+    .product-details {
+      padding: 16px;
+    }
+
+    /* Make thumbnail container horizontal on small screens */
+    .thumbnail-container {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      width: 100%;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .thumbnail-container::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .thumbnail-container::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 2px;
+    }
+
+    .thumbnail {
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+  }
 </style>
 <section class="product-section">
   <div class="product-container">
@@ -225,113 +229,113 @@
         <div id="product-thumbnails" class="thumbnail-container"></div>
       </div>
     </div>
-  
+
     <div class="product-details">
       <h1 id="product-name"></h1>
       <div class="rating">★★★★☆</div>
       <p class="price" id="product-price"></p>
       <p id="product-description"></p>
-  
+
       <div class="weight-selection">
         <h3>WEIGHT</h3>
         <button class="weight active" id="product-weight"></button>
       </div>
-  
+
       <div class="action-row">
         <div class="quantity" style="max-width: 100px;">
           <button class="minus">-</button>
           <input type="text" value="1" class="quantity-input" id="product-page-quantity">
           <button class="plus">+</button>
         </div>
-  
+
         <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART</button>
       </div>
     </div>
   </div>
 </section>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-  const segments = window.location.pathname.split('/').filter(Boolean);
-  const encoded = segments[segments.length - 1];
+  document.addEventListener('DOMContentLoaded', () => {
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const encoded = segments[segments.length - 1];
 
-  let decoded;
-  try {
-    decoded = atob(encoded);
-  } catch (e) {
-    console.error('Failed to decode ID from URL:', e);
-    return;
-  }
+    let decoded;
+    try {
+      decoded = atob(encoded);
+    } catch (e) {
+      console.error('Failed to decode ID from URL:', e);
+      return;
+    }
 
-  const [id] = decoded.split('-');
+    const [id] = decoded.split('-');
 
-  fetch(`/api/products/${encoded}/`)
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      const product = data.product;
+    fetch(`/api/products/${encoded}/`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        const product = data.product;
 
-      // ========== IMAGE DISPLAY ==========
-      const imageList = product.product_images;
-      const mainImage = document.getElementById('product-image');
-      const thumbnailContainer = document.getElementById('product-thumbnails');
+        // ========== IMAGE DISPLAY ==========
+        const imageList = product.product_images;
+        const mainImage = document.getElementById('product-image');
+        const thumbnailContainer = document.getElementById('product-thumbnails');
 
-      if (imageList.length > 0) {
-        mainImage.src = `data:image/png;base64,${imageList[0]}`;
-      }
+        if (imageList.length > 0) {
+          mainImage.src = `data:image/png;base64,${imageList[0]}`;
+        }
 
-      imageList.forEach((img, idx) => {
-        const thumb = document.createElement('img');
-        thumb.src = `data:image/png;base64,${img}`;
-        thumb.alt = `Thumbnail ${idx + 1}`;
-        thumb.classList.add('thumbnail');
-        thumb.style.width = '125px';
-        thumb.style.height = '140px';
-        thumb.style.objectFit = 'cover';
-        thumb.style.cursor = 'pointer';
-        thumb.style.marginRight = '5px';
+        imageList.forEach((img, idx) => {
+          const thumb = document.createElement('img');
+          thumb.src = `data:image/png;base64,${img}`;
+          thumb.alt = `Thumbnail ${idx + 1}`;
+          thumb.classList.add('thumbnail');
+          thumb.style.width = '125px';
+          thumb.style.height = '140px';
+          thumb.style.objectFit = 'cover';
+          thumb.style.cursor = 'pointer';
+          thumb.style.marginRight = '5px';
 
-        thumb.addEventListener('click', () => {
-          mainImage.src = `data:image/png;base64,${img}`;
+          thumb.addEventListener('click', () => {
+            mainImage.src = `data:image/png;base64,${img}`;
+          });
+
+          thumbnailContainer.appendChild(thumb);
         });
 
-        thumbnailContainer.appendChild(thumb);
-      });
+        // ========== TEXTUAL DETAILS ==========
+        document.getElementById('product-name').textContent = product.name;
+        document.getElementById('product-description').textContent = product.description;
 
-      // ========== TEXTUAL DETAILS ==========
-      document.getElementById('product-name').textContent = product.name;
-      document.getElementById('product-description').textContent = product.description;
+        if (product.serving_sizes.length > 0) {
+          const first = product.serving_sizes[0];
+          const price = parseFloat(first.price || 0);
+          const discount = parseFloat(first.discount_price || 0);
+          const finalPrice = (price - discount).toFixed(2);
 
-      if (product.serving_sizes.length > 0) {
-        const first = product.serving_sizes[0];
-        const price = parseFloat(first.price || 0);
-        const discount = parseFloat(first.discount_price || 0);
-        const finalPrice = (price - discount).toFixed(2);
-
-        document.getElementById('product-price').innerHTML =
+          document.getElementById('product-price').innerHTML =
             `₹${finalPrice}` + (discount > 0 ? ` <strike>₹${price.toFixed(2)}</strike>` : '');
         }
 
-      // ========== SERVING SIZES / WEIGHTS ==========
-      const weightSection = document.querySelector('.weight-selection');
+        // ========== SERVING SIZES / WEIGHTS ==========
+        const weightSection = document.querySelector('.weight-selection');
         weightSection.innerHTML = '<h3>WEIGHT</h3>';
 
         product.serving_sizes.forEach((s, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'weight';
+          const btn = document.createElement('button');
+          btn.className = 'weight';
 
-        // Button text: "20 Person" or "1.5kg"
-        btn.textContent = /^\d+$/.test(s.size) ? `${s.size} Person` : s.size;
+          // Button text: "20 Person" or "1.5kg"
+          btn.textContent = /^\d+$/.test(s.size) ? `${s.size} Person` : s.size;
 
-        // Add data attributes
-        btn.dataset.size = s.size;
-        btn.dataset.price = s.price || 0;
-        btn.dataset.discount = s.discount_price || 0;
+          // Add data attributes
+          btn.dataset.size = s.size;
+          btn.dataset.price = s.price || 0;
+          btn.dataset.discount = s.discount_price || 0;
 
-        if (i === 0) btn.classList.add('active');
+          if (i === 0) btn.classList.add('active');
 
-        btn.addEventListener('click', function () {
+          btn.addEventListener('click', function () {
             document.querySelectorAll('.weight').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
@@ -340,20 +344,20 @@
             const finalPrice = (price - discount).toFixed(2);
 
             document.getElementById('product-price').innerHTML =
-            `₹${finalPrice}` + (discount > 0 ? ` <strike>₹${price.toFixed(2)}</strike>` : '');
+              `₹${finalPrice}` + (discount > 0 ? ` <strike>₹${price.toFixed(2)}</strike>` : '');
+          });
+
+          weightSection.appendChild(btn);
         });
 
-        weightSection.appendChild(btn);
-        });
 
-
-      // Add-to-cart button ID
-      document.getElementById('add-to-cart-btn').setAttribute('data-encoded', product.id);
-    })
-    .catch(err => {
-      console.error('Error fetching product:', err);
-    });
-});
+        // Add-to-cart button ID
+        document.getElementById('add-to-cart-btn').setAttribute('data-encoded', product.id);
+      })
+      .catch(err => {
+        console.error('Error fetching product:', err);
+      });
+  });
 
 </script>
 <!-- <script>
@@ -420,137 +424,145 @@
     </script>
      -->
 
-     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          // Quantity Buttons
-          const quantityInput = document.querySelector('.quantity-input');
-          const minusBtn = document.querySelector('.minus');
-          const plusBtn = document.querySelector('.plus');
-        
-          minusBtn.addEventListener('click', () => {
-            let currentQty = parseInt(quantityInput.value);
-            if (currentQty > 1) quantityInput.value = currentQty - 1;
-          });
-        
-          plusBtn.addEventListener('click', () => {
-            let currentQty = parseInt(quantityInput.value);
-            quantityInput.value = currentQty + 1;
-          });
-        
-          // Handle Weight Selection
-          const weightButtons = document.querySelectorAll('.weight');
-          weightButtons.forEach(button => {
-            button.addEventListener('click', () => {
-              weightButtons.forEach(btn => btn.classList.remove('active'));
-              button.classList.add('active');
-            });
-          });
-        
-          // Add to Cart Button
-          document.querySelector('.add-to-cart').addEventListener('click', function () {
-            const productId = this.getAttribute('data-encoded');
-            const userId = sessionStorage.getItem('user_id');
-            const quantity = parseInt(document.getElementById('product-page-quantity').value) || 1;
-        
-            if (!userId) {
-              showToast("Please login to add item to cart", "danger");
-              return;
-            }
-        
-            // Get selected weight info
-            const activeWeight = document.querySelector('.weight.active');
-            const selectedSize = activeWeight?.dataset.size || "default";
-            const selectedPrice = parseFloat(activeWeight?.dataset.price) || 0;
-            const selectedDiscount = parseFloat(activeWeight?.dataset.discount) || 0;
-        
-            const cartItems = [{
-              product: productId,
-              quantity: quantity,
-              size: selectedSize,
-              price: selectedPrice,
-              discount_price: selectedDiscount
-            }];
-        
-            fetch('/api/add-to-cart/', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                userId: userId,
-                cartItems: cartItems
-              })
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data && !data.error) {
-                let cart_item = parseInt(sessionStorage.getItem("cart_count") || "0", 10);
-                let new_cart_item = cart_item + 1;
-                sessionStorage.setItem("cart_count", new_cart_item);
-                showToast("Products added to cart successfully!", "success");
-                setTimeout(() => {
-                    window.location.reload();
-                }, 300);
-              } else {
-                showToast("Failed to add products to cart.", "danger");
-              }
-            })
-            .catch(error => {
-              console.error("Error adding to cart:", error);
-              showToast("Something went wrong.", "danger");
-            });
-          });
-        
-        
-        
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Quantity Buttons
+    const quantityInput = document.querySelector('.quantity-input');
+    const minusBtn = document.querySelector('.minus');
+    const plusBtn = document.querySelector('.plus');
+
+    minusBtn.addEventListener('click', () => {
+      let currentQty = parseInt(quantityInput.value);
+      if (currentQty > 1) quantityInput.value = currentQty - 1;
+    });
+
+    plusBtn.addEventListener('click', () => {
+      let currentQty = parseInt(quantityInput.value);
+      quantityInput.value = currentQty + 1;
+    });
+
+    // Handle Weight Selection
+    const weightButtons = document.querySelectorAll('.weight');
+    weightButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        weightButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+      });
+    });
+
+    // Add to Cart Button
+    document.querySelector('.add-to-cart').addEventListener('click', function () {
+      const productId = this.getAttribute('data-encoded');
+      const userId = sessionStorage.getItem('user_id');
+      const quantity = parseInt(document.getElementById('product-page-quantity').value) || 1;
+
+      if (!userId) {
+        showToast("Please login to add item to cart", "danger");
+        return;
+      }
+
+      // Get selected weight info
+      const activeWeight = document.querySelector('.weight.active');
+      const selectedSize = activeWeight?.dataset.size || "default";
+      const selectedPrice = parseFloat(activeWeight?.dataset.price) || 0;
+      const selectedDiscount = parseFloat(activeWeight?.dataset.discount) || 0;
+
+      const cartItems = [{
+        product: productId,
+        quantity: quantity,
+        size: selectedSize,
+        price: selectedPrice,
+        discount_price: selectedDiscount
+      }];
+
+      fetch('/api/add-to-cart/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          cartItems: cartItems
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && !data.error) {
+            let cart_item = parseInt(sessionStorage.getItem("cart_count") || "0", 10);
+            let new_cart_item = cart_item + 1;
+            sessionStorage.setItem("cart_count", new_cart_item);
+            showToast("Products added to cart successfully!", "success");
+            setTimeout(() => {
+              window.location.reload();
+            }, 300);
+          } else {
+            showToast("Failed to add products to cart.", "danger");
+          }
+        })
+        .catch(error => {
+          console.error("Error adding to cart:", error);
+          showToast("Something went wrong.", "danger");
         });
-        </script>
-        
+    });
+
+
+
+  });
+</script>
+
 
 
 <section class="recommendation-section">
-    <div class="heading">
-        <h2>You May <span>Also Like</span></h2>
-        <p>Looking for more indulgence? Try these delicious treats handpicked for you!</p>
+  <div class="heading">
+    <h2>You May <span>Also Like</span></h2>
+    <p>Looking for more indulgence? Try these delicious treats handpicked for you!</p>
+  </div>
+
+  <div class="product-grid" id="recommendationGrid">
+    <div class="product-card">
+      <img
+        src="https://s3-alpha-sig.figma.com/img/ef04/3dbb/2b7cccec16c019ce86a585e7241463b7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DJ562FCnN-yWQ64l24lNAcj8fPbUAgUwgLdMgaFLaMfEyqrtCy7O-q8iGr9Y6Z~bP4egQDJA8EhUEaf2T1OOabx4hEpS2JpK72jkmysv0eYVWoSa0ENnorj~ouV10TkhwCaJ8Kgxs2PV9bgppmVKdezl3sOMtVLlrDKUBQWumUF55COYTbkwvLgm9Pl9xUTQXwUH~my1zs4L937crgOQKxhvikYoLKxYnziBPPQodTyvA9RZaBNNok~GgOU1ZDSTIsLiVOZ7dUuKuJZmoHs4ZH4Vb70cZLs4UILpnKgrsEKxlx-loulQo-X0ZjFoZjG2TXvF24al5cOl5d6kPHV3IQ__"
+        alt="French Vanilla Bomboloni">
+      <div class="product-info">
+        <h3>FRENCH VANILLA BOMBOLONI</h3>
+        <p class="category">Desserts</p>
+        <p class="price">₹200.00</p>
+      </div>
     </div>
 
-    <div class="product-grid" id="recommendationGrid">
-        <div class="product-card">
-            <img src="https://s3-alpha-sig.figma.com/img/ef04/3dbb/2b7cccec16c019ce86a585e7241463b7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DJ562FCnN-yWQ64l24lNAcj8fPbUAgUwgLdMgaFLaMfEyqrtCy7O-q8iGr9Y6Z~bP4egQDJA8EhUEaf2T1OOabx4hEpS2JpK72jkmysv0eYVWoSa0ENnorj~ouV10TkhwCaJ8Kgxs2PV9bgppmVKdezl3sOMtVLlrDKUBQWumUF55COYTbkwvLgm9Pl9xUTQXwUH~my1zs4L937crgOQKxhvikYoLKxYnziBPPQodTyvA9RZaBNNok~GgOU1ZDSTIsLiVOZ7dUuKuJZmoHs4ZH4Vb70cZLs4UILpnKgrsEKxlx-loulQo-X0ZjFoZjG2TXvF24al5cOl5d6kPHV3IQ__" alt="French Vanilla Bomboloni">
-            <div class="product-info">
-                <h3>FRENCH VANILLA BOMBOLONI</h3>
-                <p class="category">Desserts</p>
-                <p class="price">₹200.00</p>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://s3-alpha-sig.figma.com/img/45a5/b7c7/495c436c36424bfee5a0384fa68331fa?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qdDBiU8FClumOXSW7aRdSkE3vMcXBwknkRAm5AF0kF9SbtyxoVI5fVW01A03M7mBBPYeXYSAeRGgA5GGl69YGqX14DgA0LjYU-uJ790XtPrjX6ljncUltu6oPys4xjk0O8CVXXYcLbvR0NqElMDuNH4lhS85jYXjsCwLfPC5G5DQWkw8Wqvz5kN2MtWcXQwmiiwqYfnZ3eXGEOxF5BLsfo6g5lU2PLItEF7g-0pdq9yImEnR2MMZY4ZDRPrPpVg6Pc0Tubx53tcY9P3RjU2gJVV6vvC6eLBJ18eA1IMyArozke9BqTBhXJ31yH0dbptwLTUfcrfVuiKcXouVz-IIzA__" alt="Blueberry Cheese Cake">
-            <div class="product-info">
-                <h3>BLUEBERRY CHEESE CAKE</h3>
-                <p class="category">Cakes</p>
-                <p class="price">₹200.00</p>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://s3-alpha-sig.figma.com/img/8a20/53cf/69326bca05412c52363c504c81ab5637?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WgWf-H23qT3XJUGV2z3hJ3A4mDyPveHoaCBMgL6-hQiRmWj4ni2VR4kR2BwirySZpNofDjfMGEOxMz5AzoeHWFwVexqhE1GYybgzF19JWyw4BFoJ4ZzmjKK9G0xy~kxd7cYyMgtju2eX5IQ2pHBektzEu0FDb9z5s7~fTNQvI5OE1rr-FC8ibgUTgZzIFww06uSr1-3pZBkASO~UlfYnI~DEpEfNB-fuA9fwQm-vN8noaSLOI9eKw~3eVgUWWp5zE74qp1zziW452XWp6KzhLu-9gXrdbxxVHhwoXJqee7~2PW010f3JBjpNi5jhsmvIYDfMN6GYwEgFQgsKS7GrcQ__" alt="Classic Hot Chocolate">
-            <div class="product-info">
-                <h3>CLASSIC HOT CHOCOLATE</h3>
-                <p class="category">Beverages</p>
-                <p class="price">₹180.00</p>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <img src="https://s3-alpha-sig.figma.com/img/f9b3/0e57/78ef8132c44847533f3a6134ad7b20cb?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=TzGfKdCvQDg4Pn4EC8Of6UsyoJcssjiN~sqpnBYb17pu0-xCwLeXRvxKfuOE09kSiAry1ooSjJk4DgJFLRze27b1L5PFFU0lc56rz91iTcGuc31JUA~fqip54chuktybe8nQhEyoy0EjtAsC7TblatHMxSWKIK0mhuesc95BcOq2huwRXlKkG4R4IOwtX39B4hgW~m1z9jwbbObtT6UpP7Ls-w5TqRcOzsISrHbCj7vrIJXBviuwLT3P5jjeno-dSz8angXYyXfntn~Ys8eFIZ6kIHx6~CZG4cLtllEEL-NXAIDSwjqcMMQ~NJto7~6y6yfQP9Ty6PurGgDocEgL6A__" alt="Biscoff Brownies">
-            <div class="product-info">
-                <h3>BISCOFF BROWNIES</h3>
-                <p class="category">Desserts</p>
-                <p class="price">₹150.00</p>
-            </div>
-        </div>
+    <div class="product-card">
+      <img
+        src="https://s3-alpha-sig.figma.com/img/45a5/b7c7/495c436c36424bfee5a0384fa68331fa?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qdDBiU8FClumOXSW7aRdSkE3vMcXBwknkRAm5AF0kF9SbtyxoVI5fVW01A03M7mBBPYeXYSAeRGgA5GGl69YGqX14DgA0LjYU-uJ790XtPrjX6ljncUltu6oPys4xjk0O8CVXXYcLbvR0NqElMDuNH4lhS85jYXjsCwLfPC5G5DQWkw8Wqvz5kN2MtWcXQwmiiwqYfnZ3eXGEOxF5BLsfo6g5lU2PLItEF7g-0pdq9yImEnR2MMZY4ZDRPrPpVg6Pc0Tubx53tcY9P3RjU2gJVV6vvC6eLBJ18eA1IMyArozke9BqTBhXJ31yH0dbptwLTUfcrfVuiKcXouVz-IIzA__"
+        alt="Blueberry Cheese Cake">
+      <div class="product-info">
+        <h3>BLUEBERRY CHEESE CAKE</h3>
+        <p class="category">Cakes</p>
+        <p class="price">₹200.00</p>
+      </div>
     </div>
+
+    <div class="product-card">
+      <img
+        src="https://s3-alpha-sig.figma.com/img/8a20/53cf/69326bca05412c52363c504c81ab5637?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WgWf-H23qT3XJUGV2z3hJ3A4mDyPveHoaCBMgL6-hQiRmWj4ni2VR4kR2BwirySZpNofDjfMGEOxMz5AzoeHWFwVexqhE1GYybgzF19JWyw4BFoJ4ZzmjKK9G0xy~kxd7cYyMgtju2eX5IQ2pHBektzEu0FDb9z5s7~fTNQvI5OE1rr-FC8ibgUTgZzIFww06uSr1-3pZBkASO~UlfYnI~DEpEfNB-fuA9fwQm-vN8noaSLOI9eKw~3eVgUWWp5zE74qp1zziW452XWp6KzhLu-9gXrdbxxVHhwoXJqee7~2PW010f3JBjpNi5jhsmvIYDfMN6GYwEgFQgsKS7GrcQ__"
+        alt="Classic Hot Chocolate">
+      <div class="product-info">
+        <h3>CLASSIC HOT CHOCOLATE</h3>
+        <p class="category">Beverages</p>
+        <p class="price">₹180.00</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img
+        src="https://s3-alpha-sig.figma.com/img/f9b3/0e57/78ef8132c44847533f3a6134ad7b20cb?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=TzGfKdCvQDg4Pn4EC8Of6UsyoJcssjiN~sqpnBYb17pu0-xCwLeXRvxKfuOE09kSiAry1ooSjJk4DgJFLRze27b1L5PFFU0lc56rz91iTcGuc31JUA~fqip54chuktybe8nQhEyoy0EjtAsC7TblatHMxSWKIK0mhuesc95BcOq2huwRXlKkG4R4IOwtX39B4hgW~m1z9jwbbObtT6UpP7Ls-w5TqRcOzsISrHbCj7vrIJXBviuwLT3P5jjeno-dSz8angXYyXfntn~Ys8eFIZ6kIHx6~CZG4cLtllEEL-NXAIDSwjqcMMQ~NJto7~6y6yfQP9Ty6PurGgDocEgL6A__"
+        alt="Biscoff Brownies">
+      <div class="product-info">
+        <h3>BISCOFF BROWNIES</h3>
+        <p class="category">Desserts</p>
+        <p class="price">₹150.00</p>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -631,7 +643,7 @@
       }
     }
   </script> -->
-  <!-- <script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", () => {
       loadRecommendations();
     });
@@ -720,49 +732,49 @@
     </script>
      -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  loadRecommendations();
-});
+  document.addEventListener("DOMContentLoaded", () => {
+    loadRecommendations();
+  });
 
-async function loadRecommendations() {
-  try {
-    const res = await fetch("/api/products-list/?page=1&pageSize=1000");
-    if (!res.ok) throw new Error("Network response was not ok");
-    const data = await res.json();
+  async function loadRecommendations() {
+    try {
+      const res = await fetch("/api/products-list/?page=1&pageSize=1000");
+      if (!res.ok) throw new Error("Network response was not ok");
+      const data = await res.json();
 
-    const all = data.products.products;
-    const lastFour = all.slice(-4);
-    const grid = document.getElementById("recommendationGrid");
-    grid.innerHTML = "";
+      const all = data.products.products;
+      const lastFour = all.slice(-4);
+      const grid = document.getElementById("recommendationGrid");
+      grid.innerHTML = "";
 
-    lastFour.forEach((prod, index) => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      const encodedId = btoa(`${prod.id}-piescakes`);
+      lastFour.forEach((prod, index) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        const encodedId = btoa(`${prod.id}-piescakes`);
 
-      // Parse product images
-      let images = [];
-      if (Array.isArray(prod.product_images)) {
-        images = prod.product_images;
-      } else if (typeof prod.product_images === "string") {
-        images = prod.product_images.split(",").map(img => img.trim()).filter(Boolean);
-      }
+        // Parse product images
+        let images = [];
+        if (Array.isArray(prod.product_images)) {
+          images = prod.product_images;
+        } else if (typeof prod.product_images === "string") {
+          images = prod.product_images.split(",").map(img => img.trim()).filter(Boolean);
+        }
 
-      const swiperClass = `recommendation-swiper-${index}`;
-      const imageSlides = images.length > 0
-        ? images.map(img => `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${prod.name}" /></div>`).join('')
-        : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
+        const swiperClass = `recommendation-swiper-${index}`;
+        const imageSlides = images.length > 0
+          ? images.map(img => `<div class="swiper-slide"><img src="data:image/png;base64,${img}" alt="${prod.name}" /></div>`).join('')
+          : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
 
-      const firstSize = prod.serving_sizes?.[0] || { price: 0, discount_price: 0 };
-      const price = parseFloat(firstSize.price || 0);
-      const discount = parseFloat(firstSize.discount_price || 0);
-      const finalPrice = price - discount;
+        const firstSize = prod.serving_sizes?.[0] || { price: 0, discount_price: 0 };
+        const price = parseFloat(firstSize.price || 0);
+        const discount = parseFloat(firstSize.discount_price || 0);
+        const finalPrice = price - discount;
 
-      const sizesHtml = (prod.serving_sizes || []).map((s, i) => {
-        const sizeText = /^\d+$/.test(s.size) ? `${s.size} Person` : s.size;
-        const btnPrice = parseFloat(s.price || 0);
-        const btnDiscount = parseFloat(s.discount_price || 0);
-        return `
+        const sizesHtml = (prod.serving_sizes || []).map((s, i) => {
+          const sizeText = /^\d+$/.test(s.size) ? `${s.size} Person` : s.size;
+          const btnPrice = parseFloat(s.price || 0);
+          const btnDiscount = parseFloat(s.discount_price || 0);
+          return `
           <button 
             class="size-chip ${i === 0 ? 'active' : ''}" 
             data-price="${btnPrice}" 
@@ -771,9 +783,9 @@ async function loadRecommendations() {
           >
             ${sizeText}
           </button>`;
-      }).join('');
+        }).join('');
 
-      card.innerHTML = `
+        card.innerHTML = `
         <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
           <a href="/product/${encodedId}">
             <div class="swiper ${swiperClass}">
@@ -802,44 +814,44 @@ async function loadRecommendations() {
         </div>
       `;
 
-      grid.appendChild(card);
+        grid.appendChild(card);
 
-      // Initialize Swiper
-      setTimeout(() => {
-        new Swiper(`.${swiperClass}`, {
-          loop: true,
-          autoplay: { delay: 3000 },
-          pagination: false
-        });
-      }, 0);
+        // Initialize Swiper
+        setTimeout(() => {
+          new Swiper(`.${swiperClass}`, {
+            loop: true,
+            autoplay: { delay: 3000 },
+            pagination: false
+          });
+        }, 0);
+      });
+    } catch (err) {
+      console.error("Failed to load recommendations:", err);
+    }
+  }
+
+  function updateRecommendationPrice(button, cardIndex) {
+    // Get the nearest product card container
+    const productCard = button.closest('.product-card');
+
+    // Remove active class from all buttons in this card
+    productCard.querySelectorAll('.size-chip').forEach(btn => {
+      btn.classList.remove("active");
     });
-  } catch (err) {
-    console.error("Failed to load recommendations:", err);
+
+    // Add active class to the clicked one
+    button.classList.add("active");
+
+    const price = parseFloat(button.dataset.price || 0);
+    const discount = parseFloat(button.dataset.discount || 0);
+    const finalPrice = (price - discount).toFixed(2);
+
+    const priceEl = document.getElementById(`rec-price-${cardIndex}`);
+    if (priceEl) {
+      priceEl.innerHTML = `₹${finalPrice}` + (discount > 0 ? ` <strike>₹${price.toFixed(2)}</strike>` : "");
+    }
   }
-}
-
-function updateRecommendationPrice(button, cardIndex) {
-  // Get the nearest product card container
-  const productCard = button.closest('.product-card');
-
-  // Remove active class from all buttons in this card
-  productCard.querySelectorAll('.size-chip').forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  // Add active class to the clicked one
-  button.classList.add("active");
-
-  const price = parseFloat(button.dataset.price || 0);
-  const discount = parseFloat(button.dataset.discount || 0);
-  const finalPrice = (price - discount).toFixed(2);
-
-  const priceEl = document.getElementById(`rec-price-${cardIndex}`);
-  if (priceEl) {
-    priceEl.innerHTML = `₹${finalPrice}` + (discount > 0 ? ` <strike>₹${price.toFixed(2)}</strike>` : "");
-  }
-}
 </script>
- 
+
 {% include "frontend/why-choose-us.html" %}
 {% endblock %}
