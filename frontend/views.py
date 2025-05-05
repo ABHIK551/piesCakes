@@ -73,7 +73,7 @@ def reset_password(request, uid, token):
         raise Http404("Invalid or expired token")
 
     # If token is valid, render the reset password page
-    return render(request, 'frontend/reset_password.html', {
+    return render(request, 'frontend/password-reset.html', {
         'uid': uid,  # use base64 version here for the frontend form
         'token': token
     })
