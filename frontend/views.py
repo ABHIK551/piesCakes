@@ -59,16 +59,21 @@ from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from apis.models import CustomUser  # Assuming your user model is called User
 from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
 
-def reset_password(request, uid, token):
+def reset_password(request, uidb64, token):
     try:
-        uid = urlsafe_base64_decode(uid).decode()  # decode 'MQ' to '1'
+        uid = urlsafe_base64_decode(uidb64).decode()
         user = CustomUser.objects.get(pk=uid)
-        # Validate the token here (you can use a custom method or Django's built-in token validation logic)
-        if not user.validate_reset_token(token):  # Assuming you have a method to validate the token
-            raise Http404("Invalid or expired token")
-        
-        # Render reset password page with uid and token
-        return render(request, 'frontend/reset_password.html', {'uid': uid, 'token': token})
-    except CustomUser.DoesNotExist:
-        raise Http404("User not found")
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+        raise Http404("Invalid reset link")
+
+    # Validate the token using Django's built-in method
+    if not default_token_generator.check_token(user, token):
+        raise Http404("Invalid or expired token")
+
+    # If token is valid, render the reset password page
+    return render(request, 'frontend/reset_password.html', {
+        'uid': uidb64,  # use base64 version here for the frontend form
+        'token': token
+    })
