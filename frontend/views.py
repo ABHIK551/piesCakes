@@ -58,10 +58,12 @@ def termCon(request):
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from apis.models import CustomUser  # Assuming your user model is called User
+from django.utils.http import urlsafe_base64_decode
 
 def reset_password(request, uid, token):
     try:
-        user = get_object_or_404(CustomUser, id=uid)  # Fetch user based on uid
+        uid = urlsafe_base64_decode(uid).decode()  # decode 'MQ' to '1'
+        user = CustomUser.objects.get(pk=uid)
         # Validate the token here (you can use a custom method or Django's built-in token validation logic)
         if not user.validate_reset_token(token):  # Assuming you have a method to validate the token
             raise Http404("Invalid or expired token")
