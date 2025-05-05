@@ -1751,8 +1751,8 @@ class ResetPasswordAPIView(APIView):
 
         try:
             # Decode the UID from base64
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = CustomUser.objects.get(id=uid)
+            # uid = urlsafe_base64_decode(uidb64).decode()
+            user = CustomUser.objects.get(id=uidb64)
 
             # Validate the token
             if default_token_generator.check_token(user, token):
