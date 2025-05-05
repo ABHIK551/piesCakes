@@ -1763,7 +1763,7 @@ class ResetPasswordAPIView(APIView):
                 # Send a confirmation email
                 subject = "Your Password has been Reset"
                 html_message = f"""
-                    <p>Hello {user.username},</p>
+                    <p>Hello {{ user.first_name }} {{ user.last_name }}</p>
                     <p>Your password has been successfully reset.</p>
                     <p>If you did not request this change, please contact support immediately.</p>
                 """
