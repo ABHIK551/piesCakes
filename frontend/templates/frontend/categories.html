@@ -763,6 +763,8 @@
       return;
     }
 
+    document.getElementById("loader").style.display = "flex"; // 👈 Hide loader
+
     // Get selected size details
     const activeSize = productCard.querySelector(".size-btn.active");
     if (!activeSize) {
@@ -811,8 +813,12 @@
     })
     .catch(error => {
       console.error("Error adding to cart:", error);
-      alert("Something went wrong.");
+      showToast("Something went wrong.", "danger");
+    })
+    .finally(() => {
+      document.getElementById("loader").style.display = "none"; // 👈 Hide loader
     });
+    
   }
 });
 
@@ -829,6 +835,7 @@ document.addEventListener("click", function (e) {
       showToast("Please log in to add items to the cart.", "danger");
       return;
     }
+    document.getElementById("loader").style.display = "flex"; // 👈 Hide loader
 
     // Get selected size details
     const activeSize = productCard.querySelector(".size-btn.active");
@@ -879,6 +886,9 @@ document.addEventListener("click", function (e) {
     .catch(error => {
       console.error("Error adding to cart:", error);
       alert("Something went wrong.");
+    })
+    .finally(() => {
+      document.getElementById("loader").style.display = "none"; // 👈 Hide loader
     });
   }
 });

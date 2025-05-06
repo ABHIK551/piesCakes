@@ -503,6 +503,7 @@
         const token = sessionStorage.getItem("auth_token");
         const userId = sessionStorage.getItem("user_id");
         const cartTableBody = document.querySelector("#cart-table-body");
+        
 
         const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
         const totalAmountHeading = document.querySelector('.summary h3');
@@ -511,6 +512,7 @@
             cartTableBody.innerHTML = `<tr><td colspan="6">Please login to view your cart.</td></tr>`;
             return;
         }
+        document.getElementById("loader").style.display = "flex"; // 👈 Hide loader
     
         fetch(`/api/view-cart/${userId}/`, {
             method: "GET",
@@ -579,6 +581,9 @@
         .catch(error => {
             console.error("Error loading cart:", error);
             cartTableBody.innerHTML = `<tr><td colspan="6">Failed to load cart items.</td></tr>`;
+        })
+        .finally(() => {
+          document.getElementById("loader").style.display = "none"; // 👈 Hide loader
         });
 
     });
@@ -750,6 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 function deleteCartItem(productId, price) {
     const userId = sessionStorage.getItem("user_id");
+    document.getElementById("loader").style.display = "flex"; // 👈 Hide loader
 
     fetch(`/api/cart/${userId}/item/${productId}/${price}/delete/`, {
         method: 'DELETE',
@@ -775,6 +781,9 @@ function deleteCartItem(productId, price) {
     .catch(error => {
         showToast("Failed to delete cart item");
         console.error('Error:', error);
+    })
+    .finally(() => {
+      document.getElementById("loader").style.display = "none"; // 👈 Hide loader
     });
 }
 
@@ -801,7 +810,7 @@ function closeModal() {
         const token = sessionStorage.getItem('auth_token'); // if needed
     
         if (!userId) {
-            showToast('Please login first.', "danger");
+            showToast('Please login to proceed Checkout.', "danger");
             return;
         }
     
@@ -852,6 +861,8 @@ function closeModal() {
             showToast('Please fill all delivery details.', "danger");
             return;
         }
+
+        document.getElementById("loader").style.display = "none"; // 👈 Hide loader
     
         // 4. Prepare final payload
         const orderPayload = {
@@ -903,6 +914,9 @@ function closeModal() {
         .catch(error => {
             console.error('Error:', error);
             showToast('Failed to place the order. Please try again.', "danger");
+        })
+        .finally(() => {
+          document.getElementById("loader").style.display = "none"; // 👈 Hide loader
         });
     });
     </script>

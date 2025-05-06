@@ -286,7 +286,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/').filter(Boolean);
     const encoded = segments[segments.length - 1];
-
+    document.getElementById("loader").style.display = "flex"; // 👈 Show loader
     let decoded;
     try {
       decoded = atob(encoded);
@@ -385,6 +385,9 @@
       })
       .catch(err => {
         console.error('Error fetching product:', err);
+      })
+      .finally(() => {
+        document.getElementById("loader").style.display = "none"; // 👈 Hide loader
       });
   });
 
@@ -484,8 +487,10 @@
       const productId = this.getAttribute('data-encoded');
       const userId = sessionStorage.getItem('user_id');
       const quantity = parseInt(document.getElementById('product-page-quantity').value) || 1;
+      document.getElementById("loader").style.display = "flex"; // 👈 Show loader
 
       if (!userId) {
+        document.getElementById("loader").style.display = "none"; // 👈 Hide loader
         showToast("Please login to add item to cart", "danger");
         return;
       }
@@ -531,6 +536,9 @@
         .catch(error => {
           console.error("Error adding to cart:", error);
           showToast("Something went wrong.", "danger");
+        })
+        .finally(() => {
+          document.getElementById("loader").style.display = "none"; // 👈 Hide loader
         });
     });
 
