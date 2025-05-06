@@ -35,6 +35,24 @@
   .swiper-button-next, .swiper-button-prev{
     display: none !important;
   }
+
+  .add-slide {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 200px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 0px !important;
+    font-size: 1.2rem;
+  }
+
+  .addSlides .swiper-wrapper {
+    max-height: 150px !important;
+  }
 }
 
 /* Medium to large screens (769px to 1024px) */
@@ -89,20 +107,29 @@ async function loadHomepageAdd() {
       });
 
       new Swiper(".ad-swiper", {
-        loop: true,
-        autoplay: {
-          delay: 4000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
+  loop: false,
+  autoplay: {
+    delay: 40000,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+  on: {
+    init: function () {
+      if (window.innerWidth <= 480) {
+        const swiperEl = document.querySelector(".ad-swiper");
+        swiperEl.style.maxHeight = "200px";
+        swiperEl.style.height = "200px";
+      }
+    },
+  }
+});
     }
   } catch (error) {
     console.error("Failed to load homepage ads:", error);

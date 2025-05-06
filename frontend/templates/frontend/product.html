@@ -109,6 +109,7 @@
   }
 
   .image-wrapper-thupro .product-image {
+    max-width: unset;
     max-width: 100%;
     height: auto;
   }
@@ -186,8 +187,21 @@
       width: 100% !important;
     }
 
+    .image-wrapper-thupro .product-image #product-image{
+      max-width: unset !important;
+      width: unset !important;
+      max-width: 100%;
+      height: 340px;
+      object-fit: contain;
+      border-radius: 10px !important;
+    }
+
     .product-details {
       padding: 16px;
+    }
+
+    .product-weight{
+      display: block !important;
     }
 
     /* Make thumbnail container horizontal on small screens */
