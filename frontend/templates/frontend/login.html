@@ -451,17 +451,21 @@ document.querySelector("form").addEventListener("submit", async function (e) {
     console.log(data);
 
     if (data.success) {
-      sessionStorage.setItem("auth_token", data.token);
+      const token = data.access_token || data.token;  // support both shapes
+      sessionStorage.setItem("auth_token", token);
       sessionStorage.setItem("user_id", data.user.id);
       sessionStorage.setItem("user_email", data.user.email);
-      sessionStorage.setItem("user_name", data.user.name);
+      sessionStorage.setItem("user_name", `${data.user.first_name || ""} ${data.user.last_name || data.user.name || ""}`.trim());
 
       showToast("Login Successful! Redirecting...", "success");
-
-      const userId = data.user.id;
+      const tokenAccess = sessionStorage.getItem("auth_token");  // should be a string
+      const userId =  sessionStorage.getItem("user_id");
       fetch(`/api/view-cart/${userId}/`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${data.token}` }
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${tokenAccess}`
+        }
       })
       .then(response => response.json())
       .then(cartData => {

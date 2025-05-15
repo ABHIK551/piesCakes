@@ -41,6 +41,7 @@ urlpatterns = [
     path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
     path('admin/customers/', CustomerListView.as_view(), name='customer-list'),
     path('admin/logout/', AdminLogoutView.as_view(), name='admin-logout'),
+    path('custom/logout/', CustomLogoutView.as_view(), name='custom-logout'),
     path(
         'products/<str:encoded>/',
         ProductByEncodedView.as_view(),
@@ -57,4 +58,5 @@ urlpatterns = [
     # path('send-email/', SendEmailAPIView.as_view(), name='send_email'),
     path('forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot_password'),
     path('reset-password/', ResetPasswordAPIView.as_view(), name='reset_password'),
+    path('profile/', ProfileAndAddressesAPIView.as_view(), name='profile-full-update'),
 ]

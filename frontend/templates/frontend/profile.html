@@ -1,0 +1,540 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+{% include "frontend/nav.html" %}
+<!-- <style>
+    :root {
+      --primary-color: #C76E09;
+      --bg-light: #FFF8EF;
+      --card-bg: #fff;
+      --text-color: #3C1F0F;
+      --border-radius: 16px;
+      --shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      margin: 0;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    .tabs {
+      /* max-width: 1000px; */
+      margin: 0px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tab-buttons {
+      display: flex;
+      /* flex-direction: row; */
+      border-bottom: 2px solid #eee;
+    }
+
+    .tab-buttons button {
+      flex: 1;
+      padding: 1rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-weight: bold;
+      color: var(--text-color);
+      transition: background 0.2s ease;
+    }
+
+    .tab-buttons button.active {
+      background: var(--bg-light);
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 2rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color);
+    }
+
+    .profile-info h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .info-grid div {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .rating-stars {
+        display: flex;
+        flex-direction: row;
+        font-size: 1.5rem;
+        color: #ccc;
+    }
+
+    .rating-stars input {
+      display: none;
+    }
+
+    .rating-stars label {
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .rating-stars input:checked ~ label,
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label {
+      color: #f0c14b;
+    }
+
+    /* Skeleton styles */
+    .skeleton {
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.2s infinite;
+      border-radius: 8px;
+    }
+
+    .skeleton.text {
+      height: 20px;
+      width: 100%;
+    }
+
+    .skeleton.circle {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+    }
+
+    @keyframes skeleton-loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tab-buttons {
+        flex-direction: column;  /* ← that forces one-per-line */
+      }
+
+      .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style> -->
+  <style>
+    :root {
+      --primary-color: #C76E09;
+      --bg-light: #FFF8EF;
+      --card-bg: #fff;
+      --text-color: #3C1F0F;
+      --border-radius: 16px;
+      --shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      margin: 0;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    .tabs {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tab-buttons {
+      display: flex;
+      border-bottom: 2px solid #eee;
+
+      /* keep them in one row, allow side-scroll if needed */
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-buttons::-webkit-scrollbar {
+      height: 6px;
+    }
+    .tab-buttons::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+
+    .rating-stars {
+        display: flex;
+        flex-direction: row;
+        font-size: 1.5rem;
+        color: #ccc;
+    }
+
+    .rating-stars input {
+      display: none;
+    }
+
+    .rating-stars label {
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .rating-stars input:checked ~ label,
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label {
+      color: #f0c14b;
+    }
+
+    .tab-buttons button {
+      flex: 0 0 auto;         /* do not stretch to multiple lines */
+      white-space: nowrap;    /* prevent wrapping */
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-weight: bold;
+      color: var(--text-color);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .tab-buttons button.active {
+      background: var(--bg-light);
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 2rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* example profile header & grid (unchanged) */
+    .profile-header { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .profile-img { width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid var(--primary-color); }
+    .profile-info h2 { margin:0; font-size:1.5rem; }
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:1rem; }
+    .info-grid div { margin-bottom:1rem; }
+    label { font-weight:bold; display:block; margin-bottom:0.3rem; }
+    input, textarea, select { width:100%; padding:0.5rem; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
+    .btn-primary { background:var(--primary-color); color:#fff; border:none; padding:0.7rem 1.2rem; border-radius:10px; cursor:pointer; font-weight:bold; margin-top:1rem; }
+
+    /* responsive font-size for tabs */
+    @media (max-width: 600px) {
+      .tab-buttons button {
+        font-size: 0.9rem;
+        padding: 0.8rem 1.2rem;
+      }
+    }
+    @media (max-width: 400px) {
+      .tab-buttons button {
+        font-size: 0.8rem;
+        padding: 0.7rem 1rem;
+      }
+    }
+
+    /* keep profile header stacking on tiny screens */
+    @media (max-width: 500px) {
+      .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+  </style>
+  <div class="tabs">
+    <div class="tab-buttons">
+      <button class="tab-link active" data-tab="view">View Profile</button>
+      <button class="tab-link" data-tab="update">Update Profile</button>
+      <button class="tab-link" data-tab="rating">Submit Rating</button>
+    </div>
+
+    <!-- View Profile -->
+    <div id="view" class="tab-content active">
+        <div class="profile-header">
+            <img id="profile-img" src="data:image/jpeg;base64,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RaWvWnHuFzonMhB4VMfWicPvdnrhWhftmctLWm66LrXW6rHEQb5aw94a7sHgcjyWnDtFven5BQ63skmD1RURNDd/4nccfIjyVFRIrjP+F+p+sTT0c7uY61K8H5A/ML5/wp01VEuob/VkE8AJYZAPg1KinkVwu2QWSLrVN+rWtHPBiZ+IKyLDsz0/1q6uhq5GjlPU9KT/AKGcD8Eoqi12yvvFT7PaqSaqlHvNibnd8zyHqrQ03s1obNB9LayqIC2Ib5py4dDH98n3vLl5r1n2nUUYba9E2J9RNjETeh3GDx6NvWI893zXnS6I1Nq+pZW62uDqenacx0cJG8B933WefWPklV43rUtz11WHT+joXw2zg2oqzlmWeP2WYHu83csYzmwNI6YotL21tJSN3pH9aedww6V3j3DuHYujaLRQ2ajbSWymjghb9Vo4k95PafEreUDCIiAiIgIiICIiAiIgIiIC85YIponRTRskjdzY9oIPoV6IgiV02caVuJ3n2wQP+1SvdF8gcfJcCp2LaeldllVWt8HdG7+VWYiCrotidgY4F1ZVn7rIx/Ku1b9lelKR7XSUs9U5vL2idxH7IwD6hTdEGpQW2htsPQ2+khpo/swsDQfgtrGFlEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREH//Z" class="profile-img skeleton circle" alt="User" />
+            <div class="profile-info">
+              <h2 id="profile-name" class="skeleton text" style="width: 150px;">&nbsp;</h2>
+              <p id="profile-email" class="skeleton text" style="width: 200px;">&nbsp;</p>
+              <p id="profile-phone" class="skeleton text" style="width: 200px;">&nbsp;</p>
+            </div>
+        </div>
+      <div class="info-grid">
+        <div><label for="name">Name</label><p id="name" class="skeleton text">&nbsp;</p></div>
+        <div><label for="email">Email</label><p id="email" class="skeleton text">&nbsp;</p></div>
+        <div><label for="phone">Phone</label><p id="phone" class="skeleton text">&nbsp;</p></div>
+        <div><label for="address">Address</label><p id="address" class="skeleton text">&nbsp;</p></div>
+        <div><label for="city">City</label><p id="city" class="skeleton text">&nbsp;</p></div>
+        <div><label for="state">State</label><p id="state" class="skeleton text">&nbsp;</p></div>
+        <div><label for="pincode">Pincode</label><p id="pincode" class="skeleton text">&nbsp;</p></div>
+      </div>
+    </div>
+
+    <!-- Update Profile -->
+    <div id="update" class="tab-content">
+      <h2>Update Your Information</h2>
+      <!-- <form>
+        <div class="info-grid">
+          <div><label>First Name</label><input type="text" placeholder="Jeremy" /></div>
+          <div><label>Last Name</label><input type="text" placeholder="Rose" /></div>
+          <div><label>Email</label><input type="email" placeholder="hello@example.com" /></div>
+          <div><label>Phone</label><input type="tel" placeholder="+91 XXXXXXXX" /></div>
+          <div><label>Address</label><textarea rows="2" placeholder="Street address"></textarea></div>
+          <div><label>City</label><input type="text" /></div>
+          <div><label>State</label><input type="text" /></div>
+          <div><label>Pincode</label><input type="text" /></div>
+        </div>
+        <button class="btn-primary" type="submit">Update Profile</button>
+      </form> -->
+      <form id="update-form">
+        <div class="info-grid">
+          <div>
+            <label for="first_name">First Name</label>
+            <input name="first_name" id="first_name" type="text" placeholder="Jeremy" required />
+          </div>
+          <div>
+            <label for="last_name">Last Name</label>
+            <input name="last_name" id="last_name" type="text" placeholder="Rose" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input name="email" id="email" type="email" placeholder="hello@example.com" required />
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input name="phone" id="phone" type="tel" placeholder="+91 9876543210" required />
+          </div>
+          <div>
+            <label for="address">Address Line 1</label>
+            <textarea name="line1" id="address" rows="2" placeholder="Street address" required></textarea>
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input name="city" id="city" type="text" placeholder="City" required />
+          </div>
+          <div>
+            <label for="state">State</label>
+            <input name="state" id="state" type="text" placeholder="State" required />
+          </div>
+          <div>
+            <label for="postal_code">Pincode</label>
+            <input name="postal_code" id="postal_code" type="text" placeholder="123456" required />
+          </div>
+          <div>
+            <label for="country">Country</label>
+            <input name="country" id="country" type="text" placeholder="Country" value="India" required />
+          </div>
+          <div>
+            <label><input name="is_default" id="is_default" type="checkbox" checked /> Default Shipping Address</label>
+          </div>
+        </div>
+        <button class="btn-primary" type="submit">Update Profile</button>
+      </form>
+    </div>
+
+    <!-- Submit Rating -->
+    <div id="rating" class="tab-content">
+      <h2>Rate a Product</h2>
+      <form>
+        <label>Product Name</label>
+        <input type="text" placeholder="e.g. Chocolate Cake" />
+        <label>Your Rating</label>
+        <div class="rating-stars">
+          <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+          <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+          <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+          <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+          <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+        </div>
+        <label>Review</label>
+        <textarea placeholder="Write your review..."></textarea>
+        <button class="btn-primary" type="submit">Submit Rating</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('update-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const authToken = sessionStorage.getItem("auth_token")
+
+    //   const compToken = "BEARE"
+  
+      // grab values
+      const data = {
+        first_name:  document.getElementById('first_name').value,
+        last_name:   document.getElementById('last_name').value,
+        email:       document.getElementById('email').value,
+        phone:       document.getElementById('phone').value,
+        // wrap address in an array
+        addresses: [
+          {
+            address_type: 'shipping',
+            line1:         document.getElementById('address').value,
+            line2:         '',  // no second line in this form
+            city:          document.getElementById('city').value,
+            state:         document.getElementById('state').value,
+            postal_code:   document.getElementById('postal_code').value,
+            country:       document.getElementById('country').value,
+            is_default:    document.getElementById('is_default').checked
+          }
+        ]
+      };
+  
+      try {
+        const res = await fetch('/api/profile/', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(JSON.stringify(err));
+        }
+  
+        const updated = await res.json();
+        console.log('Profile updated:', updated);
+        alert('Profile updated successfully!');
+      } catch (err) {
+        console.error('Update failed:', err);
+        alert('Error updating profile. See console for details.');
+      }
+    });
+  </script>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-link');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+  <script>
+    // Simulating content load
+    window.addEventListener('load', function() {
+      // Dummy content to replace skeletons
+      const dummyData = {
+        name: "John Doe",
+        email: "john.doe@example.com",
+        phone: "+1234567890",
+        address: "123 Main St, Example City",
+        city: "Example City",
+        state: "Example State",
+        pincode: "123456"
+      };
+  
+      // Iterate through each key in dummyData
+      for (let key in dummyData) {
+        const element = document.getElementById(key); // Get element by id
+        if (element) {
+          element.classList.remove('skeleton'); // Remove skeleton class
+          element.classList.add('loaded'); // Optionally add a 'loaded' class
+          element.textContent = dummyData[key]; // Set the corresponding dummy content
+        }
+      }
+    });
+    // Simulating content load
+window.addEventListener('load', function() {
+  // Dummy data for the profile
+  const dummyData = {
+    image: "data:image/jpeg;base64,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RaWvWnHuFzonMhB4VMfWicPvdnrhWhftmctLWm66LrXW6rHEQb5aw94a7sHgcjyWnDtFven5BQ63skmD1RURNDd/4nccfIjyVFRIrjP+F+p+sTT0c7uY61K8H5A/ML5/wp01VEuob/VkE8AJYZAPg1KinkVwu2QWSLrVN+rWtHPBiZ+IKyLDsz0/1q6uhq5GjlPU9KT/AKGcD8Eoqi12yvvFT7PaqSaqlHvNibnd8zyHqrQ03s1obNB9LayqIC2Ib5py4dDH98n3vLl5r1n2nUUYba9E2J9RNjETeh3GDx6NvWI893zXnS6I1Nq+pZW62uDqenacx0cJG8B933WefWPklV43rUtz11WHT+joXw2zg2oqzlmWeP2WYHu83csYzmwNI6YotL21tJSN3pH9aedww6V3j3DuHYujaLRQ2ajbSWymjghb9Vo4k95PafEreUDCIiAiIgIiICIiAiIgIiIC85YIponRTRskjdzY9oIPoV6IgiV02caVuJ3n2wQP+1SvdF8gcfJcCp2LaeldllVWt8HdG7+VWYiCrotidgY4F1ZVn7rIx/Ku1b9lelKR7XSUs9U5vL2idxH7IwD6hTdEGpQW2htsPQ2+khpo/swsDQfgtrGFlEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREH//Z", // Example base64 image
+    name: "John Doe",
+    email: "john.doe@example.com",
+    phone: "+1234567890"
+  };
+
+  // Set the image source
+  const profileImg = document.getElementById("profile-img");
+  profileImg.src = dummyData.image; // Set the profile image
+
+  // Set the name, email, and phone
+  document.getElementById("profile-name").textContent = dummyData.name;
+  document.getElementById("profile-email").textContent = dummyData.email;
+  document.getElementById("profile-phone").textContent = dummyData.phone;
+
+  // Remove skeleton classes and add loaded classes
+  const skeletons = document.querySelectorAll('.skeleton');
+  skeletons.forEach(skeleton => {
+    skeleton.classList.remove('skeleton');
+    skeleton.classList.add('loaded');
+  });
+});
+
+  </script>
+  
+  
+  
+
+  {% include "frontend/why-choose-us.html" %}
+  {% endblock %}

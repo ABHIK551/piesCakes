@@ -52,6 +52,9 @@ def refundPolicy(request):
 def aboutUs(request):
     return render(request, 'frontend/about-us.html')
 
+def profile(request):
+    return render(request, 'frontend/profile.html')
+
 def termCon(request):
     return render(request, 'frontend/terms&Conditions.html')
 

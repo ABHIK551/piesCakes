@@ -1,10 +1,12 @@
 import base64
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from datetime import timedelta
 from .models import Category, Product, TopPickBackground
 from .models import *
 from django.utils.timezone import localtime
 import json
+from django.conf import settings
 
 class CategorySerializer(serializers.ModelSerializer):
     image_base64 = serializers.CharField(write_only=True, required=False)  # Accept Base64 input
@@ -491,6 +493,31 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
 from .models import AdminUser
 
+# class AdminLoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, data):
+#         email = data.get('email')
+#         password = data.get('password')
+
+#         try:
+#             admin = AdminUser.objects.get(email=email)
+#         except AdminUser.DoesNotExist:
+#             raise serializers.ValidationError("Invalid credentials or not an admin.")
+
+#         if not check_password(password, admin.password):
+#             raise serializers.ValidationError("Invalid credentials or not an admin.")
+
+#         refresh = RefreshToken.for_user(admin)
+#         return {
+#             'refresh': str(refresh),
+#             'access': str(refresh.access_token),
+#             'admin_id': admin.id,
+#             'name': admin.name,
+#             'email': admin.email,
+#         }
+
 class AdminLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
@@ -507,15 +534,33 @@ class AdminLoginSerializer(serializers.Serializer):
         if not check_password(password, admin.password):
             raise serializers.ValidationError("Invalid credentials or not an admin.")
 
+        if not admin.is_active:
+            admin.is_active = True
+            admin.save(update_fields=['is_active'])
+
+        # Start session tracking if method exists
+        if hasattr(admin, 'start_session'):
+            admin.start_session()
+
         refresh = RefreshToken.for_user(admin)
+
+        # Token expiration
+        access_token_lifetime = getattr(settings, 'SIMPLE_JWT', {}).get('ACCESS_TOKEN_LIFETIME', timedelta(minutes=5))
+        if isinstance(access_token_lifetime, timedelta):
+            expires_in = int(access_token_lifetime.total_seconds())
+        else:
+            # fallback if value is not timedelta object (e.g., a string)
+            expires_in = 300
+
         return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
             'admin_id': admin.id,
             'name': admin.name,
             'email': admin.email,
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'token_type': 'Bearer',
+            'expires_in': expires_in,
         }
-
 
 class CustomUserFetchSerializer(serializers.ModelSerializer):
     first_login = serializers.DateTimeField(format="%d %b %Y, %I:%M %p", required=False, allow_null=True)
@@ -585,3 +630,74 @@ class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         fields = '__all__'
+
+class AddressSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Address
+        fields = [
+            'id',
+            'address_type',
+            'line1',
+            'line2',
+            'city',
+            'state',
+            'postal_code',
+            'country',
+            'is_default',
+        ]
+        extra_kwargs = {
+            'id': {'read_only': False, 'required': False},
+        }
+
+class UserWithAddressesSerializer(serializers.ModelSerializer):
+    addresses = AddressSerializer(many=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'first_name',
+            'last_name',
+            'phone',
+            'date_of_birth',
+            'profile_image',
+            'newsletter_subscribed',
+            'preferred_language',
+            'preferred_currency',
+            'addresses',
+        ]
+
+    def update(self, instance, validated_data):
+        # 1. Pop out nested addresses data
+        addresses_data = validated_data.pop('addresses', [])
+
+        # 2. Update user fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # 3. Sync addresses
+        existing = {addr.id: addr for addr in instance.addresses.all()}
+        sent_ids = []
+
+        for addr_dict in addresses_data:
+            addr_id = addr_dict.get('id', None)
+            if addr_id and addr_id in existing:
+                # Update existing address
+                addr = existing[addr_id]
+                for key, val in addr_dict.items():
+                    setattr(addr, key, val)
+                addr.save()
+                sent_ids.append(addr_id)
+            else:
+                # Create new address
+                addr = Address.objects.create(user=instance, **addr_dict)
+                sent_ids.append(addr.id)
+
+        # 4. Delete any addresses not included in payload
+        for addr_id, addr in existing.items():
+            if addr_id not in sent_ids:
+                addr.delete()
+
+        return instance

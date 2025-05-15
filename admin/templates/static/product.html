@@ -130,6 +130,13 @@
                         <option value="1.5kg">1.5 kg</option>
                         <option value="2kg">2 kg</option>
                         <option value="custom">Custom</option>
+                        <option value="Bento">Bento</option>
+                        <option value="Full">Full</option>
+                        <option value="Pc">Pc</option>
+                        <option value="Box">Box</option>
+                        <option value="Pkt">Pkt</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Plain">Plain</option>
                     </select>
                   <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
                   <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
@@ -326,6 +333,13 @@
                                     <option value="1.5kg">1.5 kg</option>
                                     <option value="2kg">2 kg</option>
                                     <option value="custom">Custom</option>
+                                    <option value="Bento">Bento</option>
+                                    <option value="Full">Full</option>
+                                    <option value="Pc">Pc</option>
+                                    <option value="Box">Box</option>
+                                    <option value="Pkt">Pkt</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="Plain">Plain</option>
                                 </select>
                             </div>                            
                         </div>
@@ -921,6 +935,13 @@ document.getElementById('addServingSizeBtn').addEventListener('click', function 
         <option value="1.5kg">1.5 kg</option>
         <option value="2kg">2 kg</option>
         <option value="custom">Custom</option>
+        <option value="Bento">Bento</option>
+        <option value="Full">Full</option>
+        <option value="Pc">Pc</option>
+        <option value="Box">Box</option>
+        <option value="Pkt">Pkt</option>
+        <option value="Regular">Regular</option>
+        <option value="Plain">Plain</option>
     </select>
       <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
       <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
@@ -1241,7 +1262,14 @@ async function editProduct(encoded) {
             { value: "1kg", text: "1 kg" },
             { value: "1.5kg", text: "1.5 kg" },
             { value: "2kg", text: "2 kg" },
-            { value: "custom", text: "Custom" }
+            { value: "custom", text: "Custom" },
+            { value: "Bento", text: "Bento" },
+            { value: "Full", text: "Full" },
+            { value: "Pc", text: "Pc" },
+            { value: "Box", text: "Box" },
+            { value: "Pkt", text: "Pkt" },
+            { value: "Regular", text: "Regular" },
+            { value: "Plain", text: "Plain" }
         ];
 
         servingSizeSelect.innerHTML = "";
@@ -1296,7 +1324,14 @@ function populateServingSizes(servingSizes) {
             { value: "1kg", text: "1 kg" },
             { value: "1.5kg", text: "1.5 kg" },
             { value: "2kg", text: "2 kg" },
-            { value: "custom", text: "Custom" }
+            { value: "custom", text: "Custom" },
+            { value: "Bento", text: "Bento" },
+            { value: "Full", text: "Full" },
+            { value: "Pc", text: "Pc" },
+            { value: "Box", text: "Box" },
+            { value: "Pkt", text: "Pkt" },
+            { value: "Regular", text: "Regular" },
+            { value: "Plain", text: "Plain" }
     ];
 
     servingSizes.forEach((item, index) => {

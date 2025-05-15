@@ -252,7 +252,7 @@
   <div class="product-container">
     <div class="image-wrapper-thupro">
       <div class="product-image">
-        <img id="product-image" src="" alt="" loading="lazy">
+        <img id="product-image" src="" alt="" loading="lazy" style="border: 0px !important;">
       </div>
       <div class="product-image-preview">
         <div id="product-thumbnails" class="thumbnail-container"></div>
@@ -392,69 +392,6 @@
   });
 
 </script>
-<!-- <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Quantity Button Logic
-        const quantityInput = document.querySelector('.quantity-input');
-        const minusBtn = document.querySelector('.minus');
-        const plusBtn = document.querySelector('.plus');
-    
-        minusBtn.addEventListener('click', () => {
-            let currentQty = parseInt(quantityInput.value);
-            if (currentQty > 1) quantityInput.value = currentQty - 1;
-        });
-    
-        plusBtn.addEventListener('click', () => {
-            let currentQty = parseInt(quantityInput.value);
-            quantityInput.value = currentQty + 1;
-        });
-    
-        document.querySelector('.add-to-cart').addEventListener('click', function () {
-            const productId = this.getAttribute('data-encoded');
-
-            const userId = sessionStorage.getItem('user_id');
-            const quantityInput = document.getElementById('product-page-quantity');
-            const quantity = parseInt(quantityInput.value) || 1;
-
-            // If user not logged in, show message
-            if (!userId) {
-                showToast("Please login to add item to cart", "danger");
-                return;
-            }
-
-            const cartItems = [{
-                product: productId,
-                quantity: quantity
-            }];
-            
-
-            fetch('/api/add-to-cart/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    cartItems: cartItems
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data && !data.error) {
-                    showToast("Products added to cart successfully!", "success");
-                    window.location.href = "/cart";
-                } else {
-                    showToast("Failed to add products to cart.", "danger");
-                }
-            })
-            .catch(error => {
-                console.error("Error adding to cart:", error);
-                showToast("Something went wrong.", "danger");
-            });
-        });
-    });
-    </script>
-     -->
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

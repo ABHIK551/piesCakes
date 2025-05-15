@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 
 
@@ -32,25 +33,103 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, phone, first_name, last_name, password, **extra_fields)
 
+# class CustomUser(AbstractBaseUser, PermissionsMixin):
+#     # Personal Info
+#     first_name = models.CharField(max_length=30)
+#     last_name = models.CharField(max_length=30)
+#     email = models.EmailField(unique=True)
+#     phone = models.CharField(max_length=15, unique=True)
+
+#     # Session Tracking
+#     first_login = models.DateTimeField(null=True, blank=True)
+#     session_started_at = models.DateTimeField(null=True, blank=True)
+#     session_ended_at = models.DateTimeField(null=True, blank=True)
+
+#     # Timestamps
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     # Permissions
+#     is_active = models.BooleanField(default=True)
+#     is_staff = models.BooleanField(default=False)
+
+#     objects = CustomUserManager()
+
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = ['phone', 'first_name', 'last_name']
+
+#     def __str__(self):
+#         return f"{self.first_name} {self.last_name}"
+
+#     def start_session(self):
+#         now = timezone.now()
+#         self.session_started_at = now
+#         if not self.first_login:
+#             self.first_login = now
+#         self.save()
+
+#     def end_session(self):
+#         self.session_ended_at = timezone.now()
+#         self.save()
+
+class Address(models.Model):
+    SHIPPING = 'shipping'
+    BILLING  = 'billing'
+    ADDRESS_TYPES = [
+        (SHIPPING, 'Shipping'),
+        (BILLING,  'Billing'),
+    ]
+
+    user          = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='addresses')
+    address_type  = models.CharField(max_length=8, choices=ADDRESS_TYPES, default=SHIPPING)
+    line1         = models.CharField(max_length=255)
+    line2         = models.CharField(max_length=255, blank=True)
+    city          = models.CharField(max_length=100)
+    state         = models.CharField(max_length=100)
+    postal_code   = models.CharField(max_length=20)
+    country       = models.CharField(max_length=100)
+    is_default    = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.get_address_type_display()} for {self.user.email}"
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     # Personal Info
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15, unique=True)
+    first_name   = models.CharField(max_length=30)
+    last_name    = models.CharField(max_length=30)
+    email        = models.EmailField(unique=True)
+    phone        = models.CharField(
+                     max_length=15,
+                     unique=True,
+                     validators=[ RegexValidator(r'^\+?1?\d{9,15}$',
+                                message="Phone must be entered in the format: '+999999999'.")]
+                  )
+    date_of_birth   = models.DateField(null=True, blank=True)
+    profile_image   = models.ImageField(upload_to='profiles/', null=True, blank=True)
+
+    # Preferences
+    newsletter_subscribed = models.BooleanField(default=False)
+    preferred_language    = models.CharField(max_length=10, default='en')
+    preferred_currency    = models.CharField(max_length=3, default='USD')
 
     # Session Tracking
-    first_login = models.DateTimeField(null=True, blank=True)
+    first_login        = models.DateTimeField(null=True, blank=True)
     session_started_at = models.DateTimeField(null=True, blank=True)
-    session_ended_at = models.DateTimeField(null=True, blank=True)
+    session_ended_at   = models.DateTimeField(null=True, blank=True)
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     # Permissions
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_active  = models.BooleanField(default=True)
+    is_staff   = models.BooleanField(default=False)
+
+    # E-commerce relations
+    #  * order_set (reverse FK from Order model)
+    #  * cart (OneToOne or FK from a Cart model)
+    #  * wishlist (M2M to Product)
+    # wishlist = models.ManyToManyField('shop.Product', blank=True, related_name='wishlisted_by')
 
     objects = CustomUserManager()
 
@@ -58,20 +137,26 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['phone', 'first_name', 'last_name']
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} <{self.email}>"
 
     def start_session(self):
         now = timezone.now()
         self.session_started_at = now
         if not self.first_login:
             self.first_login = now
-        self.save()
+        self.save(update_fields=['session_started_at','first_login'])
 
     def end_session(self):
         self.session_ended_at = timezone.now()
-        self.save()
+        self.save(update_fields=['session_ended_at'])
 
+    @property
+    def default_shipping_address(self):
+        return self.addresses.filter(address_type=Address.SHIPPING, is_default=True).first()
 
+    @property
+    def default_billing_address(self):
+        return self.addresses.filter(address_type=Address.BILLING, is_default=True).first()
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)

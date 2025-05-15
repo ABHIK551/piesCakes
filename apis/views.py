@@ -45,6 +45,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import CustomUser  # Adjust import if needed
+from rest_framework import generics, permissions
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAdminUser 
 
 
 class ProductCreateAPIView(APIView):
@@ -575,71 +578,153 @@ from datetime import datetime, timedelta
 #         else:
 #             return Response({"success": False, "message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
+# class LoginView(APIView):
+#     def post(self, request):
+#         email = request.data.get("email")
+#         password = request.data.get("password")
+
+#         if not email or not password:
+#             return Response({"success": False, "message": "Email and password required."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         user = authenticate(request, username=email, password=password)
+
+#         if user is not None:
+#             # ✅ Generate JWT token
+#             payload = {
+#                 "user_id": user.id,
+#                 "email": user.email,
+#                 "exp": datetime.utcnow() + timedelta(hours=2),
+#                 "iat": datetime.utcnow()
+#             }
+#             token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+
+#             # ✅ Prepare email HTML body
+#             html_body = f"""
+#                 <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f5f2; color: #333;">
+#                     <h2 style="color: #b05a3c;">Welcome back to Pies & Thies!</h2>
+#                     <p>Hi {user.first_name},</p>
+#                     <p>
+#                         We noticed a successful login to your account just now:
+#                     </p>
+#                     <ul>
+#                         <li><strong>Email:</strong> {user.email}</li>
+#                         <li><strong>Time (UTC):</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}</li>
+#                     </ul>
+#                     <p>
+#                         If this was you, no action is needed. If you didn’t authorize this login,
+#                         please <a href="mailto:support@piesandthies.com" style="color: #b05a3c;">contact our support team</a> immediately.
+#                     </p>
+#                     <hr style="margin: 20px 0;" />
+#                     <p style="font-size: 14px; color: #666;">
+#                         Thanks for choosing <strong>Pies & Thies</strong> – where every bite feels like home.
+#                     </p>
+#                 </div>
+#             """
+
+
+#             # ✅ Send email
+#             try:
+#                 send_email("🔐 New Login to Your Pies & Thies Account – Was this you?n", html_body, user.email)
+#             except Exception as e:
+#                 # Log this if needed, or ignore silently
+#                 print("Email failed:", str(e))
+
+#             return Response({
+#                 "success": True,
+#                 "message": "Login successful",
+#                 "token": token,
+#                 "user": {
+#                     "id": user.id,
+#                     "email": user.email,
+#                     "name": f"{user.first_name} {user.last_name}"
+#                 }
+#             })
+
+#         else:
+#             return Response({"success": False, "message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
 class LoginView(APIView):
+    """
+    POST /api/auth/login/
+    {
+      "email": "user@example.com",
+      "password": "secret"
+    }
+    → returns access+refresh tokens and user info
+    """
+    permission_classes = []    # allow any
+
     def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
+        email = request.data.get("email", "").strip()
+        password = request.data.get("password", "")
 
         if not email or not password:
-            return Response({"success": False, "message": "Email and password required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"success": False, "message": "Email and password are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         user = authenticate(request, username=email, password=password)
+        if not user:
+            return Response(
+                {"success": False, "message": "Invalid credentials."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        if not user.is_active:
+            return Response(
+                {"success": False, "message": "Account is disabled."},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
-        if user is not None:
-            # ✅ Generate JWT token
-            payload = {
-                "user_id": user.id,
-                "email": user.email,
-                "exp": datetime.utcnow() + timedelta(hours=2),
-                "iat": datetime.utcnow()
+        # ─── Generate tokens ───────────────────────────────────────────────────
+        refresh = RefreshToken.for_user(user)
+        access  = refresh.access_token
+
+        # Optional: customize access token lifetime (default is from settings)
+        # access.set_exp(from_time=timezone.now(), lifetime=timedelta(hours=2))
+
+        # ─── Send login notification email ────────────────────────────────────
+        html_body = f"""
+        <div style="font-family: Arial, sans-serif; background:#f9f5f2; padding:20px;">
+          <h2 style="color:#b05a3c;">Welcome back to Pies & Thies!</h2>
+          <p>Hi {user.first_name},</p>
+          <p>Your account was just accessed:</p>
+          <ul>
+            <li><strong>Email:</strong> {user.email}</li>
+            <li><strong>Time (UTC):</strong> {datetime.utcnow():%Y-%m-%d %H:%M:%S}</li>
+          </ul>
+          <p>If this wasn’t you, <a href="mailto:support@piesandthies.com" style="color:#b05a3c;">please contact support</a> immediately.</p>
+          <hr/>
+          <p style="color:#666; font-size:14px;">
+            Thanks for choosing <strong>Pies & Thies</strong>.
+          </p>
+        </div>
+        """
+        try:
+            send_email(
+                subject="🔐 New Login to Your Pies & Thies Account",
+                html_body=html_body,
+                to_email=user.email
+            )
+        except Exception as e:
+            # log error if you like
+            print("Failed to send login email:", e)
+
+        # ─── Build response ────────────────────────────────────────────────────
+        return Response({
+            "success": True,
+            "message": "Login successful.",
+            "token_type": "Bearer",
+            "access_token":  str(access),
+            "refresh_token": str(refresh),
+            "expires_in":    access.lifetime.total_seconds(),
+            "user": {
+                "id":        user.id,
+                "email":     user.email,
+                "first_name":user.first_name,
+                "last_name": user.last_name,
             }
-            token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
-
-            # ✅ Prepare email HTML body
-            html_body = f"""
-                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f5f2; color: #333;">
-                    <h2 style="color: #b05a3c;">Welcome back to Pies & Thies!</h2>
-                    <p>Hi {user.first_name},</p>
-                    <p>
-                        We noticed a successful login to your account just now:
-                    </p>
-                    <ul>
-                        <li><strong>Email:</strong> {user.email}</li>
-                        <li><strong>Time (UTC):</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}</li>
-                    </ul>
-                    <p>
-                        If this was you, no action is needed. If you didn’t authorize this login,
-                        please <a href="mailto:support@piesandthies.com" style="color: #b05a3c;">contact our support team</a> immediately.
-                    </p>
-                    <hr style="margin: 20px 0;" />
-                    <p style="font-size: 14px; color: #666;">
-                        Thanks for choosing <strong>Pies & Thies</strong> – where every bite feels like home.
-                    </p>
-                </div>
-            """
-
-
-            # ✅ Send email
-            try:
-                send_email("🔐 New Login to Your Pies & Thies Account – Was this you?n", html_body, user.email)
-            except Exception as e:
-                # Log this if needed, or ignore silently
-                print("Email failed:", str(e))
-
-            return Response({
-                "success": True,
-                "message": "Login successful",
-                "token": token,
-                "user": {
-                    "id": user.id,
-                    "email": user.email,
-                    "name": f"{user.first_name} {user.last_name}"
-                }
-            })
-
-        else:
-            return Response({"success": False, "message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
+        }, status=status.HTTP_200_OK)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1385,14 +1470,49 @@ class AdminUserSignupView(APIView):
             print("Serializer Errors:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class AdminLoginView(APIView):
+#     def post(self, request):
+#         serializer = AdminLoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             return Response(serializer.validated_data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class AdminLoginView(APIView):
+#     def post(self, request):
+#         serializer = AdminLoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.validated_data['user']  # assumes serializer returns 'user'
+
+#             # Check if user is inactive
+#             if not user.is_active:
+#                 raise AuthenticationFailed(detail="User is inactive", code="user_inactive")
+
+#             # Track session start
+#             user.start_session()
+
+#             return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class AdminLoginView(APIView):
     def post(self, request):
         serializer = AdminLoginSerializer(data=request.data)
         if serializer.is_valid():
+            user = AdminUser.objects.get(email=serializer.validated_data['email'])
+
+            # Set active status here
+            if not user.is_active:
+                user.is_active = True
+                user.save(update_fields=['is_active'])
+
+            # Start session timestamp
+            if hasattr(user, 'start_session'):
+                user.start_session()
+
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-from rest_framework.permissions import IsAdminUser 
 
 class CustomerListView(APIView):
     # permission_classes = [IsAdminUser]
@@ -1407,6 +1527,22 @@ class CustomerListView(APIView):
 class AdminLogoutView(APIView):
     def post(self, request):
         request.session.flush()  # Clears the session
+        return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
+    
+
+class CustomLogoutView(APIView):
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return Response({"error": "User is not authenticated."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(pk=request.user.pk)
+            user.end_session()  # Call the method from your CustomUser model
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        request.session.flush()  # Clear session
+
         return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
 
 
@@ -1775,3 +1911,16 @@ class ResetPasswordAPIView(APIView):
 
         except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             return Response({"error": "Invalid UID."}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class ProfileAndAddressesAPIView(generics.RetrieveUpdateAPIView):
+    """
+    GET  /api/profile/    → returns user + addresses
+    PUT  /api/profile/    → replace entire profile+addresses
+    PATCH /api/profile/   → partial update of profile+addresses
+    """
+    serializer_class = UserWithAddressesSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
