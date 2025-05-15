@@ -433,10 +433,10 @@
             // Set delivery charge based on grand total
             if (grandTotalBeforeDelivery < 500) {
                 deliveryCharge = 0;
-                // deliveryChargeSpan.innerText = "₹150.00"; // or "150 Rs"
+                deliveryChargeSpan.innerText = "₹150.00"; // or "150 Rs"
             } else {
                 deliveryCharge = 0; // Or whatever logic you want for free delivery
-                // deliveryChargeSpan.innerText = "₹0.00";
+                deliveryChargeSpan.innerText = "₹0.00"; // or "150 Rs"
             }
 
             const grandTotal = grandTotalBeforeDelivery + deliveryCharge;
@@ -638,6 +638,7 @@ function updateTotalAmount() {
     // Now properly update subtotal and total amount
     const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
     const grandTotalSpan = document.getElementById('grandTotalMainTest');
+    const deliveryChargeSpan1 = document.getElementById('deliveryChargeMain')
 
     if (subTotalSpan) {
         subTotalSpan.textContent = `₹${total.toFixed(2)}`;
@@ -650,6 +651,7 @@ function updateTotalAmount() {
         const finalAmount = total + deliveryCharge; // delivery charge rule
 
         grandTotalSpan.textContent = `${finalAmount.toFixed(2)}`;
+        deliveryChargeSpan1.textContent = `${deliveryCharge.toFixed(2)}`;
     }
 }
 
