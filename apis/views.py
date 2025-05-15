@@ -54,7 +54,6 @@ class ProductCreateAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def post(self, request, *args, **kwargs):
-        print("Incoming Payload:", request.data)
 
         # ✅ Flatten single-value lists from QueryDict
         data = {}
@@ -79,7 +78,6 @@ class ProductCreateAPIView(APIView):
             try:
                 parsed_serving_sizes = json.loads(serving_sizes_input_raw)
                 data['serving_sizes_input'] = parsed_serving_sizes
-                print("Parsed serving_sizes_input:", parsed_serving_sizes)
             except json.JSONDecodeError:
                 return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
 
@@ -103,7 +101,6 @@ class CategoryCreateView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # Extract request data
         data = request.data.dict() if isinstance(request.data, dict) else request.data.copy()
-        print("Received Data:", data)  # Debugging
 
         # Handle file upload (multipart/form-data)
         image_file = request.FILES.get('image_file')
@@ -450,8 +447,6 @@ def update_product(request, productId):
         data[key] = value
 
 
-    print(data)
-
     # ✅ Handle image upload (Base64 encode single or multiple images)
     if "product_images" in request.FILES:
         image_files = request.FILES.getlist("product_images")
@@ -482,7 +477,6 @@ def update_product(request, productId):
     if serving_sizes_input_raw:
         try:
             parsed_serving_sizes = json.loads(serving_sizes_input_raw)
-            print(f"parsed_serving_sizes {parsed_serving_sizes}")
             data["serving_sizes_input"] = parsed_serving_sizes
         except json.JSONDecodeError:
             return Response({"success": False, "message": "Invalid JSON for serving_sizes_input"}, status=400)
@@ -809,7 +803,6 @@ def update_banner(request, pk):
     
     # Prepare the data to update
     data = request.data.copy()  # Make a copy of request data to modify
-    print(data)
     
     # If image is uploaded as a file, convert to base64 and update the 'image' field
     if "image_base64" in request.FILES:
@@ -1003,9 +996,7 @@ def update_top_pick(request):
         try:
             # Getting the ID and other form fields from the POST data
             top_pick_id = request.POST.get('top_pick_id')
-            print(f"top_pick_id {top_pick_id}")
             heading = request.POST.get('heading')
-            print(f"heading {heading}")
             description = request.POST.get('description')
             status = request.POST.get('status')
             link = request.POST.get('link')
@@ -1077,7 +1068,6 @@ class AddsDeleteAPIView(APIView):
 def get_ads_by_id(request, id):
     try:
         ads = Adds.objects.get(id=id)
-        print(f"ads {ads}")
         serializer = AdsSerializer(ads)
         return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
     except Adds.DoesNotExist:
@@ -1091,7 +1081,6 @@ def ads_banner(request, pk):
     
     # Prepare the data to update
     data = request.data.copy()  # Make a copy of request data to modify
-    print(data)
     
     # If image is uploaded as a file, convert to base64 and update the 'image' field
     if "image_base64" in request.FILES:
@@ -1138,7 +1127,6 @@ class BakedDelightsCreateAPIView(generics.CreateAPIView):
     parser_classes = [MultiPartParser, FormParser]  # Allow file uploads
 
     def post(self, request, *args, **kwargs):
-        print(request.body)
         image_file = request.FILES.get('image')
         
         data = request.data.copy()  # Make it mutable
