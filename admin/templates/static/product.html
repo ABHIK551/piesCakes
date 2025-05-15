@@ -983,9 +983,6 @@ formData.set('serving_sizes_input', JSON.stringify(servingSizes));
   fetch('/api/products/create/', {
     method: 'POST',
     body: formData,
-    headers: {
-      'Authorization': `Bearer ${sessionStorage.getItem('admin_access_token') || ''}`
-    }
   })
   .then(res => res.json())
   .then(data => {
