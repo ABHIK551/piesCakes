@@ -984,7 +984,7 @@ formData.set('serving_sizes_input', JSON.stringify(servingSizes));
     method: 'POST',
     body: formData,
     headers: {
-      'Authorization': `Bearer ${sessionStorage.getItem('auth_token') || ''}`
+      'Authorization': `Bearer ${sessionStorage.getItem('admin_access_token') || ''}`
     }
   })
   .then(res => res.json())
