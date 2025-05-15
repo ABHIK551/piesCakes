@@ -137,6 +137,10 @@
                         <option value="Pkt">Pkt</option>
                         <option value="Regular">Regular</option>
                         <option value="Plain">Plain</option>
+                        <option value="Slice">Slice</option>
+                        <option value="100g">100g</option>
+                        <option value="200g">200g</option>
+                        <option value="Ptl">Ptl</option>
                     </select>
                   <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
                   <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
@@ -340,6 +344,10 @@
                                     <option value="Pkt">Pkt</option>
                                     <option value="Regular">Regular</option>
                                     <option value="Plain">Plain</option>
+                                    <option value="Slice">Slice</option>
+                                    <option value="100g">100g</option>
+                                    <option value="200g">200g</option>
+                                    <option value="Ptl">Ptl</option>
                                 </select>
                             </div>                            
                         </div>
@@ -942,6 +950,10 @@ document.getElementById('addServingSizeBtn').addEventListener('click', function 
         <option value="Pkt">Pkt</option>
         <option value="Regular">Regular</option>
         <option value="Plain">Plain</option>
+        <option value="Slice">Slice</option>
+        <option value="100g">100g</option>
+        <option value="200g">200g</option>
+        <option value="Ptl">Ptl</option>
     </select>
       <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
       <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
@@ -1266,7 +1278,11 @@ async function editProduct(encoded) {
             { value: "Box", text: "Box" },
             { value: "Pkt", text: "Pkt" },
             { value: "Regular", text: "Regular" },
-            { value: "Plain", text: "Plain" }
+            { value: "Plain", text: "Plain" },
+            { value: "Slice", text: "Slice" },
+            { value: "100g", text: "100g" },
+            { value: "200g", text: "200g" },
+            { value: "Ptl", text: "Ptl" }
         ];
 
         servingSizeSelect.innerHTML = "";
@@ -1328,7 +1344,11 @@ function populateServingSizes(servingSizes) {
             { value: "Box", text: "Box" },
             { value: "Pkt", text: "Pkt" },
             { value: "Regular", text: "Regular" },
-            { value: "Plain", text: "Plain" }
+            { value: "Plain", text: "Plain" },
+            { value: "Slice", text: "Slice" },
+            { value: "100g", text: "100g" },
+            { value: "200g", text: "200g" },
+            { value: "Ptl", text: "Ptl" }
     ];
 
     servingSizes.forEach((item, index) => {

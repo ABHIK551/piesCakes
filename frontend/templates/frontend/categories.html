@@ -491,7 +491,7 @@
 </section>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const apiUrl = "/api/products-list/?pageSize=10";
+    const apiUrl = "/api/products-list/?pageSize=100";
     let allProducts = [];
     let filteredProducts = [];
     let currentPage = 1;
@@ -813,7 +813,7 @@
     })
     .catch(error => {
       console.error("Error adding to cart:", error);
-      showToast("Something went wrong.", "danger");
+      showToast("Something went wrong.", "dangers");
     })
     .finally(() => {
       document.getElementById("loader").style.display = "none"; // 👈 Hide loader
