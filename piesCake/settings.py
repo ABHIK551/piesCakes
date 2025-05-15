@@ -196,3 +196,6 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 40 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 40 * 1024 * 1024
