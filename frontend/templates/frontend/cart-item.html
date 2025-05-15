@@ -432,11 +432,11 @@
 
             // Set delivery charge based on grand total
             if (grandTotalBeforeDelivery < 500) {
-                deliveryCharge = 150;
-                deliveryChargeSpan.innerText = "₹150.00"; // or "150 Rs"
+                deliveryCharge = 0;
+                // deliveryChargeSpan.innerText = "₹150.00"; // or "150 Rs"
             } else {
                 deliveryCharge = 0; // Or whatever logic you want for free delivery
-                deliveryChargeSpan.innerText = "₹0.00"; // or "150 Rs"
+                // deliveryChargeSpan.innerText = "₹0.00";
             }
 
             const grandTotal = grandTotalBeforeDelivery + deliveryCharge;
