@@ -58,6 +58,12 @@ def profile(request):
 def termCon(request):
     return render(request, 'frontend/terms&Conditions.html')
 
+def contact(request):
+    return render(request, 'frontend/contact.html')
+
+def gallery(request):
+    return render(request, 'frontend/gallery.html')
+
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from apis.models import CustomUser  # Assuming your user model is called User
