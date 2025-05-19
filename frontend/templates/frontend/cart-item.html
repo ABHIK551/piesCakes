@@ -320,6 +320,7 @@
     <div class="cost">
         <p>Sub-Total: <span id="subTotalMain">₹0.00</span></p>
         <p>Delivery Charges: <span id="deliveryChargeMain">₹0.00</span></p>
+        <p>GST Charges: 18% <span id="gstCharge">₹0.00</span></p>
         <p>Coupon: <span id="couponCodeApplied"></span></p>
         <p>Coupon Discount: <span id="couponDiscountMain">₹0.00</span></p>
         <p>Apply Discount: <a href="#" id="apply-discount-link">Apply Discount</a></p>
@@ -639,19 +640,24 @@ function updateTotalAmount() {
     const subTotalSpan = document.querySelector('.cost p:nth-child(1) span');
     const grandTotalSpan = document.getElementById('grandTotalMainTest');
     const deliveryChargeSpan1 = document.getElementById('deliveryChargeMain')
+    const gstCharge = document.getElementById('gstCharge')
 
     if (subTotalSpan) {
         subTotalSpan.textContent = `₹${total.toFixed(2)}`;
     }
+   
     if (grandTotalSpan) {
-        let deliveryCharge = 0;
+       
         if (total < 500) {
             deliveryCharge = 0;
         }
-        const finalAmount = total + deliveryCharge; // delivery charge rule
 
+        const finalAmount1 = total + deliveryCharge; // delivery charge rule
+        const gst = finalAmount1 * (18/100)
+        finalAmount = finalAmount1 + gst
         grandTotalSpan.textContent = `${finalAmount.toFixed(2)}`;
         deliveryChargeSpan1.textContent = `${deliveryCharge.toFixed(2)}`;
+        gstCharge.textContent = `${gst.toFixed(2)}`;
     }
 }
 

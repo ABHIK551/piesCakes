@@ -344,7 +344,7 @@ function openOrderModal(order) {
 
     let subtotal = 0;
     order.order_items.forEach(item => {
-        const itemTotal = parseFloat(item.item_price) * item.quantity;
+        const itemTotal = parseFloat(item.item_price - item.discount) * item.quantity;
         subtotal += itemTotal;
 
         const tr = document.createElement('tr');
@@ -358,9 +358,9 @@ function openOrderModal(order) {
     });
 
     // Total Calculation
-    const taxPercent = 5;
-    const taxAmount = (subtotal * taxPercent) / 100;
-    const shippingCharges = 150; // Static shipping
+    const taxPercent = 18;
+    const taxAmount = (subtotal ) * (18 / 100);
+    const shippingCharges = 0; // Static shipping
     const discountAmount = parseFloat(order.discount_amount || 0);
 
     const finalTotal = subtotal + taxAmount + shippingCharges - discountAmount;
