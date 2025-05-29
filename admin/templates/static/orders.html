@@ -498,12 +498,11 @@ function updateOrderStatus() {
   fetch(`/api/orders/${orderId}/update-status/`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${authToken}`
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
     order_status: selectedStatus,
-    payment_status: selectedPaymentStatus  // Add this line
+    payment_status: selectedPaymentStatus
   })
   })
   .then(res => res.json())
