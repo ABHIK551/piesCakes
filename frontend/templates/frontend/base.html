@@ -3480,5 +3480,68 @@ nav {
             priceDisplay.textContent = rangeInput.value;
         });
     </script>
+	<!-- <script>
+		document.getElementById('search-button').addEventListener('click', function () {
+			const input = document.getElementById('search-input'); // the actual input field
+			const suggestionBox = document.getElementById('search-suggestions');
+
+			const query = input.value.trim();
+			if (query.length === 0) {
+				suggestionBox.style.display = 'none';
+				suggestionBox.innerHTML = '';
+				return;
+			}
+
+			fetch('/api/products/search/?q=cake', {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(response => response.json())
+				.then(data => {
+					suggestionBox.innerHTML = '';
+					if (data.success && data.products.length > 0) {
+						data.products.forEach(product => {
+							const encodedId = encodeProductId(product.id);
+							const item = document.createElement('div');
+							item.style.padding = '8px';
+							item.style.cursor = 'pointer';
+							item.style.borderBottom = '1px solid #eee';
+							item.innerHTML = product.name;
+							item.addEventListener('click', () => {
+								window.location.href = `product/${encodedId}`;
+							});
+							suggestionBox.appendChild(item);
+						});
+						suggestionBox.style.display = 'block';
+					} else {
+						suggestionBox.style.display = 'none';
+					}
+				})
+				.catch(err => {
+					console.error('Error fetching suggestions', err);
+				});
+		});
+
+		// Optional: Auto-suggestions while typing
+		document.getElementById('search-input').addEventListener('input', function () {
+			document.getElementById('search-button').click();
+		});
+
+		// Hide suggestions if clicking outside
+		document.addEventListener('click', function (e) {
+			const box = document.querySelector('.search-bar');
+			const suggestionBox = document.getElementById('search-suggestions');
+			if (!box.contains(e.target)) {
+				suggestionBox.style.display = 'none';
+			}
+		});
+
+		// Dummy encoder (replace with your real logic)
+		function encodeProductId(id) {
+			return btoa(id); // simple base64 encode
+		}
+	</script> -->
+
 </body>
 </html>
