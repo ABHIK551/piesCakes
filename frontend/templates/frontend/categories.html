@@ -62,12 +62,13 @@
   background-size: contain;
   background-position: center right;
   background-repeat: no-repeat;
-  height: 250px;
+  height: 300px;
   display: flex;
   align-items: center;
-  padding: 0 5%;
+  /* padding: 0 5%; */
   color: white;
   position: relative;
+  width: 100% !important;
 }
 
 .product-filter-bar {
@@ -394,10 +395,6 @@
 </div>
 
 <div class="cake-collection-banner">
-  <div class="banner-text">
-    <!-- <p>WELCOME TO</p>
-    <h2>Our Cake Collection</h2> -->
-  </div>
 </div>
 
 <section class="categories-product">
@@ -903,9 +900,5 @@ document.addEventListener("click", function (e) {
 
 </script>
 
-{% include "frontend/bestseller.html" %}
-{% include "frontend/adds.html" %}
-{% include "frontend/new-arrivals.html" %}
-{% include "frontend/baked-delight.html" %}
 {% include "frontend/why-choose-us.html" %}
 {% endblock %}
