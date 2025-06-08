@@ -503,7 +503,7 @@
     const weightFilterList = document.getElementById("weight-filter-list");
     const priceRange = document.querySelector("#price-range");
     const tagSpans = document.querySelectorAll(".tags span");
-  
+    document.getElementById("loader").style.display = "flex"; // Show loader
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
@@ -533,6 +533,9 @@
         populateWeights(weightSet);
         filteredProducts = allProducts;
         paginateProducts(filteredProducts, 1);
+      })
+      .finally(() => {
+        document.getElementById("loader").style.display = "none"; // Hide loader
       });
   
     function populateCategories(categoryMap) {
@@ -583,29 +586,34 @@
     }
   
     function applyFilters() {
-      const selectedCategories = [...document.querySelectorAll(".category-filter:checked")].map(cb => cb.value);
-      const selectedSubCategories = [...document.querySelectorAll(".subcategory-filter:checked")].map(cb => cb.value);
-      const selectedWeights = [...document.querySelectorAll(".weight-filter:checked")].map(cb => cb.value.toLowerCase());
-      const selectedTags = [...tagSpans].filter(span => span.classList.contains('active')).map(span => span.textContent.trim().toLowerCase());
-      const maxPrice = parseFloat(priceRange.value);
-  
-      const filtered = allProducts.filter(p => {
-        const parent = p.category.parent?.name;
-        const cat = parent || p.category.name;
-        const sub = parent ? p.category.name : null;
-  
-        const categoryMatch = !selectedCategories.length || selectedCategories.includes(cat) || selectedSubCategories.includes(sub);
-        const subCategoryMatch = !selectedSubCategories.length || selectedSubCategories.includes(sub);
-  
-        const weightMatch = !selectedWeights.length || p.serving_sizes?.some(ss => selectedWeights.includes(ss.size?.toLowerCase().trim()));
-        const priceMatch = p.serving_sizes?.some(ss => parseFloat(ss.price) - parseFloat(ss.discount_price || 0) <= maxPrice);
-        const tagsMatch = !selectedTags.length || selectedTags.some(t => (p.tags || "").toLowerCase().includes(t));
-  
-        return categoryMatch && subCategoryMatch && weightMatch && priceMatch && tagsMatch;
-      });
-  
-      filteredProducts = filtered;
-      paginateProducts(filteredProducts, 1);
+      document.getElementById("loader").style.display = "flex";
+
+      setTimeout(() => {
+        const selectedCategories = [...document.querySelectorAll(".category-filter:checked")].map(cb => cb.value);
+        const selectedSubCategories = [...document.querySelectorAll(".subcategory-filter:checked")].map(cb => cb.value);
+        const selectedWeights = [...document.querySelectorAll(".weight-filter:checked")].map(cb => cb.value.toLowerCase());
+        const selectedTags = [...tagSpans].filter(span => span.classList.contains('active')).map(span => span.textContent.trim().toLowerCase());
+        const maxPrice = parseFloat(priceRange.value);
+    
+        const filtered = allProducts.filter(p => {
+          const parent = p.category.parent?.name;
+          const cat = parent || p.category.name;
+          const sub = parent ? p.category.name : null;
+    
+          const categoryMatch = !selectedCategories.length || selectedCategories.includes(cat) || selectedSubCategories.includes(sub);
+          const subCategoryMatch = !selectedSubCategories.length || selectedSubCategories.includes(sub);
+    
+          const weightMatch = !selectedWeights.length || p.serving_sizes?.some(ss => selectedWeights.includes(ss.size?.toLowerCase().trim()));
+          const priceMatch = p.serving_sizes?.some(ss => parseFloat(ss.price) - parseFloat(ss.discount_price || 0) <= maxPrice);
+          const tagsMatch = !selectedTags.length || selectedTags.some(t => (p.tags || "").toLowerCase().includes(t));
+    
+          return categoryMatch && subCategoryMatch && weightMatch && priceMatch && tagsMatch;
+        });
+    
+        filteredProducts = filtered;
+        paginateProducts(filteredProducts, 1);
+      document.getElementById("loader").style.display = "none";
+      }, 100);
     }
   
     function paginateProducts(products, page = 1) {

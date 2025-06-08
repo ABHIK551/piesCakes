@@ -206,29 +206,29 @@ class ProductListView(generics.ListAPIView):
                     } if product.category.parent else None
                 } if product.category else None,
                 "description": product.description,
-                "ingredients": product.ingredients,
-                "allergen_info": product.allergen_info,
-                "price": product.price,
-                "discount_price": product.discount_price,
-                "stock_status": product.stock_status,
+                # "ingredients": product.ingredients,
+                # "allergen_info": product.allergen_info,
+                # "price": product.price,
+                # "discount_price": product.discount_price,
+                # "stock_status": product.stock_status,
                 "serving_size": product.serving_size,
                 "serving_sizes": serving_sizes,  # ✅ Fixed line
-                "total_stock": product.total_stock,
-                "reorder_level": product.reorder_level,
-                "weight": product.weight,
-                "cake_size": product.cake_size,
-                "flavor_variants": product.flavor_variants,
-                "add_ons": product.add_ons,
+                # "total_stock": product.total_stock,
+                # "reorder_level": product.reorder_level,
+                # "weight": product.weight,
+                # "cake_size": product.cake_size,
+                # "flavor_variants": product.flavor_variants,
+                # "add_ons": product.add_ons,
                 "product_images": product.product_images_base64.split(',') if product.product_images_base64 else [],
-                "calories": product.calories,
-                "nutrition_facts": product.nutrition_facts,
-                "prep_time": product.prep_time,
-                "delivery_option": product.delivery_option,
-                "shelf_life": product.shelf_life,
-                "tags": product.tags,
+                # "calories": product.calories,
+                # "nutrition_facts": product.nutrition_facts,
+                # "prep_time": product.prep_time,
+                # "delivery_option": product.delivery_option,
+                # "shelf_life": product.shelf_life,
+                # "tags": product.tags,
                 "reviews": product.reviews,
-                "related_products": product.related_products,
-                "total_sales": product.total_sales,
+                # "related_products": product.related_products,
+                # "total_sales": product.total_sales,
                 "status": 'Active' if product.status == 1 else 'Inactive',
                 "created_at": product.created_at,
                 "updated_at": product.updated_at
@@ -1914,18 +1914,18 @@ class ProfileAndAddressesAPIView(generics.RetrieveUpdateAPIView):
         return self.request.user
     
 
-from rest_framework.permissions import AllowAny    
-from django.db.models import Q
-class ProductSearchView(APIView):
-    def get(self, request):
-        query = request.GET.get('q', '')
-        print(f"--------------- query ------------- {query}")
-        if not query:
-            return Response({"success": False, "message": "No search query provided."}, status=400)
+# from rest_framework.permissions import AllowAny    
+# from django.db.models import Q
+# class ProductSearchView(APIView):
+#     def get(self, request):
+#         query = request.GET.get('q', '')
+#         print(f"--------------- query ------------- {query}")
+#         if not query:
+#             return Response({"success": False, "message": "No search query provided."}, status=400)
 
-        products = Product.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
-        ).order_by('-created_at')[:20]
+#         products = Product.objects.filter(
+#             Q(name__icontains=query) | Q(description__icontains=query)
+#         ).order_by('-created_at')[:20]
 
-        data = ProductSerializer(products, many=True).data
-        return Response({"success": True, "products": data}, status=200)
+#         data = ProductSerializer(products, many=True).data
+#         return Response({"success": True, "products": data}, status=200)
