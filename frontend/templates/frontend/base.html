@@ -3565,7 +3565,7 @@ nav {
 		
 					suggestionsBox.innerHTML = data.results.map(prod => {
 						const encodedId = btoa(`${prod.id}-piescakes`);
-						return `<div class="suggestion-item" data-url="product/${encodedId}" style="padding:10px; cursor:pointer;">${prod.name}</div>`;
+						return `<div class="suggestion-item" data-url="/product/${encodedId}" style="padding:10px; cursor:pointer;">${prod.name}</div>`;
 					}).join("");
 		
 					suggestionsBox.style.display = "block";
@@ -3618,7 +3618,7 @@ nav {
 	
 				suggestionsBox1.innerHTML = data.results.map(prod => {
 					const encodedId = btoa(`${prod.id}-piescakes`);
-					return `<div class="suggestion-item" data-url="product/${encodedId}" style="padding:10px; cursor:pointer;">${prod.name}</div>`;
+					return `<div class="suggestion-item" data-url="/product/${encodedId}" style="padding:10px; cursor:pointer;">${prod.name}</div>`;
 				}).join("");
 	
 				suggestionsBox1.style.display = "block";
