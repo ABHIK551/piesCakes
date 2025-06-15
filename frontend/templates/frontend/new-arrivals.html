@@ -144,235 +144,234 @@
     
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
-try {
-const response = await fetch("/api/products-list/?page=1&pageSize=1000", {
-    method: "GET",
-});
+    try {
+        const response = await fetch("/api/products-list/?page=1&pageSize=1000", {
+            method: "GET",
+        });
+        
+        const data = await response.json();
+        const products = data.products.products;
 
-const data = await response.json();
-const products = data.products.products;
+        const categoryContainer = document.getElementById("category-container");
+        const productsContainer = document.getElementById("products-container");
 
-const categoryContainer = document.getElementById("category-container");
-const productsContainer = document.getElementById("products-container");
+        // Extract unique categories from products
+        const uniqueCategories = ["All", ...new Set(products.map(product => product.category.name))];
 
-// Extract unique categories from products
-const uniqueCategories = ["All", ...new Set(products.map(product => product.category.name))];
+        // Generate category filters dynamically
+        categoryContainer.innerHTML = `<ul>${uniqueCategories.map(cat => `<li>${cat}</li>`).join("")}</ul>`;
 
-// Generate category filters dynamically
-categoryContainer.innerHTML = `<ul>${uniqueCategories.map(cat => `<li>${cat}</li>`).join("")}</ul>`;
+        // Ensure "All" is active by default
+        const categoryItems = categoryContainer.querySelectorAll("li");
+        if (categoryItems.length) {
+            categoryItems[0].classList.add("active");
+        }
 
-// Ensure "All" is active by default
-const categoryItems = categoryContainer.querySelectorAll("li");
-if (categoryItems.length) {
-    categoryItems[0].classList.add("active");
-}
+        function encodeProductId(id) {
+            // Convert ID to string, pad or salt it if you want a longer encoded result
+            const padded = `${id}-piescakes`;
+            return btoa(padded);
+        }
 
-function encodeProductId(id) {
-    // Convert ID to string, pad or salt it if you want a longer encoded result
-    const padded = `${id}-piescakes`;
-    return btoa(padded);
-}
+        function displayProducts(productList) {
+            productsContainer.innerHTML = "";
+            if (productList.length === 0) {
+                productsContainer.innerHTML = "<p>No products found</p>";
+                return;
+            }
 
-function displayProducts(productList) {
-    productsContainer.innerHTML = "";
-    if (productList.length === 0) {
-        productsContainer.innerHTML = "<p>No products found</p>";
-        return;
-    }
+            productList.forEach((product, index) => {
+                const encodedId = encodeProductId(product.id);
+                const createdAt = new Date(product.created_at);
+                const currentDate = new Date();
+                const daysDifference = (currentDate - createdAt) / (1000 * 60 * 60 * 24);
+                const isNew = daysDifference <= 10;
+                const images = product.product_images || [];
+                const swiperClass = `swiper-${index}`;
+                const servingSizes = product.serving_sizes || [];
 
-    productList.forEach((product, index) => {
-        const encodedId = encodeProductId(product.id);
-        const createdAt = new Date(product.created_at);
-        const currentDate = new Date();
-        const daysDifference = (currentDate - createdAt) / (1000 * 60 * 60 * 24);
-        const isNew = daysDifference <= 10;
-        const images = product.product_images || [];
-        const swiperClass = `swiper-${index}`;
-        const servingSizes = product.serving_sizes || [];
+                // Default to first size or fallback to main price
+                const initialSize = servingSizes[0] || { price: product.price, discount_price: product.discount_price };
+                const discountedPrice = initialSize.discount_price
+                    ? initialSize.price - initialSize.discount_price
+                    : initialSize.price;
 
-        // Default to first size or fallback to main price
-        const initialSize = servingSizes[0] || { price: product.price, discount_price: product.discount_price };
-        const discountedPrice = initialSize.discount_price
-            ? initialSize.price - initialSize.discount_price
-            : initialSize.price;
+                // Generate swiper slides
+                let imagesHtml = images.length > 0
+                    ? images.map(img => `<div class="swiper-slide swiper3"><img src="data:image/png;base64,${img}" style="repeat:no-repeat;" alt="${product.name}" loading="lazy"/></div>`).join("")
+                    : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
 
-        // Generate swiper slides
-        let imagesHtml = images.length > 0
-            ? images.map(img => `<div class="swiper-slide swiper3"><img src="data:image/png;base64,${img}" style="repeat:no-repeat;" alt="${product.name}" loading="lazy"/></div>`).join("")
-            : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
+                // Generate serving size buttons
+                let sizeButtons = servingSizes.map((s, i) => `
+                    <button class="size-btn ${i === 0 ? 'active' : ''}"
+                        data-product-index="${index}" 
+                        data-price="${parseFloat(s.price)}" 
+                        data-discount="${parseFloat(s.discount_price)}">
+                        ${Number.isInteger(Number(s.size)) ? `${s.size} Person` : s.size}
+                    </button>`).join(" ");
 
-        // Generate serving size buttons
-        let sizeButtons = servingSizes.map((s, i) => `
-            <button class="size-btn ${i === 0 ? 'active' : ''}"
-                data-product-index="${index}" 
-                data-price="${parseFloat(s.price)}" 
-                data-discount="${parseFloat(s.discount_price)}">
-                ${Number.isInteger(Number(s.size)) ? `${s.size} Person` : s.size}
-            </button>`).join(" ");
-
-        const productElement = document.createElement("div");
-        productElement.classList.add("product-card");
-        productElement.classList.add("swiper4");
-        productElement.innerHTML = `
-            <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
-                <a href="product/${encodedId}">
-                    <div class="swiper swiper1 ${swiperClass}">
-                        <div class="swiper-wrapper swiper2">${imagesHtml}</div>
-                    </div>
-                </a>
-                <div class="product-info">
-                    <span class="category mb-1">${product.category.name}</span>
-                    <h3 class="mb-1 product-heading" title="${product.name}">
-                        <a href="product/${encodedId}" style="text-decoration:none; font-size:16px; font-weight:bold; color:#5A3E36;">
-                            ${product.name}
+                const productElement = document.createElement("div");
+                productElement.classList.add("product-card");
+                productElement.classList.add("swiper4");
+                productElement.innerHTML = `
+                    <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
+                        <a href="product/${encodedId}">
+                            <div class="swiper swiper1 ${swiperClass}">
+                                <div class="swiper-wrapper swiper2">${imagesHtml}</div>
+                            </div>
                         </a>
-                    </h3>
-                    <div class="rating mb-1">★★★★★</div>
+                        <div class="product-info">
+                            <span class="category mb-1">${product.category.name}</span>
+                            <h3 class="mb-1 product-heading" title="${product.name}">
+                                <a href="product/${encodedId}" style="text-decoration:none; font-size:16px; font-weight:bold; color:#5A3E36;">
+                                    ${product.name}
+                                </a>
+                            </h3>
+                            <div class="rating mb-1">★★★★★</div>
 
-                    <div class="mb-2 size-buttons">
-                        ${sizeButtons}
+                            <div class="mb-2 size-buttons">
+                                ${sizeButtons}
+                            </div>
+
+                            <p class="price mb-1" id="price-${index}">
+                                ₹${discountedPrice}
+                                ${initialSize.discount_price > 0 ? `<strike>₹${initialSize.price}</strike>` : ''}
+                            </p>
+
+                            ${isNew ? `<span class="badge bg-success">NEW</span>` : ''}
+                        </div>
                     </div>
+                `;
 
-                    <p class="price mb-1" id="price-${index}">
-                        ₹${discountedPrice}
-                        ${initialSize.discount_price > 0 ? `<strike>₹${initialSize.price}</strike>` : ''}
-                    </p>
+                productsContainer.appendChild(productElement);
 
-                    ${isNew ? `<span class="badge bg-success">NEW</span>` : ''}
-                </div>
-            </div>
-        `;
+                // Init Swiper for each product card
+                new Swiper(`.${swiperClass}`, {
+                    loop: true,
+                    autoplay: { delay: 3000 },
+                });
+            });
 
-        productsContainer.appendChild(productElement);
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const index = this.getAttribute('data-product-index');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const discount = parseFloat(this.getAttribute('data-discount'));
+                    const discountedPrice = price - discount;
 
-        // Init Swiper for each product card
-        new Swiper(`.${swiperClass}`, {
-            loop: true,
-            autoplay: { delay: 3000 },
+                    const priceEl = document.getElementById(`price-${index}`);
+                    priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? ` <strike>₹${price}</strike>` : ''}`;
+
+                    // Remove 'active' from all buttons in this product group
+                    const buttons = document.querySelectorAll(`.size-btn[data-product-index="${index}"]`);
+                    buttons.forEach(b => b.classList.remove('active'));
+
+                    // Add 'active' to clicked button
+                    this.classList.add('active');
+                });
+            });
+
+            initMobileSwiper(); // optional
+
+        }
+
+        // Function to filter products by category
+        function filterProducts(category) {
+            if (category === "All") {
+                displayProducts(products);
+            } else {
+                const filteredProducts = products.filter(product => product.category.name === category);
+                displayProducts(filteredProducts);
+                
+            }
+        }
+
+        // Event delegation for category selection
+        categoryContainer.addEventListener("click", function (event) {
+            if (event.target.tagName === "LI") {
+                const selectedCategory = event.target.innerText.trim();
+
+                // Remove "active" class from all categories
+                document.querySelectorAll("#category-container li").forEach(li => li.classList.remove("active"));
+                
+                // Add "active" class to the clicked category
+                event.target.classList.add("active");
+
+                // Filter products based on selected category
+                filterProducts(selectedCategory);
+            }
         });
-    });
 
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const index = this.getAttribute('data-product-index');
-            const price = parseFloat(this.getAttribute('data-price'));
-            const discount = parseFloat(this.getAttribute('data-discount'));
-            const discountedPrice = price - discount;
-
-            const priceEl = document.getElementById(`price-${index}`);
-            priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? ` <strike>₹${price}</strike>` : ''}`;
-
-            // Remove 'active' from all buttons in this product group
-            const buttons = document.querySelectorAll(`.size-btn[data-product-index="${index}"]`);
-            buttons.forEach(b => b.classList.remove('active'));
-
-            // Add 'active' to clicked button
-            this.classList.add('active');
-        });
-    });
-
-    initMobileSwiper(); // optional
-
-}
-
-// Function to filter products by category
-function filterProducts(category) {
-    if (category === "All") {
+        // Display all products by default
         displayProducts(products);
-    } else {
-        const filteredProducts = products.filter(product => product.category.name === category);
-        displayProducts(filteredProducts);
-        
-    }
-}
-
-// Event delegation for category selection
-categoryContainer.addEventListener("click", function (event) {
-    if (event.target.tagName === "LI") {
-        const selectedCategory = event.target.innerText.trim();
-
-        // Remove "active" class from all categories
-        document.querySelectorAll("#category-container li").forEach(li => li.classList.remove("active"));
-        
-        // Add "active" class to the clicked category
-        event.target.classList.add("active");
-
-        // Filter products based on selected category
-        filterProducts(selectedCategory);
+    } catch (error) {
+        console.error("Error fetching products:", error);
     }
 });
 
-// Display all products by default
-displayProducts(products);
-} catch (error) {
-console.error("Error fetching products:", error);
-}
-});
+        </script>
+        <script>
 
-</script>
+            function forceStyle(element, property, value) {
+                element.style.setProperty(property, value, "important");
+            }
+            
+            let mobileSwiper = null;
+            
+            function initMobileSwiper() {
+    const container = document.getElementById('products-container');
+    const cards = Array.from(container.querySelectorAll('.product-card'));
 
-<script>
-
-    function forceStyle(element, property, value) {
-        element.style.setProperty(property, value, "important");
+    // Destroy existing swiper instance if any
+    if (mobileSwiper !== null) {
+        mobileSwiper.destroy(true, true);
+        mobileSwiper = null;
     }
-    
-    let mobileSwiper = null;
-    
-    function initMobileSwiper() {
-const container = document.getElementById('products-container');
-const cards = Array.from(container.querySelectorAll('.product-card'));
 
-// Destroy existing swiper instance if any
-if (mobileSwiper !== null) {
-mobileSwiper.destroy(true, true);
-mobileSwiper = null;
+    if (window.innerWidth <= 468 && cards.length > 0) {
+        container.classList.add('swiper');
+
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('swiper-wrapper');
+
+        // Move cards inside wrapper
+        cards.forEach(card => {
+            card.classList.add('swiper-slide');
+            wrapper.appendChild(card);
+        });
+
+        // Clear container and add wrapper
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+
+        // (optional) create pagination
+        const pagination = document.createElement('div');
+        pagination.classList.add('swiper-pagination');
+        container.appendChild(pagination);
+
+        // Reinitialize Swiper
+            mobileSwiper = new Swiper("#products-container", {
+            slidesPerView: 2,
+            spaceBetween: 0, // ✅ this is the correct way
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    }
 }
 
-if (window.innerWidth <= 468 && cards.length > 0) {
-container.classList.add('swiper');
-
-// Create wrapper
-const wrapper = document.createElement('div');
-wrapper.classList.add('swiper-wrapper');
-
-// Move cards inside wrapper
-cards.forEach(card => {
-    card.classList.add('swiper-slide');
-    wrapper.appendChild(card);
-});
-
-// Clear container and add wrapper
-container.innerHTML = '';
-container.appendChild(wrapper);
-
-// (optional) create pagination
-const pagination = document.createElement('div');
-pagination.classList.add('swiper-pagination');
-container.appendChild(pagination);
-
-// Reinitialize Swiper
-    mobileSwiper = new Swiper("#products-container", {
-    slidesPerView: 2,
-    spaceBetween: 0, // ✅ this is the correct way
-    loop: true,
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-});
-}
-}
-
-</script>
+            </script>
             
     </div>
 </section>
