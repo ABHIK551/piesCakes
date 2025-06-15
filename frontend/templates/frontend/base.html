@@ -136,13 +136,34 @@ main {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 15px 20px;
+	padding: 5px 10px;
 	/* flex-wrap: wrap; */
+}
+
+.main-header .logo{
+	width: 20% !important;
+}
+
+.main-header .search-bar{
+	width: 60% !important;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.main-header .user-actions{
+	width: 20% !important;
+	float: right !important;
 }
 
 .logo img {
 	height: 100px;
 	max-width: 170%;
+}
+
+#search-input{
+	text-align: center;
+	justify-content: center;
+	margin: 0 auto !important;
 }
 
 .search-bar {
@@ -171,31 +192,54 @@ main {
 }
 
 .search-bar input {
-	width: 62%;
-	padding: 8px;
-
-    border-radius: 3px;
+	width: 100%;
+	text-align: left !important;
+	/* margin: auto; */
 	border: 1px solid lightgray !important;
 }
 
-.search-bar button {
+.search-bar #search-button i {
 	background: none;
 	border: none;
 	font-size: 18px;
 	cursor: pointer;
-	margin-left: -30px;
+	margin-left: -70px;
+	/* margin-left: -30px; */
 	color: #ccc;
+}
+
+.search-bar #search-button{
+	background-color: white;
+	border: 0px;
 }
 
 .user-actions {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
+	justify-content: flex-end;
 }
 
-.user-actions span {
+.user-actions > * {
+    flex-shrink: 0;   /* prevent shrinking if needed */
+    white-space: nowrap;  /* prevent text wrapping */
+}
+
+.user-actions button{
 	text-decoration: none !important;
-	margin: 0 10px;
+	/* margin: 0 10px; */
 	font-size: 14px;
+	width: 60%;
+	text-align: center !important;
+	justify-content: center !important;
+	cursor: pointer;
+}
+.user-actions div {
+	text-decoration: none !important;
+	/* margin: 0 10px; */
+	font-size: 14px;
+	width: 40%;
+	text-align: center !important;
+	justify-content: center !important;
 	cursor: pointer;
 }
 
@@ -1769,6 +1813,17 @@ html, body {
 	position: relative;
 }
 
+.top-bar .left{
+	width: 20%;
+}
+.top-bar .center{
+	width: 60%;
+}
+.top-bar .right{
+	width: 20%;
+	text-align: right;
+}
+
 .call-feat {
 	display: flex;
 	align-items: center;
@@ -1805,13 +1860,14 @@ html, body {
 	color: #333;
 }
 
-.help-links {
+.help-links span{
 	margin-left: auto;
 	display: flex;
 	gap: 10px;
 	font-size: 14px;
 	color: #333;
     padding-right: 20px;
+	flex-direction: flex-end !important;
 }
 
 nav {
