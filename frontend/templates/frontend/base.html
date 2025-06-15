@@ -3591,6 +3591,60 @@ nav {
 			});
 		});
 		</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const input1 = document.getElementById("search-input-mobile");
+		const suggestionsBox1 = document.getElementById("search-suggestions-mobile");
+	
+		input1.addEventListener("input", async function () {
+			const query = input1.value.trim();
+	
+			if (query.length === 0) {
+				suggestionsBox1.style.display = "none";
+				suggestionsBox1.innerHTML = "";
+				return;
+			}
+	
+			try {
+				const response = await fetch(`/api/search-products/?q=${encodeURIComponent(query)}`);
+				const data = await response.json();
+	
+				if (data.results.length === 0) {
+					suggestionsBox1.innerHTML = "<div style='padding:10px;'>No results found</div>";
+					suggestionsBox1.style.display = "block";
+					return;
+				}
+	
+				suggestionsBox1.innerHTML = data.results.map(prod => {
+					const encodedId = btoa(`${prod.id}-piescakes`);
+					return `<div class="suggestion-item" data-url="product/${encodedId}" style="padding:10px; cursor:pointer;">${prod.name}</div>`;
+				}).join("");
+	
+				suggestionsBox1.style.display = "block";
+			} catch (err) {
+				console.error("Search error:", err);
+			}
+		});
+	
+		// Navigate to product on click
+		suggestionsBox1.addEventListener("click", function (e) {
+			const item = e.target.closest(".suggestion-item");
+			if (item) {
+				const url = item.getAttribute("data-url");
+				window.location.href = url;
+			}
+		});
+	
+		// Optional: hide suggestions when clicking outside
+		document.addEventListener("click", (e) => {
+			if (!suggestionsBox1.contains(e.target) && e.target !== input1) {
+				suggestionsBox1.style.display = "none";
+			}
+		});
+	});
+	</script>
+	
 		
 
 </body>
