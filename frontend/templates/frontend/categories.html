@@ -659,7 +659,9 @@
               <div class='size-select' style='display:flex;gap:8px;margin-bottom:8px;width:100%;'>${sizeButtons}</div>
               <p class='price' style='margin:5px 0;'>
                 <span class='current-price' style='color:orange;font-weight:bold;'>₹${finalPrice.toFixed(2)}</span>
-                ${ss.discount_price ? `<span class='old-price' style='text-decoration:line-through;color:grey;margin-left:8px;'>₹${parseFloat(ss.price).toFixed(2)}</span>` : ''}
+                ${ss.discount_price && parseFloat(ss.discount_price) > 0 
+                    ? `<span class='old-price' style='text-decoration:line-through;color:grey;margin-left:8px;'>₹${parseFloat(ss.price).toFixed(2)}</span>` 
+                    : ''}
               </p>
               <div class='rating' style='color:#FFD700;font-size:1.2em;margin-bottom:10px;width:100%;text-align:left !important;'>★★★★★</div>
               <div class='buttons' style='display:flex;gap:10px;'>
