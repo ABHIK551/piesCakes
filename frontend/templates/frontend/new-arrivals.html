@@ -317,7 +317,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         </script> -->
 
-        <script>
+        <!-- <script>
             document.addEventListener("DOMContentLoaded", async function () {
                 try {
                     const response = await fetch("/api/products-list/?page=1&pageSize=1000", {
@@ -546,6 +546,196 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 }
 
+            </script> -->
+
+            <script>
+                document.addEventListener("DOMContentLoaded", async function () {
+                    try {
+                        const response = await fetch("/api/products-list/?page=1&pageSize=1000");
+                        const data = await response.json();
+                        const products = data.products.products;
+            
+                        const categoryContainer = document.getElementById("category-container");
+                        const productsContainer = document.getElementById("products-container");
+            
+                        const showMoreButton = document.createElement("button");
+                        showMoreButton.innerText = "View More";
+                        showMoreButton.className = "view-more-button";
+                        Object.assign(showMoreButton.style, {
+                            display: "none",
+                            margin: "20px auto",
+                            padding: "10px 20px",
+                            backgroundColor: "#5A3E36",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        });
+                        productsContainer.insertAdjacentElement("afterend", showMoreButton);
+            
+                        let currentCategory = "All";
+                        let currentProductIndex = 0;
+                        const itemsPerPage = 8;
+            
+                        const uniqueCategories = ["All", ...new Set(products.map(product => product.category.name))];
+                        categoryContainer.innerHTML = `<ul>${uniqueCategories.map(cat => `<li>${cat}</li>`).join("")}</ul>`;
+                        categoryContainer.querySelectorAll("li")[0].classList.add("active");
+            
+                        function encodeProductId(id) {
+                            return btoa(`${id}-piescakes`);
+                        }
+            
+                        function renderProductCard(product, index) {
+                            const encodedId = encodeProductId(product.id);
+                            const isNew = (new Date() - new Date(product.created_at)) / (1000 * 60 * 60 * 24) <= 10;
+                            const images = product.product_images || [];
+                            const swiperClass = `swiper-${index}`;
+                            const servingSizes = product.serving_sizes || [];
+                            const initialSize = servingSizes[0] || { price: product.price, discount_price: product.discount_price };
+                            const discountedPrice = initialSize.discount_price ? initialSize.price - initialSize.discount_price : initialSize.price;
+            
+                            const imagesHtml = images.length
+                                ? images.map(img => `<div class="swiper-slide swiper3"><img src="data:image/png;base64,${img}" alt="${product.name}" loading="lazy"/></div>`).join("")
+                                : `<div class="swiper-slide"><img src="placeholder.jpg" alt="No image" /></div>`;
+            
+                            const sizeButtons = servingSizes.map((s, i) => `
+                                <button class="size-btn ${i === 0 ? 'active' : ''}"
+                                    data-product-index="${index}" 
+                                    data-price="${parseFloat(s.price)}" 
+                                    data-discount="${parseFloat(s.discount_price)}">
+                                    ${Number.isInteger(Number(s.size)) ? `${s.size} Person` : s.size}
+                                </button>`).join(" ");
+            
+                            const productElement = document.createElement("div");
+                            productElement.classList.add("product-card", "swiper4");
+                            productElement.innerHTML = `
+                                <div class="inner-product-tag" style="border-radius:0px;text-align: left !important;">
+                                    <a href="product/${encodedId}">
+                                        <div class="swiper swiper1 ${swiperClass}">
+                                            <div class="swiper-wrapper swiper2">${imagesHtml}</div>
+                                        </div>
+                                    </a>
+                                    <div class="product-info">
+                                        <span class="category mb-1">${product.category.name}</span>
+                                        <h3 class="mb-1 product-heading" title="${product.name}">
+                                            <a href="product/${encodedId}" style="text-decoration:none; font-size:16px; font-weight:bold; color:#5A3E36;">
+                                                ${product.name}
+                                            </a>
+                                        </h3>
+                                        <div class="rating mb-1">★★★★★</div>
+                                        <div class="mb-2 size-buttons">${sizeButtons}</div>
+                                        <p class="price mb-1" id="price-${index}">
+                                            ₹${discountedPrice}${initialSize.discount_price > 0 ? `<strike>₹${initialSize.price}</strike>` : ''}
+                                        </p>
+                                        ${isNew ? `<span class="badge bg-success">NEW</span>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                            productsContainer.appendChild(productElement);
+            
+                            new Swiper(`.${swiperClass}`, {
+                                loop: true,
+                                autoplay: { delay: 3000 }
+                            });
+                        }
+            
+                        function displayProductsByCategory(category) {
+                            currentCategory = category;
+                            currentProductIndex = 0;
+                            productsContainer.innerHTML = "";
+                            const filtered = category === "All" ? products : products.filter(p => p.category.name === category);
+                            displayNextBatch(filtered);
+                        }
+            
+                        function displayNextBatch(filteredProducts) {
+                            const nextProducts = filteredProducts.slice(currentProductIndex, currentProductIndex + itemsPerPage);
+                            nextProducts.forEach((product, i) => renderProductCard(product, currentProductIndex + i));
+                            currentProductIndex += itemsPerPage;
+            
+                            document.querySelectorAll('.size-btn').forEach(btn => {
+                                btn.addEventListener('click', function () {
+                                    const index = this.getAttribute('data-product-index');
+                                    const price = parseFloat(this.getAttribute('data-price'));
+                                    const discount = parseFloat(this.getAttribute('data-discount'));
+                                    const discountedPrice = price - discount;
+                                    const priceEl = document.getElementById(`price-${index}`);
+                                    priceEl.innerHTML = `₹${discountedPrice}${discount > 0 ? ` <strike>₹${price}</strike>` : ''}`;
+                                    document.querySelectorAll(`.size-btn[data-product-index="${index}"]`).forEach(b => b.classList.remove('active'));
+                                    this.classList.add('active');
+                                });
+                            });
+            
+                            const total = currentCategory === "All" ? products.length : products.filter(p => p.category.name === currentCategory).length;
+                            showMoreButton.style.display = currentProductIndex < total ? "block" : "none";
+            
+                            initMobileSwiper(); // ✅ called after rendering each batch
+                        }
+            
+                        categoryContainer.addEventListener("click", function (event) {
+                            if (event.target.tagName === "LI") {
+                                document.querySelectorAll("#category-container li").forEach(li => li.classList.remove("active"));
+                                event.target.classList.add("active");
+                                displayProductsByCategory(event.target.innerText.trim());
+                            }
+                        });
+            
+                        showMoreButton.addEventListener("click", function () {
+                            const filtered = currentCategory === "All" ? products : products.filter(p => p.category.name === currentCategory);
+                            displayNextBatch(filtered);
+                        });
+            
+                        displayProductsByCategory("All");
+            
+                    } catch (error) {
+                        console.error("Error fetching products:", error);
+                    }
+                });
+            
+                let mobileSwiper = null;
+                function initMobileSwiper() {
+                    const container = document.getElementById('products-container');
+                    const cards = Array.from(container.querySelectorAll('.product-card'));
+            
+                    if (mobileSwiper !== null) {
+                        mobileSwiper.destroy(true, true);
+                        mobileSwiper = null;
+                    }
+            
+                    if (window.innerWidth <= 468 && cards.length > 0) {
+                        container.classList.add('swiper');
+                        const wrapper = document.createElement('div');
+                        wrapper.classList.add('swiper-wrapper');
+                        cards.forEach(card => {
+                            card.classList.add('swiper-slide');
+                            wrapper.appendChild(card);
+                        });
+            
+                        container.innerHTML = '';
+                        container.appendChild(wrapper);
+            
+                        const pagination = document.createElement('div');
+                        pagination.classList.add('swiper-pagination');
+                        container.appendChild(pagination);
+            
+                        mobileSwiper = new Swiper("#products-container", {
+                            slidesPerView: 2,
+                            spaceBetween: 0,
+                            loop: true,
+                            autoplay: {
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: ".swiper-button-next",
+                                prevEl: ".swiper-button-prev",
+                            },
+                        });
+                    }
+                }
             </script>
             
     </div>
