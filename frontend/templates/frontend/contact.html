@@ -3,6 +3,21 @@
 {% include "frontend/nav.html" %}
 <style>
     /*  ▸▸  Cake Order Form – Styles  ◂◂  */
+:root{
+  --brand:#d97706;            /* button + accents */
+  --border:#e5e7eb;           /* light gray lines   */
+  --input-bg:#fafafa;         /* softer input bkg   */
+  --radius:0.5rem;
+  --transition:0.25s ease;
+  --main-color: #d1782a;
+  font-family: 'Nunito', sans-serif !important;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+*{
+    font-family: 'Nunito', sans-serif !important;
+}
 
 .category-section-header {
   display: flex;
@@ -59,7 +74,7 @@
 
 /* ——— Layout wrappers ——— */
 .cake-order{
-  max-width:1200px;
+  max-width:1268px;
   margin-inline:auto;
   padding:2rem 1rem;
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -123,27 +138,27 @@ input:focus,select:focus,textarea:focus{
 
 /* 2️⃣ ≥576 px: small tablets */
 @media(min-width:576px){
-  :root{font-size:17px;}
+  /* :root{font-size:17px;} */
 }
 
 /* 3️⃣ ≥768 px: large tablet / small laptop */
 @media(min-width:768px){
-  :root{font-size:18px;}
+  /* :root{font-size:18px;} */
   .cake-order{padding:2.5rem 2rem;}
 }
 
 /* 4️⃣ ≥1024 px: desktop and beyond */
 @media(min-width:1024px){
-  :root{font-size:19px;}
+  /* :root{font-size:19px;} */
   .cake-order{padding:3rem;}
   .row{gap:1.25rem;}
   .two-col>.field{flex:1 1 calc(50% - 0.625rem);}
 }
 /*  ▸▸  Contact Strip – Styles  ◂◂  */
 .contact-strip{
-  max-width:1200px;
+  max-width:1268px;
   margin-inline:auto;
-  padding:2rem 1rem 3rem;
+  padding:0px;
   display:grid;
   gap:1.25rem;
   background:#fdfdf8;               /* subtle tinted bg like screenshot */
@@ -172,7 +187,7 @@ input:focus,select:focus,textarea:focus{
 }
 
 /*  Text treatments  */
-/* .heading{font-size:1rem;font-weight:700;letter-spacing:0.03em;color:var(--brand);margin:0;} */
+.heading{font-size:1rem;font-weight:700;letter-spacing:0.03em;color:var(--brand);margin:0;}
 .sub{font-size:0.8rem;letter-spacing:0.02em;color:#6b7280;margin:0.4rem 0 0;}
 .text{font-weight:600;margin:0;}
 address{font-style:normal;line-height:1.45;font-size:0.9rem;color:#1f2937;}
@@ -351,7 +366,7 @@ address{font-style:normal;line-height:1.45;font-size:0.9rem;color:#1f2937;}
     <div class="contact-card">
       <img src="data:image/png;base64,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" alt="Store icon" class="contact-img">
   
-      <h4 class="heading">Outlet Timings</h4>
+      <h4 class="heading" style="text-align: center;">Outlet Timings</h4>
       <p class="sub">Monday</p>
       <p class="text">09:00 AM – 09:00 PM</p>
       <p class="sub">Tuesday – Sunday</p>
