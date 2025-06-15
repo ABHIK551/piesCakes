@@ -1914,18 +1914,16 @@ class ProfileAndAddressesAPIView(generics.RetrieveUpdateAPIView):
         return self.request.user
     
 
-# from rest_framework.permissions import AllowAny    
-# from django.db.models import Q
-# class ProductSearchView(APIView):
-#     def get(self, request):
-#         query = request.GET.get('q', '')
-#         print(f"--------------- query ------------- {query}")
-#         if not query:
-#             return Response({"success": False, "message": "No search query provided."}, status=400)
-
-#         products = Product.objects.filter(
-#             Q(name__icontains=query) | Q(description__icontains=query)
-#         ).order_by('-created_at')[:20]
-
-#         data = ProductSerializer(products, many=True).data
-#         return Response({"success": True, "products": data}, status=200)
+class ProductSearchAPIView(APIView):
+    def get(self, request):
+        query = request.GET.get('q', '')
+        if query:
+            products = Product.objects.filter(name__icontains=query)[:10]
+            result = [
+                {
+                    "id": product.id,
+                    "name": product.name
+                } for product in products
+            ]
+            return Response({"results": result}, status=status.HTTP_200_OK)
+        return Response({"results": []}, status=status.HTTP_200_OK)

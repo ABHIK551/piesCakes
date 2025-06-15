@@ -59,5 +59,5 @@ urlpatterns = [
     path('forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot_password'),
     path('reset-password/', ResetPasswordAPIView.as_view(), name='reset_password'),
     path('profile/', ProfileAndAddressesAPIView.as_view(), name='profile-full-update'),
-    # path('products/search/', ProductSearchView.as_view(), name='product-search'),
+    path("search-products/", ProductSearchAPIView.as_view(), name="product-search"),
 ]
