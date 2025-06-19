@@ -3182,34 +3182,74 @@ nav {
   max-width: 100% !important;
 } */
 
+/* === Wrapper for Reels === */
 .instaReels {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   gap: 16px;
-  padding: 20px;
+  padding: 20px 16px;
   box-sizing: border-box;
-}
 
-.reel {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  width: 325.5px; /* Adjust width as needed */
-}
-
-.instagram-media {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-
-.instaReels::-webkit-scrollbar {
-  display: none;
-}
-.instaReels {
+  /* Hide scrollbar cross-browser */
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.instaReels::-webkit-scrollbar {
+  display: none;
+}
+
+/* === Each Reel Card === */
+.reel {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 325.5px; /* Default for desktop */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* === Instagram Embed Styling === */
+.instagram-media {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* === Tablet Screens (768px to 1023px) === */
+@media screen and (max-width: 1023px) {
+  .reel {
+    width: 280px;
+  }
+}
+
+/* === Mobile Screens (468px to 767px) === */
+@media screen and (max-width: 767px) {
+  .reel {
+    width: 240px;
+  }
+
+  .instagram-media {
+    max-height: 350px;
+  }
+}
+
+/* === Small Mobile: Two Reels per Screen (~468px width) === */
+@media screen and (max-width: 468px) {
+	.instaReels{
+		margin: 0 10px;
+	}
+  .reel {
+    width: calc(53% - 10px); /* Fits two reels side-by-side with gap */
+  }
+
+  .instagram-media {
+    min-height: 400px;
+  }
+}
+
 </style>
 <body>
     <main>
