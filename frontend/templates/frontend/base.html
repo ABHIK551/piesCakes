@@ -3213,8 +3213,8 @@ nav {
   width: 100% !important;
   max-width: 100% !important;
   height: auto !important;
-  max-height: 500px;
-  object-fit: cover;
+  min-height: 650px;
+  object-fit: contain;
   display: block;
 }
 
@@ -3238,17 +3238,29 @@ nav {
 
 /* === Small Mobile: Two Reels per Screen (~468px width) === */
 @media screen and (max-width: 468px) {
-	.instaReels{
-		margin: 0 10px;
-	}
+  .instaReels {
+    margin: 0;
+    padding: 10px;
+    gap: 10px;
+	margin: 0 10px;
+    justify-content: flex-start;
+  }
+
   .reel {
-    width: calc(53% - 10px); /* Fits two reels side-by-side with gap */
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
   }
 
   .instagram-media {
-    min-height: 400px;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 350px;
+    margin: 0 auto;
   }
 }
+
 
 </style>
 <body>
