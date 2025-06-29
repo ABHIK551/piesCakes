@@ -1966,7 +1966,7 @@ class AddressEditAPIView(APIView):
 
 
 class AddressDeleteAPIView(APIView):
-    def delete(self, request, id):
+    def post(self, request, id):
         try:
             address = get_object_or_404(CustAddress, id=id)
             address.delete()
@@ -1981,7 +1981,7 @@ class AddressDeleteAPIView(APIView):
             )
 
 class AddressUpdateAPIView(APIView):
-    def put(self, request, id):
+    def post(self, request, id):
         address = get_object_or_404(CustAddress, id=id)
         serializer = AddressSerializerCust(address, data=request.data)
         if serializer.is_valid():
