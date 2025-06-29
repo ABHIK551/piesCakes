@@ -1932,7 +1932,7 @@ class ProductSearchAPIView(APIView):
 
 class AddressCreateAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = AddressSerializer(data=request.data)
+        serializer = AddressSerializerCust(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({
@@ -1960,7 +1960,7 @@ class AddressEditAPIView(APIView):
 
 class AddressDeleteAPIView(APIView):
     def delete(self, request, id):
-        address = get_object_or_404(Address, id=id)
+        address = get_object_or_404(CustAddress, id=id)
         address.delete()
         return Response({"message": "Address deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
     
