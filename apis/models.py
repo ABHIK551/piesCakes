@@ -10,6 +10,7 @@ from django.core.validators import RegexValidator
 
 
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, phone, first_name, last_name, password=None, **extra_fields):
         if not email:
@@ -467,15 +468,3 @@ class CustAddress(models.Model):
 
     def __str__(self):
         return f"{self.receiver_name} - {self.pincode}"
-    
-class AddressByCustIdAPIView(APIView):
-    def get(self, request, cust_id):
-        addresses = CustAddress.objects.filter(custId=cust_id)
-        if not addresses.exists():
-            return Response({"message": "No address found for this custId"}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = AddressSerializer(addresses, many=True)
-        return Response({
-            "message": f"Found {len(addresses)} addresses for custId {cust_id}",
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
