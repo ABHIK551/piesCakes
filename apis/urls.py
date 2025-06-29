@@ -60,4 +60,9 @@ urlpatterns = [
     path('reset-password/', ResetPasswordAPIView.as_view(), name='reset_password'),
     path('profile/', ProfileAndAddressesAPIView.as_view(), name='profile-full-update'),
     path("search-products/", ProductSearchAPIView.as_view(), name="product-search"),
+    path('address/create/', AddressCreateAPIView.as_view(), name='address-create'),
+    path('address/<int:id>/', AddressEditAPIView.as_view(), name='address-edit'),
+    path('address/delete/<int:id>/', AddressDeleteAPIView.as_view(), name='address-delete'),
+    path('address/update/<int:id>/', AddressUpdateAPIView.as_view(), name='address-update'),
+    path('addresses/customer/<str:cust_id>/', AddressByCustIdAPIView.as_view(), name='addresses-by-custid'),
 ]

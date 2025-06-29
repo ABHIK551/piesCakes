@@ -2,11 +2,12 @@ import base64
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 from datetime import timedelta
-from .models import Category, Product, TopPickBackground
+from .models import Category, Product, TopPickBackground, CustAddress
 from .models import *
 from django.utils.timezone import localtime
 import json
 from django.conf import settings
+
 
 class CategorySerializer(serializers.ModelSerializer):
     image_base64 = serializers.CharField(write_only=True, required=False)  # Accept Base64 input
@@ -531,3 +532,8 @@ class UserWithAddressesSerializer(serializers.ModelSerializer):
                 addr.delete()
 
         return instance
+    
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustAddress
+        fields = '__all__'

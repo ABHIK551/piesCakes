@@ -1927,3 +1927,62 @@ class ProductSearchAPIView(APIView):
             ]
             return Response({"results": result}, status=status.HTTP_200_OK)
         return Response({"results": []}, status=status.HTTP_200_OK)
+
+
+class AddressCreateAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = AddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Address created successfully',
+                'data': serializer.data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class AddressEditAPIView(APIView):
+    def get(self, request, id):
+        address = get_object_or_404(Address, id=id)
+        serializer = AddressSerializer(address)
+        return Response(serializer.data)
+
+    def put(self, request, id):
+        address = get_object_or_404(Address, id=id)
+        serializer = AddressSerializer(address, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Address updated successfully",
+                "data": serializer.data
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AddressDeleteAPIView(APIView):
+    def delete(self, request, id):
+        address = get_object_or_404(Address, id=id)
+        address.delete()
+        return Response({"message": "Address deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    
+class AddressUpdateAPIView(APIView):
+    def put(self, request, id):
+        address = get_object_or_404(Address, id=id)
+        serializer = AddressSerializer(address, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Address updated successfully",
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class AddressByCustIdAPIView(APIView):
+    def get(self, request, cust_id):
+        addresses = CustAddress.objects.filter(custId=cust_id)
+        if not addresses.exists():
+            return Response({"message": "No address found for this custId"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AddressSerializer(addresses, many=True)
+        return Response({
+            "message": f"Found {len(addresses)} addresses for custId {cust_id}",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)

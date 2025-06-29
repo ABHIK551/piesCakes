@@ -454,3 +454,28 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
+class CustAddress(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
+    full_address = models.TextField()
+    landmark = models.CharField(max_length=255, blank=True)
+    pincode = models.CharField(max_length=10)
+    receiver_name = models.CharField(max_length=100)
+    receiver_mobile = models.CharField(max_length=15)
+    email = models.EmailField()
+    custId = models.CharField(max_length=36, blank=True)
+
+    def __str__(self):
+        return f"{self.receiver_name} - {self.pincode}"
+    
+class AddressByCustIdAPIView(APIView):
+    def get(self, request, cust_id):
+        addresses = CustAddress.objects.filter(custId=cust_id)
+        if not addresses.exists():
+            return Response({"message": "No address found for this custId"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AddressSerializer(addresses, many=True)
+        return Response({
+            "message": f"Found {len(addresses)} addresses for custId {cust_id}",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
