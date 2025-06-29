@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
 from .models import Category,  Product
-from .serializers import CategorySerializer, ProductSerializer
+from .serializers import CategorySerializer, ProductSerializer, AddressSerializerCust
 from rest_framework import generics, filters, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -1943,13 +1943,13 @@ class AddressCreateAPIView(APIView):
     
 class AddressEditAPIView(APIView):
     def get(self, request, id):
-        address = get_object_or_404(Address, id=id)
-        serializer = AddressSerializer(address)
+        address = get_object_or_404(CustAddress, id=id)
+        serializer = AddressSerializerCust(address)
         return Response(serializer.data)
 
     def put(self, request, id):
-        address = get_object_or_404(Address, id=id)
-        serializer = AddressSerializer(address, data=request.data)
+        address = get_object_or_404(CustAddress, id=id)
+        serializer = AddressSerializerCust(address, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({
@@ -1966,8 +1966,8 @@ class AddressDeleteAPIView(APIView):
     
 class AddressUpdateAPIView(APIView):
     def put(self, request, id):
-        address = get_object_or_404(Address, id=id)
-        serializer = AddressSerializer(address, data=request.data)
+        address = get_object_or_404(CustAddress, id=id)
+        serializer = AddressSerializerCust(address, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({
@@ -1982,7 +1982,7 @@ class AddressByCustIdAPIView(APIView):
         if not addresses.exists():
             return Response({"message": "No address found for this custId"}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = AddressSerializer(addresses, many=True)
+        serializer = AddressSerializerCust(addresses, many=True)
         return Response({
             "message": f"Found {len(addresses)} addresses for custId {cust_id}",
             "data": serializer.data

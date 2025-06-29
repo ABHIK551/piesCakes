@@ -533,7 +533,7 @@ class UserWithAddressesSerializer(serializers.ModelSerializer):
 
         return instance
     
-class AddressSerializer(serializers.ModelSerializer):
+class AddressSerializerCust(serializers.ModelSerializer):
     class Meta:
         model = CustAddress
         fields = '__all__'
