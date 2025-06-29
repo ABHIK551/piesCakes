@@ -1972,7 +1972,7 @@ class AddressDeleteAPIView(APIView):
             address.delete()
             return Response(
                 {"message": "Address deleted successfully"},
-                status=status.HTTP_204_NO_CONTENT
+                status=status.HTTP_200_OK
             )
         except Exception as e:
             return Response(
