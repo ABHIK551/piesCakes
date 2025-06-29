@@ -1958,12 +1958,28 @@ class AddressEditAPIView(APIView):
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class AddressDeleteAPIView(APIView):
+#     def delete(self, request, id):
+#         address = get_object_or_404(CustAddress, id=id)
+#         address.delete()
+#         return Response({"message": "Address deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
 class AddressDeleteAPIView(APIView):
     def delete(self, request, id):
-        address = get_object_or_404(CustAddress, id=id)
-        address.delete()
-        return Response({"message": "Address deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-    
+        try:
+            address = get_object_or_404(CustAddress, id=id)
+            address.delete()
+            return Response(
+                {"message": "Address deleted successfully"},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class AddressUpdateAPIView(APIView):
     def put(self, request, id):
         address = get_object_or_404(CustAddress, id=id)
