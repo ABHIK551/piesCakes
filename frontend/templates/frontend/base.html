@@ -3473,6 +3473,8 @@ nav {
             document.addEventListener("DOMContentLoaded", () => {
                 const authToken = sessionStorage.getItem("auth_token");
                 const cartCount = sessionStorage.getItem("cart_count") || 0;
+				const storedName = sessionStorage.getItem("user_name") || "";
+				const username = storedName.split(" ")[0] || "";
             
                 const userCartDisplay = document.getElementById("userCartDisplay");
 				const userCartDisplay2 = document.getElementById("userCartDisplay2");
@@ -3491,7 +3493,7 @@ nav {
                         </defs>
                       </svg>
                     </div>
-                    <div class="cart-text">
+                    <div class="cart-text" style="margin-right:-50px;">
                       <div class="cart-label">Cart</div>
                       <div class="cart-count"><strong>${cartCount}</strong>-ITEMS</div>
                     </div>
@@ -3529,7 +3531,7 @@ nav {
                         <i class="bi bi-box-arrow-right" style="font-size:20px; color:#634A3F;"></i>
                     </div>
                     <div class="logout-text">
-                        <div class="logout-label">Account</div>
+                        <div class="logout-label">Hi ${username}</div>
                         <div class="logout-action"><strong>Logout</strong></div>
                     </div>
                     </a>

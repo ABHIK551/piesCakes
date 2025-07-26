@@ -283,10 +283,12 @@
       </select>
   
       <label for="location">Location *</label>
-      <select id="location" required>
-        <option value="">Choose Location</option>
+      <input type="text" id="location" placeholder="Enter your location...." required>
+
+      <!-- <select id="location" required>
+        <option value="">Choose Location</option> -->
         <!-- Locations will load dynamically if needed -->
-      </select>
+      <!-- </select> -->
   
       <label for="address">Delivery Address *</label>
       <textarea id="address" placeholder="Enter full delivery address" class="form-control" required></textarea>
@@ -892,7 +894,6 @@ function closeModal() {
             total_amount: grandTotal
         };
     
-        console.log("Order Payload", orderPayload);
     
         // 5. POST to API
         fetch('api/orders/create/', {
@@ -909,14 +910,14 @@ function closeModal() {
             return response.json();
         })
         .then(data => {
-            console.log('Order Created:', data);
+            sessionStorage.setItem("cart_count", 0);
             showToast('Order placed successfully! 🎉', "success");
 
             showSuccessAnimation();
 
 
             setTimeout(() => {
-                window.location.href = "/orders";  // Redirect after 2 seconds
+                window.location.href = "/orders";
             }, 2000);
            
         })

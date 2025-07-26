@@ -1648,30 +1648,61 @@ logger = logging.getLogger(__name__)
 
 #     def create(self, request, *args, **kwargs):
 #         try:
-#             # NO need to mutate
-#             request_data = request.data.copy()  # Make a safe copy
+#             request_data = request.data.copy()
 
 #             serializer = self.get_serializer(data=request_data)
+
+#             print(f"Order data us here {request_data}")
 #             serializer.is_valid(raise_exception=True)
 #             self.perform_create(serializer)
 #             headers = self.get_success_headers(serializer.data)
+
+#             # ✅ Fetch user info
+#             user_id = serializer.validated_data.get("user").id
+#             user = CustomUser.objects.get(id=user_id)
+
+#             # ✅ Build HTML email body
+#             html_message = f"""
+#                 <h2>Order Confirmation</h2>
+#                 <p>Hi {user.first_name},</p>
+#                 <p>Your order has been placed successfully! We'll notify you once it's shipped.</p>
+#                 <p><strong>Order ID:</strong> {serializer.data['id']}</p>
+#                 <p><strong>Total Amount:</strong> ₹{serializer.data['total_amount']}</p>
+#                 <br/>
+#                 <p>Thanks for shopping with <strong>Pies & Thies</strong>!</p>
+#             """
+
+#             plain_message = strip_tags(html_message)
+
+#             # ✅ Send Email
+#             send_mail(
+#                 subject="🧾 Your Pies & Thies Order Confirmation",
+#                 message=plain_message,
+#                 from_email=settings.EMAIL_HOST_USER,
+#                 recipient_list=[user.email],
+#                 html_message=html_message,
+#                 fail_silently=True  # Set to False if you want to debug errors
+#             )
 
 #             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 #         except ValidationError as e:
 #             logger.warning(f"Validation error during order creation: {e.detail}")
 #             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
-        
+
 #         except Exception as e:
 #             logger.error(f"Unexpected error during order creation: {str(e)}", exc_info=True)
 #             return Response({'error': 'Something went wrong while creating the order.'},
 #                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+from django.db import transaction
+
 class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializers
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         try:
             request_data = request.data.copy()
@@ -1685,7 +1716,18 @@ class OrderCreateView(generics.CreateAPIView):
             user_id = serializer.validated_data.get("user").id
             user = CustomUser.objects.get(id=user_id)
 
-            # ✅ Build HTML email body
+            # ✅ Remove ordered products from cart
+            cart = Cart.objects.filter(user=user).first()
+            if cart:
+                for item in request_data.get("order_items", []):
+                    product_name = item.get("product_name")
+                    if product_name:
+                        CartItem.objects.filter(
+                            cart=cart,
+                            product__name=product_name
+                        ).delete()
+
+            # ✅ Send confirmation email
             html_message = f"""
                 <h2>Order Confirmation</h2>
                 <p>Hi {user.first_name},</p>
@@ -1697,15 +1739,13 @@ class OrderCreateView(generics.CreateAPIView):
             """
 
             plain_message = strip_tags(html_message)
-
-            # ✅ Send Email
             send_mail(
                 subject="🧾 Your Pies & Thies Order Confirmation",
                 message=plain_message,
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user.email],
                 html_message=html_message,
-                fail_silently=True  # Set to False if you want to debug errors
+                fail_silently=True
             )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -1718,6 +1758,8 @@ class OrderCreateView(generics.CreateAPIView):
             logger.error(f"Unexpected error during order creation: {str(e)}", exc_info=True)
             return Response({'error': 'Something went wrong while creating the order.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 class UpdateOrderStatusView(APIView):
     def post(self, request, pk):
