@@ -1,0 +1,9 @@
+nohup: ignoring input
+[2025-08-10 11:03:42 +0000] [2146] [INFO] Starting gunicorn 23.0.0
+[2025-08-10 11:03:42 +0000] [2146] [INFO] Listening at: http://0.0.0.0:8000 (2146)
+[2025-08-10 11:03:42 +0000] [2146] [INFO] Using worker: sync
+[2025-08-10 11:03:42 +0000] [2147] [INFO] Booting worker with pid: 2147
+/root/piesCakes/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'apis.models.Product'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+/root/piesCakes/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'apis.models.Category'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
