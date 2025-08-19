@@ -116,36 +116,38 @@
               <legend class="w-auto px-2">Serving Sizes & Prices</legend>
               <div id="servingSizesContainer">
                 <div class="serving-size-row mb-3 d-flex gap-2">
-                    <select name="serving_size_temp" class="form-control serving-size">
-                        <option value="">-- Select Serving Size --</option>
-                        <option value="4">4 slice</option>
-                        <option value="6">6 slice</option>
-                        <option value="8">8 slice</option>
-                        <option value="10">10 slice</option>
-                        <option value="12">12 slice</option>
-                        <option value="15">15 slice</option>
-                        <option value="20">20 slice</option>
-                        <option value="0.5kg">0.5 kg</option>
-                        <option value="1kg">1 kg</option>
-                        <option value="1.5kg">1.5 kg</option>
-                        <option value="2kg">2 kg</option>
-                        <option value="custom">Custom</option>
-                        <option value="Bento">Bento</option>
-                        <option value="Full">Full</option>
-                        <option value="Pc">Pc</option>
-                        <option value="Box">Box</option>
-                        <option value="Pkt">Pkt</option>
-                        <option value="Regular">Regular</option>
-                        <option value="Plain">Plain</option>
-                        <option value="Slice">Slice</option>
-                        <option value="100g">100g</option>
-                        <option value="200g">200g</option>
-                        <option value="Ptl">Ptl</option>
-                    </select>
-                  <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
-                  <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
-                  <button type="button" class="btn btn-danger remove-serving-size">X</button>
+                    <input list="servingSizes" name="serving_size_temp" class="form-control serving-size" placeholder="Serving Size">
+                    
+                    <datalist id="servingSizes">
+                        <option value="4 slice">
+                        <option value="6 slice">
+                        <option value="8 slice">
+                        <option value="10 slice">
+                        <option value="12 slice">
+                        <option value="15 slice">
+                        <option value="20 slice">
+                        <option value="0.5 kg">
+                        <option value="1 kg">
+                        <option value="1.5 kg">
+                        <option value="2 kg">
+                        <option value="Pastry">
+                        <option value="Bento">
+                        <option value="Full">
+                        <option value="Pc">
+                        <option value="Box">
+                        <option value="Pkt">
+                        <option value="Regular">
+                        <option value="Plain">
+                        <option value="Slice">
+                        <option value="100g">
+                        <option value="200g">
+                        <option value="Ptl">
+                    </datalist>
+                    <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
+                    <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
+                    <button type="button" class="btn btn-danger remove-serving-size">X</button>
                 </div>
+
               </div>
               <button type="button" class="btn btn-secondary btn-sm" id="addServingSizeBtn">Add Another Serving Size</button>
             </fieldset>
@@ -321,32 +323,32 @@
                         <div class="row">
                             <div class="col-md-6 mb-3" hidden>
                                 <label class="form-label">Serving Size:</label>
-                                <select id="editProductServingSize" name="serving_size" class="form-control">
-                                    <option value="">-- Select Serving Size --</option>
-                                    <option value="4">4 slice</option>
-                                    <option value="6">6 slice</option>
-                                    <option value="8">8 slice</option>
-                                    <option value="10">10 slice</option>
-                                    <option value="12">12 slice</option>
-                                    <option value="15">15 slice</option>
-                                    <option value="20">20 slice</option>
-                                    <option value="0.5kg">0.5 kg</option>
-                                    <option value="1kg">1 kg</option>
-                                    <option value="1.5kg">1.5 kg</option>
-                                    <option value="2kg">2 kg</option>
-                                    <option value="custom">Custom</option>
-                                    <option value="Bento">Bento</option>
-                                    <option value="Full">Full</option>
-                                    <option value="Pc">Pc</option>
-                                    <option value="Box">Box</option>
-                                    <option value="Pkt">Pkt</option>
-                                    <option value="Regular">Regular</option>
-                                    <option value="Plain">Plain</option>
-                                    <option value="Slice">Slice</option>
-                                    <option value="100g">100g</option>
-                                    <option value="200g">200g</option>
-                                    <option value="Ptl">Ptl</option>
-                                </select>
+                                <input list="servingSizeOptionsList" id="editProductServingSize" class="form-control" placeholder="Serving Size">
+                        <datalist id="servingSizeOptionsList">
+                        <option value="4 slice">
+                        <option value="6 slice">
+                        <option value="8 slice">
+                        <option value="10 slice">
+                        <option value="12 slice">
+                        <option value="15 slice">
+                        <option value="20 slice">
+                        <option value="0.5kg">
+                        <option value="1kg">
+                        <option value="1.5kg">
+                        <option value="2kg">
+                        <option value="Pastry">
+                        <option value="Bento">
+                        <option value="Full">
+                        <option value="Pc">
+                        <option value="Box">
+                        <option value="Pkt">
+                        <option value="Regular">
+                        <option value="Plain">
+                        <option value="Slice">
+                        <option value="100g">
+                        <option value="200g">
+                        <option value="Ptl">
+                        </datalist>
                             </div>                            
                         </div>
                     </fieldset>
@@ -878,7 +880,7 @@ async function updateProduct(event) {
     // ✅ Collect and attach serving sizes
     const servingSizes = [];
     document.querySelectorAll('#editServingSizesContainer .row').forEach(row => {
-        const size = row.querySelector('select')?.value.trim();
+        const size = row.querySelector('input[name$="[size]"]')?.value.trim();
         const price = parseFloat(row.querySelector('input[name$="[price]"]')?.value);
         const discount = row.querySelector('input[name$="[discount_price]"]')?.value;
         const discount_price = discount ? parseFloat(discount) : null;
@@ -924,41 +926,56 @@ async function updateProduct(event) {
 
     </script>
 <script>
+// document.getElementById('addServingSizeBtn').addEventListener('click', function () {
+//   const newRow = `
+//     <div class="serving-size-row mb-3 d-flex gap-2">
+//     <select name="serving_size_temp" class="form-control serving-size">
+//         <option value="">-- Select Serving Size --</option>
+//         <option value="4 slice">4 slice</option>
+//         <option value="6 slice">6 slice</option>
+//         <option value="8 slice">8 slice</option>
+//         <option value="10 slice">10 slice</option>
+//         <option value="12 slice">12 slice</option>
+//         <option value="15 slice">15 slice</option>
+//         <option value="20 slice">20 slice</option>
+//         <option value="0.5kg">0.5 kg</option>
+//         <option value="1kg">1 kg</option>
+//         <option value="1.5kg">1.5 kg</option>
+//         <option value="2kg">2 kg</option>
+//         <option value="custom">Custom</option>
+//         <option value="Bento">Bento</option>
+//         <option value="Full">Full</option>
+//         <option value="Pc">Pc</option>
+//         <option value="Box">Box</option>
+//         <option value="Pkt">Pkt</option>
+//         <option value="Regular">Regular</option>
+//         <option value="Plain">Plain</option>
+//         <option value="Slice">Slice</option>
+//         <option value="100g">100g</option>
+//         <option value="200g">200g</option>
+//         <option value="Ptl">Ptl</option>
+//     </select>
+//       <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
+//       <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
+//       <button type="button" class="btn btn-danger remove-serving-size">X</button>
+//     </div>`;
+//   document.getElementById('servingSizesContainer').insertAdjacentHTML('beforeend', newRow);
+// });
+
 document.getElementById('addServingSizeBtn').addEventListener('click', function () {
   const newRow = `
-    <div class="serving-size-row mb-3 d-flex gap-2">
-    <select name="serving_size_temp" class="form-control serving-size">
-        <option value="">-- Select Serving Size --</option>
-        <option value="4 slice">4 slice</option>
-        <option value="6 slice">6 slice</option>
-        <option value="8 slice">8 slice</option>
-        <option value="10 slice">10 slice</option>
-        <option value="12 slice">12 slice</option>
-        <option value="15 slice">15 slice</option>
-        <option value="20 slice">20 slice</option>
-        <option value="0.5kg">0.5 kg</option>
-        <option value="1kg">1 kg</option>
-        <option value="1.5kg">1.5 kg</option>
-        <option value="2kg">2 kg</option>
-        <option value="custom">Custom</option>
-        <option value="Bento">Bento</option>
-        <option value="Full">Full</option>
-        <option value="Pc">Pc</option>
-        <option value="Box">Box</option>
-        <option value="Pkt">Pkt</option>
-        <option value="Regular">Regular</option>
-        <option value="Plain">Plain</option>
-        <option value="Slice">Slice</option>
-        <option value="100g">100g</option>
-        <option value="200g">200g</option>
-        <option value="Ptl">Ptl</option>
-    </select>
-      <input type="number" class="form-control price-input" placeholder="Price" step="0.01" required>
-      <input type="number" class="form-control discount-input" placeholder="Discount Price" step="0.01">
+    <div class="serving-size-row mb-3 d-flex gap-2 align-items-start">
+      <input type="text" name="serving_sizes[][size]" class="form-control serving-size" placeholder="Serving Size"
+             list="servingSizeOptionsList" required>
+      <input type="number" name="serving_sizes[][price]" class="form-control price-input" placeholder="Price" step="0.01" required>
+      <input type="number" name="serving_sizes[][discount_price]" class="form-control discount-input" placeholder="Discount Price" step="0.01">
       <button type="button" class="btn btn-danger remove-serving-size">X</button>
     </div>`;
+    
   document.getElementById('servingSizesContainer').insertAdjacentHTML('beforeend', newRow);
 });
+
+
 
 document.addEventListener('click', function (e) {
   if (e.target.classList.contains('remove-serving-size')) {
@@ -1269,7 +1286,7 @@ async function editProduct(encoded) {
             { value: "1kg", text: "1 kg" },
             { value: "1.5kg", text: "1.5 kg" },
             { value: "2kg", text: "2 kg" },
-            { value: "custom", text: "Custom" },
+            { value: "Pastry", text: "Pastry" },
             { value: "Bento", text: "Bento" },
             { value: "Full", text: "Full" },
             { value: "Pc", text: "Pc" },
@@ -1316,54 +1333,105 @@ async function editProduct(encoded) {
 
 
 
+// function populateServingSizes(servingSizes) {
+//     const container = document.getElementById("editServingSizesContainer");
+//     if (!container) return;
+
+//     container.innerHTML = '';
+
+//     const options = [
+//     { value: "", text: "-- Select Serving Size --" },
+//             { value: "4 slice", text: "4 slice" },
+//             { value: "6 slice", text: "6 slice" },
+//             { value: "8 slice", text: "8 slice" },
+//             { value: "10 slice", text: "10 slice" },
+//             { value: "12 slice", text: "12 slice" },
+//             { value: "15 slice", text: "15 slice" },
+//             { value: "20 slice", text: "20 slice" },
+//             { value: "0.5kg", text: "0.5 kg" },
+//             { value: "1kg", text: "1 kg" },
+//             { value: "1.5kg", text: "1.5 kg" },
+//             { value: "2kg", text: "2 kg" },
+//             { value: "custom", text: "Custom" },
+//             { value: "Bento", text: "Bento" },
+//             { value: "Full", text: "Full" },
+//             { value: "Pc", text: "Pc" },
+//             { value: "Box", text: "Box" },
+//             { value: "Pkt", text: "Pkt" },
+//             { value: "Regular", text: "Regular" },
+//             { value: "Plain", text: "Plain" },
+//             { value: "Slice", text: "Slice" },
+//             { value: "100g", text: "100g" },
+//             { value: "200g", text: "200g" },
+//             { value: "Ptl", text: "Ptl" }
+//     ];
+
+//     servingSizes.forEach((item, index) => {
+//         const row = document.createElement("div");
+//         row.className = "row mb-2";
+
+//         // Build select options
+//         const selectOptions = options.map(opt => {
+//             const selected = opt.value === item.size ? 'selected' : '';
+//             return `<option value="${opt.value}" ${selected}>${opt.text}</option>`;
+//         }).join("");
+
+//         row.innerHTML = `
+//             <div class="col-md-4">
+//                 <select name="serving_sizes_input[${index}][size]" class="form-control">
+//                     ${selectOptions}
+//                 </select>
+//             </div>
+//             <div class="col-md-4">
+//                 <input type="number" name="serving_sizes_input[${index}][price]" class="form-control" placeholder="Price" value="${item.price || ''}">
+//             </div>
+//             <div class="col-md-4">
+//                 <input type="number" name="serving_sizes_input[${index}][discount_price]" class="form-control" placeholder="Discount Price" value="${item.discount_price || ''}">
+//             </div>
+//         `;
+//         container.appendChild(row);
+//     });
+// }
+
 function populateServingSizes(servingSizes) {
     const container = document.getElementById("editServingSizesContainer");
     if (!container) return;
 
     container.innerHTML = '';
 
-    const options = [
-    { value: "", text: "-- Select Serving Size --" },
-            { value: "4 slice", text: "4 slice" },
-            { value: "6 slice", text: "6 slice" },
-            { value: "8 slice", text: "8 slice" },
-            { value: "10 slice", text: "10 slice" },
-            { value: "12 slice", text: "12 slice" },
-            { value: "15 slice", text: "15 slice" },
-            { value: "20 slice", text: "20 slice" },
-            { value: "0.5kg", text: "0.5 kg" },
-            { value: "1kg", text: "1 kg" },
-            { value: "1.5kg", text: "1.5 kg" },
-            { value: "2kg", text: "2 kg" },
-            { value: "custom", text: "Custom" },
-            { value: "Bento", text: "Bento" },
-            { value: "Full", text: "Full" },
-            { value: "Pc", text: "Pc" },
-            { value: "Box", text: "Box" },
-            { value: "Pkt", text: "Pkt" },
-            { value: "Regular", text: "Regular" },
-            { value: "Plain", text: "Plain" },
-            { value: "Slice", text: "Slice" },
-            { value: "100g", text: "100g" },
-            { value: "200g", text: "200g" },
-            { value: "Ptl", text: "Ptl" }
-    ];
+    const datalistId = "servingSizeOptionsList";
+
+    // Only create one datalist and append to document if not already there
+    if (!document.getElementById(datalistId)) {
+        const datalist = document.createElement("datalist");
+        datalist.id = datalistId;
+
+        const options = [
+            "4 slice", "6 slice", "8 slice", "10 slice", "12 slice", "15 slice", "20 slice",
+            "0.5kg", "1kg", "1.5kg", "2kg", "Pastry", "Bento", "Full", "Pc", "Box", "Pkt",
+            "Regular", "Plain", "Slice", "100g", "200g", "Ptl"
+        ];
+
+        options.forEach(value => {
+            const option = document.createElement("option");
+            option.value = value;
+            datalist.appendChild(option);
+        });
+
+        document.body.appendChild(datalist);
+    }
 
     servingSizes.forEach((item, index) => {
         const row = document.createElement("div");
         row.className = "row mb-2";
 
-        // Build select options
-        const selectOptions = options.map(opt => {
-            const selected = opt.value === item.size ? 'selected' : '';
-            return `<option value="${opt.value}" ${selected}>${opt.text}</option>`;
-        }).join("");
-
         row.innerHTML = `
             <div class="col-md-4">
-                <select name="serving_sizes_input[${index}][size]" class="form-control">
-                    ${selectOptions}
-                </select>
+                <input list="${datalistId}" 
+                       name="serving_sizes_input[${index}][size]" 
+                       class="form-control" 
+                       value="${item.size || ''}" 
+                       placeholder="Serving Size">
             </div>
             <div class="col-md-4">
                 <input type="number" name="serving_sizes_input[${index}][price]" class="form-control" placeholder="Price" value="${item.price || ''}">
@@ -1372,6 +1440,7 @@ function populateServingSizes(servingSizes) {
                 <input type="number" name="serving_sizes_input[${index}][discount_price]" class="form-control" placeholder="Discount Price" value="${item.discount_price || ''}">
             </div>
         `;
+
         container.appendChild(row);
     });
 }
