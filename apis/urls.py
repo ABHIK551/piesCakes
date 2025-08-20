@@ -65,4 +65,5 @@ urlpatterns = [
     path('address/delete/<uuid:id>/', AddressDeleteAPIView.as_view(), name='address-delete'),
     path('address/update/<uuid:id>/', AddressUpdateAPIView.as_view(), name='address-update'),
     path('addresses/customer/<str:cust_id>/', AddressByCustIdAPIView.as_view(), name='addresses-by-custid'),
+    path('send-cake-order/', CakeOrderEmailView.as_view(), name='send_cake_order'),
 ]

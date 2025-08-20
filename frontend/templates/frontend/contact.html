@@ -247,89 +247,72 @@ address{font-style:normal;line-height:1.45;font-size:0.9rem;color:#1f2937;}
     <h2 class="title">Cake <span style="color: #b45309;">Order Form</span></h2>
     <p class="subtitle">Customize Your Perfect Cake!</p>
   
-    <form action="#" method="post" enctype="multipart/form-data">
-  
-      <!-- ───── Personal Info ───── -->
+    <form id="cakeOrderForm" enctype="multipart/form-data">
       <label>Name<span>*</span></label>
       <div class="row two-col">
         <div class="field">
-          <input type="text" placeholder="First Name" required>
+          <input type="text" name="first_name" placeholder="First Name" required>
         </div>
         <div class="field">
           <label class="sr-only">Last Name</label>
-          <input type="text" placeholder="Last Name" required>
+          <input type="text" name="last_name" placeholder="Last Name" required>
         </div>
       </div>
-  
+
       <div class="row two-col">
         <div class="field">
           <label>Email</label>
-          <input type="email" placeholder="Email id">
+          <input type="email" name="email" placeholder="Email id">
         </div>
         <div class="field">
           <label>Phone<span>*</span></label>
-          <input type="tel" placeholder="Phone number" required>
+          <input type="tel" name="phone" placeholder="Phone number" required>
         </div>
       </div>
-  
+
       <!-- ───── Cake Details ───── -->
       <h3 class="group-heading">Cake Details</h3>
-  
+
       <div class="row two-col">
         <div class="field">
           <label>Cake Flavor</label>
-          <select required>
-            <option hidden selected>Choose cake flavor</option>
-            <option>Chocolate</option><option>Vanilla</option>
-            <option>Red Velvet</option><option>Butterscotch</option>
-          </select>
+          <input type="text" name="flavor" placeholder="Vanilla">
         </div>
         <div class="field">
           <label>Cake Size</label>
-          <select required>
-            <option hidden selected>Choose cake size</option>
-            <option>0.5 kg</option><option>1 kg</option>
-            <option>2 kg</option>
-          </select>
+          <input type="text" name="size" placeholder="2 kg">
         </div>
       </div>
-  
+
       <div class="row two-col">
         <div class="field">
           <label>Filling Flavor</label>
-          <select>
-            <option hidden selected>Choose filling flavor</option>
-            <option>Chocolate Ganache</option>
-            <option>Strawberry Cream</option>
-          </select>
+          <input type="text" name="filling" placeholder="Chocolate Ganache">
         </div>
         <div class="field">
           <label>Icing Flavor</label>
-          <select>
-            <option hidden selected>Choose icing flavor</option>
-            <option>Buttercream</option><option>Fondant</option>
-          </select>
+          <input type="text" name="icing" placeholder="Buttercream">
         </div>
       </div>
-  
+
       <div class="row two-col">
         <div class="field">
           <label>Delivery Date</label>
-          <input type="date" required>
+          <input type="date" name="date" required>
         </div>
         <div class="field">
           <label>Delivery Time</label>
-          <input type="time" required>
+          <input type="time" name="time" required>
         </div>
       </div>
-  
+
       <div class="row">
         <div class="field">
           <label>Cake Message (max 8 words)</label>
-          <input type="text" maxlength="80" placeholder="Happy Birthday Phil!">
+          <input type="text" name="message" maxlength="80" placeholder="Happy Birthday Phil!">
         </div>
       </div>
-  
+
       <div class="row two-col radio-wrap">
         <div class="field">
           <label>Pickup or Delivery?</label>
@@ -338,26 +321,27 @@ address{font-style:normal;line-height:1.45;font-size:0.9rem;color:#1f2937;}
         </div>
         <div class="field">
           <label>Reference Photo</label>
-          <input type="file" accept="image/*">
+          <input type="file" name="reference_photo" accept="image/*">
         </div>
       </div>
-  
+
       <div class="row">
         <div class="field">
           <label>Address</label>
-          <input type="text" placeholder="123 Baker Street, Beach">
+          <input type="text" name="address" placeholder="123 Baker Street, Beach">
         </div>
       </div>
-  
+
       <div class="row">
         <div class="field">
           <label>Any Special Requests or Notes?</label>
-          <textarea rows="3" placeholder="Type your message…"></textarea>
+          <textarea rows="3" name="notes" placeholder="Type your message…"></textarea>
         </div>
       </div>
-  
+
       <button class="submit-btn" type="submit">Submit</button>
     </form>
+
   </section>
 <!--  ▸▸  Contact Strip  (image version) ◂◂  -->
 <section class="contact-strip" id="contact">
@@ -391,5 +375,37 @@ address{font-style:normal;line-height:1.45;font-size:0.9rem;color:#1f2937;}
       <a href="tel:+919229949506" class="phone">+91 9229949506</a>
     </div>
   </section>
-  
+  <script>
+    document.getElementById("cakeOrderForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      document.getElementById("loader").style.display = "flex";
+      
+      const form = e.target;
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("/api/send-cake-order/", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === "success") {
+          showToast("🎉 Order placed successfully!");
+          form.reset();
+        } else {
+          showToast("❌ Failed to place order: " + data.message);
+        }
+      } catch (error) {
+        showToast("🚨 Error submitting form: " + error.message);
+      } finally {
+        document.getElementById("loader").style.display = "none";
+      }
+
+    });
+  </script>
+
+
 {% endblock %}

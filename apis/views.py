@@ -1751,6 +1751,8 @@ class OrderCreateView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         except ValidationError as e:
+            import traceback
+            traceback.print_exc()
             logger.warning(f"Validation error during order creation: {e.detail}")
             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1760,6 +1762,93 @@ class OrderCreateView(generics.CreateAPIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.mail import send_mail, EmailMessage
+from django.utils.html import strip_tags
+from django.conf import settings
+
+class CakeOrderEmailView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+        try:
+            data = request.data
+            files = request.FILES
+
+            first_name = data.get('first_name', '')
+            last_name = data.get('last_name', '')
+            email = data.get('email', '')
+            phone = data.get('phone', '')
+            flavor = data.get('flavor', '')
+            size = data.get('size', '')
+            filling = data.get('filling', '')
+            icing = data.get('icing', '')
+            date = data.get('date', '')
+            time = data.get('time', '')
+            message = data.get('message', '')
+            method = data.get('method', '')
+            address = data.get('address', '')
+            notes = data.get('notes', '')
+            reference_photo = files.get('reference_photo')
+
+            full_name = f"{first_name} {last_name}"
+
+            # ✅ Email to customer
+            html_message_customer = f"""
+                <h2>🎂 Cake Order Confirmation</h2>
+                <p>Hi {first_name},</p>
+                <p>Thanks for placing an order with <strong>Pies & Thies</strong>!</p>
+                <p>We’ve received your request and will reach out if needed.</p>
+                <p><strong>Delivery:</strong> {date} at {time}</p>
+                <br/>
+                <p>Cheers,<br/>Team <strong>Pies & Thies</strong></p>
+            """
+            send_mail(
+                subject="🎉 Your Cake Order with Pies & Thies",
+                message=strip_tags(html_message_customer),
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                html_message=html_message_customer,
+                fail_silently=False
+            )
+
+            # ✅ Email to vendor
+            html_message_vendor = f"""
+                <h2>🍰 New Cake Order</h2>
+                <p><strong>Name:</strong> {full_name}</p>
+                <p><strong>Email:</strong> {email}</p>
+                <p><strong>Phone:</strong> {phone}</p>
+                <p><strong>Cake Flavor:</strong> {flavor}</p>
+                <p><strong>Size:</strong> {size}</p>
+                <p><strong>Filling:</strong> {filling}</p>
+                <p><strong>Icing:</strong> {icing}</p>
+                <p><strong>Message on Cake:</strong> {message}</p>
+                <p><strong>Delivery Date & Time:</strong> {date} at {time}</p>
+                <p><strong>Method:</strong> {method.capitalize()}</p>
+                <p><strong>Address:</strong> {address}</p>
+                <p><strong>Notes:</strong> {notes}</p>
+            """
+
+            vendor_email = EmailMessage(
+                subject="📦 New Cake Order Received",
+                body=strip_tags(html_message_vendor),
+                from_email=settings.EMAIL_HOST_USER,
+                to=['sales@prajnabyparth.com']
+            )
+
+            if reference_photo:
+                vendor_email.attach(reference_photo.name, reference_photo.read(), reference_photo.content_type)
+
+            vendor_email.content_subtype = 'html'
+            vendor_email.send()
+
+            return Response({'status': 'success', 'message': 'Emails sent successfully.'})
+
+        except Exception as e:
+            return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UpdateOrderStatusView(APIView):
     def post(self, request, pk):
