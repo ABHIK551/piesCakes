@@ -698,7 +698,7 @@ class LoginView(APIView):
         try:
             send_email(
                 subject="🔐 New Login to Your Pies & Thies Account",
-                html_body=html_body,
+                html_message=html_body,
                 to_email=user.email
             )
         except Exception as e:
